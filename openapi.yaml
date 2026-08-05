@@ -12,6 +12,7 @@ info:
       passages with source citations. Available to all tiers including free.
     - **`/v1/answer`** — Retrieval-augmented generation. Returns a grounded
       answer with numbered citations. Requires a paid plan (Starter or Professional).
+    - **`/v1/corpora`** — List all available corpora with metadata.
     - **`/v1/text/{uid}`** — Full chunked text of a document by its canonical ID.
     - **`/v1/entity/{entity_id}`** — Entity metadata and name variants.
     - **`/v1/keys`** — Self-issue a free-tier API key.
@@ -20,16 +21,26 @@ info:
     Pass your API key in the `X-API-Key` header. Keys are prefixed `st_`.
 
     ## Rate Limits
-    | Tier         | /search      | /answer     | Price     |
-    |--------------|-------------|-------------|-----------|
-    | Free         | 100 req/day | Not available | $0      |
-    | Starter      | 5,000 req/day | 100 req/day | $29/mo  |
-    | Professional | 50,000 req/day | 300 req/day | $149/mo |
+    | Tier         | /search        | /answer       | Price     |
+    |--------------|----------------|---------------|-----------|
+    | Free         | 100 req/day    | Not available | $0        |
+    | Starter      | 1,000 req/day  | 100 req/day   | $29/mo    |
+    | Professional | 10,000 req/day | 300 req/day   | $149/mo   |
 
     ## Available Corpora
-    | Corpus ID     | Description                              | Licence |
-    |---------------|------------------------------------------|---------|
-    | `pali-canon`  | Pali Canon (Tipitaka) — SuttaCentral     | CC-0    |
+    Use `/v1/corpora` to fetch this list at runtime.
+
+    | Corpus ID       | Tradition  | Language        | Description                          | Licence   |
+    |-----------------|------------|-----------------|--------------------------------------|-----------|
+    | `pali-canon`    | Buddhism   | Pali / English  | Pali Canon (Tipitaka) — SuttaCentral | CC0       |
+    | `sc-data-lzh`   | Buddhism   | Classical Chinese | Āgamas — SuttaCentral sc-data      | CC0       |
+    | `gretil`        | Buddhism   | Sanskrit        | GRETIL Buddhist Sanskrit (opt-in only) | Open    |
+    | `quran`         | Islam      | Arabic          | Tanzil Qur'an (Uthmani script)       | CC BY 3.0 |
+    | `sahih-bukhari` | Islam      | English         | Sahih al-Bukhari — fawazahmed0       | Unlicense |
+    | `sahih-muslim`  | Islam      | English         | Sahih Muslim — fawazahmed0           | Unlicense |
+
+    Note: `gretil` is excluded from unscoped searches due to low cross-lingual
+    retrieval accuracy (18% R@5). Pass `corpus_codes: ["gretil"]` to access it explicitly.
 
   version: 1.0.0
   contact:
@@ -72,11 +83,20 @@ paths:
           application/json:
             schema:
               $ref: '#/components/schemas/SearchRequest'
-            example:
-              query: "What is the nature of suffering?"
-              traditions: ["theravada"]
-              languages: ["en"]
-              top_k: 8
+            examples:
+              buddhist_search:
+                summary: Buddhist search scoped by tradition
+                value:
+                  query: "What is the nature of suffering?"
+                  traditions: ["theravada"]
+                  languages: ["en"]
+                  top_k: 8
+              islamic_search:
+                summary: Islamic search scoped by corpus codes
+                value:
+                  query: "What did the Prophet say about prayer?"
+                  corpus_codes: ["sahih-bukhari", "sahih-muslim"]
+                  top_k: 8
       responses:
         '200':
           description: Search results with ranked passages
@@ -168,6 +188,50 @@ paths:
           $ref: '#/components/responses/Forbidden'
         '429':
           $ref: '#/components/responses/QuotaExceeded'
+
+  /v1/corpora:
+    get:
+      tags: [Corpus]
+      summary: List all available corpora
+      description: |
+        Returns all indexed corpora with their codes, traditions, languages,
+        and licence metadata. Use corpus codes from this response to scope
+        `/v1/search` and `/v1/answer` requests.
+      operationId: listCorpora
+      security: []
+      responses:
+        '200':
+          description: List of available corpora
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/CorporaResponse'
+              example:
+                corpora:
+                  - code: pali-canon
+                    name: "Pali Canon (Tipitaka)"
+                    tradition: theravada
+                    language: pi
+                    license: CC0
+                    base_url: https://suttacentral.net
+                  - code: quran
+                    name: "Qur'an (Tanzil Uthmani)"
+                    tradition: islam
+                    language: ar
+                    license: CC BY 3.0
+                    base_url: https://tanzil.net
+                  - code: sahih-bukhari
+                    name: "Sahih al-Bukhari"
+                    tradition: islam
+                    language: en
+                    license: Unlicense
+                    base_url: https://sunnah.com/bukhari
+                  - code: sahih-muslim
+                    name: "Sahih Muslim"
+                    tradition: islam
+                    language: en
+                    license: Unlicense
+                    base_url: https://sunnah.com/muslim
 
   /v1/text/{uid}:
     get:
@@ -300,17 +364,23 @@ components:
           type: string
           description: The search query in any supported language
           example: "What is the nature of suffering?"
+        corpus_codes:
+          type: array
+          items:
+            type: string
+          description: "Most precise scope — filter by corpus code (e.g. `quran`, `sahih-bukhari`, `pali-canon`). Takes priority over traditions for reranking."
+          example: ["sahih-bukhari", "sahih-muslim"]
         traditions:
           type: array
           items:
             type: string
-          description: "Filter by tradition (e.g. `theravada`, `mahayana`)"
+          description: "Filter by tradition (e.g. `theravada`, `islam`)"
           example: ["theravada"]
         languages:
           type: array
           items:
             type: string
-          description: "Filter by language code (e.g. `en`, `pi`, `lzh`)"
+          description: "Filter by language code (e.g. `en`, `pi`, `ar`, `lzh`)"
           example: ["en"]
         collections:
           type: array
@@ -350,6 +420,12 @@ components:
           type: string
           description: The question to answer from the corpus
           example: "What did the Buddha teach about impermanence?"
+        corpus_codes:
+          type: array
+          items:
+            type: string
+          description: "Most precise scope — filter retrieval by corpus code (e.g. `quran`, `sahih-bukhari`, `pali-canon`)"
+          example: ["sahih-bukhari", "sahih-muslim"]
         traditions:
           type: array
           items:
@@ -527,6 +603,29 @@ components:
                 type: string
               is_primary:
                 type: boolean
+
+    CorporaResponse:
+      type: object
+      properties:
+        corpora:
+          type: array
+          items:
+            type: object
+            properties:
+              code:
+                type: string
+                description: Corpus identifier used in corpus_codes filter
+              name:
+                type: string
+              tradition:
+                type: string
+              language:
+                type: string
+                description: Primary language ISO code
+              license:
+                type: string
+              base_url:
+                type: string
 
     KeyRequest:
       type: object

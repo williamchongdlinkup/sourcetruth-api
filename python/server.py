@@ -291,16 +291,18 @@ def get_key_record(x_api_key: str = Header(default='')) -> dict | None:
 
 class SearchRequest(BaseModel):
     query: str
-    traditions:  Optional[list[str]] = None
-    languages:   Optional[list[str]] = None
-    collections: Optional[list[str]] = None
+    corpus_codes: Optional[list[str]] = None   # most precise: e.g. ["sahih-bukhari", "quran"]
+    traditions:   Optional[list[str]] = None   # e.g. ["theravada", "islam"]
+    languages:    Optional[list[str]] = None   # ISO: ["en", "pi", "ar"]
+    collections:  Optional[list[str]] = None
     top_k: int = 8
 
 
 class AnswerRequest(BaseModel):
     question: str
-    traditions: Optional[list[str]] = None
-    languages:  Optional[list[str]] = None
+    corpus_codes: Optional[list[str]] = None
+    traditions:   Optional[list[str]] = None
+    languages:    Optional[list[str]] = None
     max_passages: int = 6
 
 
@@ -337,10 +339,12 @@ def search(
     results = _search.search(
         query=req.query,
         entity_ids=entity_ids,
+        corpus_codes=req.corpus_codes,
         traditions=req.traditions,
         languages=req.languages,
         collections=req.collections,
         top_k=req.top_k,
+        rerank='auto',
     )
     latency_ms = int((time.monotonic() - t0) * 1000)
 
@@ -437,9 +441,11 @@ def answer(
     passages = _search.search(
         query=req.question,
         entity_ids=entity_ids,
+        corpus_codes=req.corpus_codes,
         traditions=req.traditions,
         languages=req.languages,
         top_k=req.max_passages,
+        rerank='auto',
     )
 
     if not passages:
@@ -514,6 +520,20 @@ def answer(
         'passages_used': [p['chunk_text'][:200] + '…' for p in passages],
         'latency_ms':    latency_ms,
     }
+
+
+@app.get('/v1/corpora')
+def list_corpora():
+    """Return all indexed corpora — use returned codes as corpus_codes filter values."""
+    with get_primary_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                """SELECT code, name, tradition, language, license, base_url
+                   FROM source_corpora
+                   ORDER BY tradition, code"""
+            )
+            rows = cur.fetchall()
+    return {'corpora': [dict(r) for r in rows]}
 
 
 @app.get('/v1/text/{uid}')

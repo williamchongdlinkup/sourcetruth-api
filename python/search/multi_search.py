@@ -38,11 +38,13 @@ class MultiAccountSearch:
         traditions: list[str] | None = None,
         languages: list[str] | None = None,
         collections: list[str] | None = None,
+        corpus_codes: list[str] | None = None,
         top_k: int = 8,
+        rerank: str = 'auto',
     ) -> list[dict]:
         candidate_k = top_k * 3  # wider pool per account gives global RRF more signal
 
-        # Embed once — avoids 3 parallel Voyage API calls in the fan-out threads
+        # Embed once — avoids parallel Voyage API calls in the fan-out threads
         query_vec = embed_query(query)
 
         kwargs = dict(
@@ -52,7 +54,9 @@ class MultiAccountSearch:
             traditions=traditions,
             languages=languages,
             collections=collections,
+            corpus_codes=corpus_codes,
             top_k=candidate_k,
+            rerank=rerank,
         )
 
         per_account: dict[int, list[dict]] = {}
