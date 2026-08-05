@@ -1,0 +1,588 @@
+openapi: 3.0.3
+
+info:
+  title: SourceTruth API
+  description: |
+    Pre-indexed canonical and classical text API. Semantic search and
+    AI-powered Q&A over scripture, philosophy, and classical literature —
+    no ingestion pipeline required.
+
+    ## Endpoints
+    - **`/v1/search`** — Hybrid semantic + keyword retrieval. Returns ranked
+      passages with source citations. Available to all tiers including free.
+    - **`/v1/answer`** — Retrieval-augmented generation. Returns a grounded
+      answer with numbered citations. Requires a paid plan (Starter or Professional).
+    - **`/v1/text/{uid}`** — Full chunked text of a document by its canonical ID.
+    - **`/v1/entity/{entity_id}`** — Entity metadata and name variants.
+    - **`/v1/keys`** — Self-issue a free-tier API key.
+
+    ## Authentication
+    Pass your API key in the `X-API-Key` header. Keys are prefixed `st_`.
+
+    ## Rate Limits
+    | Tier         | /search      | /answer     | Price     |
+    |--------------|-------------|-------------|-----------|
+    | Free         | 100 req/day | Not available | $0      |
+    | Starter      | 5,000 req/day | 100 req/day | $29/mo  |
+    | Professional | 50,000 req/day | 300 req/day | $149/mo |
+
+    ## Available Corpora
+    | Corpus ID     | Description                              | Licence |
+    |---------------|------------------------------------------|---------|
+    | `pali-canon`  | Pali Canon (Tipitaka) — SuttaCentral     | CC-0    |
+
+  version: 1.0.0
+  contact:
+    name: SourceTruth Support
+    email: api@sourcetruth.io
+    url: https://sourcetruth.io
+
+servers:
+  - url: https://api.sourcetruth.io
+    description: Production
+
+security:
+  - ApiKeyAuth: []
+
+tags:
+  - name: Search
+    description: Semantic and hybrid passage retrieval
+  - name: Answer
+    description: Retrieval-augmented generation with citations
+  - name: Corpus
+    description: Direct text and entity access
+  - name: Keys
+    description: API key management
+
+paths:
+
+  /v1/search:
+    post:
+      tags: [Search]
+      summary: Semantic search over canonical texts
+      description: |
+        Hybrid semantic + keyword search across indexed corpora. Returns
+        ranked passages with source citations, tradition metadata, and
+        relevance scores. No LLM call — fast and low-cost.
+        Available to all tiers including free.
+      operationId: search
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/SearchRequest'
+            example:
+              query: "What is the nature of suffering?"
+              traditions: ["theravada"]
+              languages: ["en"]
+              top_k: 8
+      responses:
+        '200':
+          description: Search results with ranked passages
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/SearchResponse'
+              example:
+                query: "What is the nature of suffering?"
+                resolved_entities:
+                  - id: 42
+                    english: "dukkha"
+                    pali: "dukkha"
+                    type: "concept"
+                passages:
+                  - chunk_id: 1001
+                    text: "Now this, monks, is the noble truth of suffering..."
+                    reference: "SN 56.11"
+                    sutta_id: "sn56.11"
+                    title_english: "Setting the Wheel of Dhamma in Motion"
+                    tradition: "theravada"
+                    language: "en"
+                    collection: "SN"
+                    corpus: "pali-canon"
+                    score: 0.94
+                search_accounts: 1
+                latency_ms: 87
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '429':
+          $ref: '#/components/responses/QuotaExceeded'
+
+  /v1/answer:
+    post:
+      tags: [Answer]
+      summary: AI-generated answer with source citations
+      description: |
+        Retrieval-augmented generation. Retrieves the most relevant passages
+        from the corpus, then generates a grounded answer via Claude with
+        numbered inline citations.
+
+        **Requires a paid plan (Starter or Professional).** Free tier receives 403.
+      operationId: answer
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/AnswerRequest'
+            example:
+              question: "What did the Buddha teach about impermanence?"
+              traditions: ["theravada"]
+              languages: ["en"]
+              max_passages: 6
+      responses:
+        '200':
+          description: AI-generated answer with citations
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/AnswerResponse'
+              example:
+                question: "What did the Buddha teach about impermanence?"
+                answer: |
+                  The Buddha taught that all conditioned phenomena are impermanent (anicca) [1].
+                  In the Anattalakkhana Sutta, he explained that form, feeling, perception,
+                  volitional formations, and consciousness are all impermanent [2]...
+
+                  **Citations:**
+                  [1] SN 22.59 — Anattalakkhana Sutta
+                  [2] SN 56.11 — Dhammacakkappavattana Sutta
+                citations:
+                  - index: 1
+                    sutta_id: "sn22.59"
+                    reference: "SN 22.59"
+                    title_english: "The Characteristic of Non-self"
+                    corpus: "pali-canon"
+                    tradition: "theravada"
+                passages_used:
+                  - "All conditioned phenomena are impermanent. When one sees this with..."
+                latency_ms: 1842
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/Unauthorized'
+        '403':
+          $ref: '#/components/responses/Forbidden'
+        '429':
+          $ref: '#/components/responses/QuotaExceeded'
+
+  /v1/text/{uid}:
+    get:
+      tags: [Corpus]
+      summary: Full document text by canonical ID
+      description: |
+        Returns the full chunked text of a document by its canonical external ID
+        (e.g. `sn56.11`, `mn10`). Use `/v1/search` to discover IDs.
+      operationId: getText
+      parameters:
+        - name: uid
+          in: path
+          required: true
+          description: Canonical document ID (e.g. `sn56.11`, `mn10`)
+          schema:
+            type: string
+          example: sn56.11
+        - name: lang
+          in: query
+          required: false
+          description: Language code (default `en`)
+          schema:
+            type: string
+            default: en
+          example: en
+      responses:
+        '200':
+          description: Full document with chunks
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/TextResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /v1/entity/{entity_id}:
+    get:
+      tags: [Corpus]
+      summary: Entity metadata and name variants
+      description: |
+        Returns metadata and all name variants for a canonical entity
+        (Pali, Sanskrit, Chinese, Tibetan, English). Entity IDs are
+        returned in search results via `resolved_entities`.
+      operationId: getEntity
+      parameters:
+        - name: entity_id
+          in: path
+          required: true
+          description: Entity ID from resolved_entities in search results
+          schema:
+            type: integer
+          example: 42
+      responses:
+        '200':
+          description: Entity metadata with name variants
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/EntityResponse'
+        '404':
+          $ref: '#/components/responses/NotFound'
+
+  /v1/keys:
+    post:
+      tags: [Keys]
+      summary: Self-issue a free-tier API key
+      description: |
+        Creates a free-tier API key instantly. No credit card required.
+        Free tier: 100 `/search` requests/day. `/answer` requires a paid plan.
+        Upgrade at https://sourcetruth.io/pricing.
+      operationId: createKey
+      security: []
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/KeyRequest'
+            example:
+              name: "My App"
+              email: "developer@example.com"
+      responses:
+        '200':
+          description: API key created — store it safely, shown only once
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/KeyResponse'
+              example:
+                key: "st_a1b2c3d4e5f6..."
+                tier: "free"
+                daily_limit: 100
+                message: "Store this key safely — it will not be shown again."
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '429':
+          description: Key creation rate limit exceeded (5 per hour per IP)
+
+  /health:
+    get:
+      tags: [Keys]
+      summary: Health check
+      operationId: health
+      security: []
+      responses:
+        '200':
+          description: API is healthy
+          content:
+            application/json:
+              example:
+                status: ok
+                version: 1.0.0
+
+components:
+
+  securitySchemes:
+    ApiKeyAuth:
+      type: apiKey
+      in: header
+      name: X-API-Key
+      description: "API key prefixed with `st_`. Get a free key at /v1/keys."
+
+  schemas:
+
+    SearchRequest:
+      type: object
+      required: [query]
+      properties:
+        query:
+          type: string
+          description: The search query in any supported language
+          example: "What is the nature of suffering?"
+        traditions:
+          type: array
+          items:
+            type: string
+          description: "Filter by tradition (e.g. `theravada`, `mahayana`)"
+          example: ["theravada"]
+        languages:
+          type: array
+          items:
+            type: string
+          description: "Filter by language code (e.g. `en`, `pi`, `lzh`)"
+          example: ["en"]
+        collections:
+          type: array
+          items:
+            type: string
+          description: "Filter by collection (e.g. `MN`, `DN`, `SN`)"
+          example: ["MN"]
+        top_k:
+          type: integer
+          description: Number of passages to return (default 8, max 20)
+          default: 8
+          example: 8
+
+    SearchResponse:
+      type: object
+      properties:
+        query:
+          type: string
+        resolved_entities:
+          type: array
+          items:
+            $ref: '#/components/schemas/Entity'
+        passages:
+          type: array
+          items:
+            $ref: '#/components/schemas/Passage'
+        search_accounts:
+          type: integer
+        latency_ms:
+          type: integer
+
+    AnswerRequest:
+      type: object
+      required: [question]
+      properties:
+        question:
+          type: string
+          description: The question to answer from the corpus
+          example: "What did the Buddha teach about impermanence?"
+        traditions:
+          type: array
+          items:
+            type: string
+          description: Filter retrieval by tradition
+          example: ["theravada"]
+        languages:
+          type: array
+          items:
+            type: string
+          description: Filter retrieval by language
+          example: ["en"]
+        max_passages:
+          type: integer
+          description: Number of passages to retrieve for context (default 6, max 10)
+          default: 6
+          example: 6
+
+    AnswerResponse:
+      type: object
+      properties:
+        question:
+          type: string
+        answer:
+          type: string
+          description: AI-generated answer with inline numbered citations
+        citations:
+          type: array
+          items:
+            $ref: '#/components/schemas/Citation'
+        passages_used:
+          type: array
+          items:
+            type: string
+          description: First 200 chars of each passage used as context
+        latency_ms:
+          type: integer
+
+    Passage:
+      type: object
+      properties:
+        chunk_id:
+          type: integer
+        text:
+          type: string
+        reference:
+          type: string
+          description: Human-readable canonical citation (e.g. "SN 56.11")
+        sutta_id:
+          type: string
+          description: Machine-readable canonical ID (e.g. "sn56.11")
+        title_english:
+          type: string
+        title_pali:
+          type: string
+        tradition:
+          type: string
+        language:
+          type: string
+        collection:
+          type: string
+        translator:
+          type: string
+        corpus:
+          type: string
+          description: Corpus ID (e.g. "pali-canon")
+        url:
+          type: string
+        score:
+          type: number
+          format: float
+
+    Citation:
+      type: object
+      properties:
+        index:
+          type: integer
+        sutta_id:
+          type: string
+        reference:
+          type: string
+        title_english:
+          type: string
+        translator:
+          type: string
+        corpus:
+          type: string
+        url:
+          type: string
+        tradition:
+          type: string
+
+    Entity:
+      type: object
+      properties:
+        id:
+          type: integer
+        english:
+          type: string
+        pali:
+          type: string
+        sanskrit:
+          type: string
+        chinese:
+          type: string
+        tibetan:
+          type: string
+        type:
+          type: string
+
+    TextResponse:
+      type: object
+      properties:
+        uid:
+          type: string
+        title_english:
+          type: string
+        title_pali:
+          type: string
+        tradition:
+          type: string
+        language:
+          type: string
+        collection:
+          type: string
+        translator:
+          type: string
+        url:
+          type: string
+        corpus:
+          type: string
+        chunks:
+          type: array
+          items:
+            type: object
+            properties:
+              chunk_index:
+                type: integer
+              chunk_text:
+                type: string
+              reference:
+                type: string
+              chapter:
+                type: string
+              section:
+                type: string
+
+    EntityResponse:
+      type: object
+      properties:
+        id:
+          type: integer
+        english_preferred:
+          type: string
+        pali:
+          type: string
+        sanskrit:
+          type: string
+        classical_chinese:
+          type: string
+        tibetan:
+          type: string
+        entity_type:
+          type: string
+        name_variants:
+          type: array
+          items:
+            type: object
+            properties:
+              name_text:
+                type: string
+              language:
+                type: string
+              script:
+                type: string
+              is_primary:
+                type: boolean
+
+    KeyRequest:
+      type: object
+      required: [name, email]
+      properties:
+        name:
+          type: string
+          example: "My App"
+        email:
+          type: string
+          format: email
+          example: "developer@example.com"
+
+    KeyResponse:
+      type: object
+      properties:
+        key:
+          type: string
+          description: Full API key — shown only once, store immediately
+        tier:
+          type: string
+          example: free
+        daily_limit:
+          type: integer
+          example: 100
+        message:
+          type: string
+
+  responses:
+    BadRequest:
+      description: Invalid request parameters
+      content:
+        application/json:
+          example:
+            detail: "Query cannot be empty."
+    Unauthorized:
+      description: Missing or invalid API key
+      content:
+        application/json:
+          example:
+            detail: "Invalid or inactive API key."
+    Forbidden:
+      description: Endpoint requires a paid plan
+      content:
+        application/json:
+          example:
+            detail: "The /answer endpoint requires a paid plan (starter or professional)."
+    NotFound:
+      description: Resource not found
+      content:
+        application/json:
+          example:
+            detail: "Text sn56.11 (lang=en) not found."
+    QuotaExceeded:
+      description: Daily request limit reached
+      content:
+        application/json:
+          example:
+            detail: "Daily request limit reached."

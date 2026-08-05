@@ -1,0 +1,9 @@
+python/.venv/
+python/data/
+web/
+sql/
+**/__pycache__/
+**/*.pyc
+.env
+*.log
+*.err
