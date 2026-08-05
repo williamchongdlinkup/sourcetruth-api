@@ -1,4 +1,5 @@
 anthropic>=0.30.0
+stripe>=7.0.0
 voyageai>=0.3.0
 psycopg2-binary>=2.9.9
 pgvector>=0.3.0

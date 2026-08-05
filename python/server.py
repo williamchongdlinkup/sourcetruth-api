@@ -34,6 +34,7 @@ from typing import Optional
 from urllib.parse import quote as urlquote
 
 import anthropic
+import stripe
 from dotenv import load_dotenv
 from fastapi import BackgroundTasks, Depends, FastAPI, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
@@ -53,6 +54,22 @@ _ner    = None
 _claude = None
 
 KEY_PREFIX = os.getenv('API_KEY_PREFIX', 'st_')
+
+TIER_LIMITS = {
+    'free':         {'daily_limit': 100,    'answer_daily_limit': None},
+    'starter':      {'daily_limit': 1_000,  'answer_daily_limit': 100},
+    'professional': {'daily_limit': 10_000, 'answer_daily_limit': 300},
+}
+
+stripe.api_key = os.getenv('STRIPE_SECRET_KEY', '')
+_PRICE_TO_TIER = {
+    price_id: tier
+    for tier, price_id in {
+        'starter':      os.getenv('STRIPE_STARTER_PRICE_ID', ''),
+        'professional': os.getenv('STRIPE_PROFESSIONAL_PRICE_ID', ''),
+    }.items()
+    if price_id
+}
 
 SYSTEM_PROMPT = (
     "You are a scholarly reference assistant specialising in canonical and classical texts. "
@@ -213,6 +230,56 @@ def _log_usage(
         print(f'[log_usage] Failed for key_id={key_id}: {e}')
 
 
+def _check_answer_quota(key_record: dict) -> None:
+    """Raise 403 if no /answer access, 429 if daily /answer limit is exhausted."""
+    limit = key_record.get('answer_daily_limit')
+    if limit is None:
+        raise HTTPException(
+            status_code=403,
+            detail='The /answer endpoint requires a paid plan (starter or professional).',
+        )
+    with get_primary_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT count FROM answer_daily_quota WHERE key_id = %s AND date = CURRENT_DATE",
+                (key_record['id'],),
+            )
+            row = cur.fetchone()
+    if (row['count'] if row else 0) >= limit:
+        raise HTTPException(status_code=429, detail='Daily /answer limit reached.')
+
+
+def _log_answer_usage(key_id: int) -> None:
+    """Atomically increment the /answer daily quota counter (background task)."""
+    try:
+        with get_primary_conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """INSERT INTO answer_daily_quota (key_id, date, count)
+                       VALUES (%s, CURRENT_DATE, 1)
+                       ON CONFLICT (key_id, date)
+                       DO UPDATE SET count = answer_daily_quota.count + 1""",
+                    (key_id,),
+                )
+    except Exception as e:
+        print(f'[log_answer_usage] Failed for key_id={key_id}: {e}')
+
+
+def _get_key_by_raw(raw_key: str) -> dict:
+    """Look up a key record without quota check (used for billing operations)."""
+    key_hash = _hash_key(raw_key.strip())
+    with get_primary_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                "SELECT * FROM api_keys WHERE key_hash = %s AND is_active = TRUE",
+                (key_hash,),
+            )
+            record = cur.fetchone()
+    if not record:
+        raise HTTPException(status_code=401, detail='Invalid or inactive API key.')
+    return dict(record)
+
+
 def get_key_record(x_api_key: str = Header(default='')) -> dict | None:
     """FastAPI dependency: returns key record if header present, None for anonymous."""
     if not x_api_key:
@@ -240,6 +307,13 @@ class AnswerRequest(BaseModel):
 class KeyRequest(BaseModel):
     name: str
     email: str
+
+
+class CheckoutRequest(BaseModel):
+    api_key:     str
+    price_id:    str
+    success_url: Optional[str] = None
+    cancel_url:  Optional[str] = None
 
 
 # ── Endpoints ────────────────────────────────────────────────────────────────
@@ -353,11 +427,7 @@ def answer(
             status_code=401,
             detail='An API key is required for /v1/answer.',
         )
-    if key_record.get('tier') == 'free':
-        raise HTTPException(
-            status_code=403,
-            detail='The /answer endpoint requires a paid plan (starter or professional).',
-        )
+    _check_answer_quota(key_record)
     if not req.question.strip():
         raise HTTPException(status_code=400, detail='Question cannot be empty.')
 
@@ -435,6 +505,7 @@ def answer(
         req.traditions or [], req.languages or [],
         len(passages), latency_ms,
     )
+    background_tasks.add_task(_log_answer_usage, key_record['id'])
 
     return {
         'question':      req.question,
@@ -545,6 +616,139 @@ def create_key(req: KeyRequest, request: Request):
         'daily_limit': 100,
         'message':     'Store this key safely — it will not be shown again.',
     }
+
+
+@app.post('/v1/stripe/checkout')
+@limiter.limit('5/hour')
+def stripe_checkout(req: CheckoutRequest, request: Request):
+    """Create a Stripe Checkout session to upgrade an API key to a paid plan."""
+    if not stripe.api_key:
+        raise HTTPException(status_code=503, detail='Billing not configured.')
+
+    key_record = _get_key_by_raw(req.api_key)
+    email = key_record.get('email', '')
+    if not email:
+        raise HTTPException(status_code=400, detail='API key has no email — cannot create billing account.')
+
+    # Find or create Stripe customer, then persist the customer ID on the key
+    customer_id = key_record.get('stripe_customer_id')
+    if not customer_id:
+        existing = stripe.Customer.list(email=email, limit=1)
+        if existing.data:
+            customer_id = existing.data[0].id
+        else:
+            customer = stripe.Customer.create(
+                email=email,
+                metadata={'key_id': str(key_record['id'])},
+            )
+            customer_id = customer.id
+        with get_primary_conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    "UPDATE api_keys SET stripe_customer_id = %s WHERE id = %s",
+                    (customer_id, key_record['id']),
+                )
+
+    app_url = os.getenv('NEXT_PUBLIC_APP_URL', 'https://api.sourcetruth.io')
+    session = stripe.checkout.Session.create(
+        customer=customer_id,
+        mode='subscription',
+        line_items=[{'price': req.price_id, 'quantity': 1}],
+        subscription_data={'metadata': {'key_id': str(key_record['id'])}},
+        success_url=req.success_url or f'{app_url}/billing/success?session_id={{CHECKOUT_SESSION_ID}}',
+        cancel_url=req.cancel_url or f'{app_url}/billing/cancel',
+    )
+    return {'checkout_url': session.url}
+
+
+@app.post('/v1/stripe/portal')
+@limiter.limit('10/hour')
+def stripe_portal(request: Request, key_record: dict | None = Depends(get_key_record)):
+    """Create a Stripe Customer Portal session to manage an existing subscription."""
+    if not stripe.api_key:
+        raise HTTPException(status_code=503, detail='Billing not configured.')
+    if not key_record:
+        raise HTTPException(status_code=401, detail='An API key is required.')
+
+    customer_id = key_record.get('stripe_customer_id')
+    if not customer_id:
+        raise HTTPException(status_code=400, detail='No billing account linked to this key.')
+
+    app_url = os.getenv('NEXT_PUBLIC_APP_URL', 'https://api.sourcetruth.io')
+    params: dict = {
+        'customer':   customer_id,
+        'return_url': f'{app_url}/billing',
+    }
+    portal_config = os.getenv('STRIPE_PORTAL_CONFIG_ID')
+    if portal_config:
+        params['configuration'] = portal_config
+
+    session = stripe.billing_portal.Session.create(**params)
+    return {'portal_url': session.url}
+
+
+@app.post('/v1/stripe/webhook')
+async def stripe_webhook(request: Request):
+    """Receive and verify Stripe webhook events for subscription lifecycle management."""
+    if not stripe.api_key:
+        raise HTTPException(status_code=503, detail='Billing not configured.')
+
+    payload = await request.body()
+    sig = request.headers.get('stripe-signature', '')
+    try:
+        event = stripe.Webhook.construct_event(
+            payload, sig, os.environ.get('STRIPE_WEBHOOK_SECRET', '')
+        )
+    except (ValueError, stripe.error.SignatureVerificationError):
+        raise HTTPException(status_code=400, detail='Webhook verification failed.')
+
+    etype = event['type']
+    obj   = event['data']['object']
+
+    if etype in ('customer.subscription.created', 'customer.subscription.updated'):
+        key_id_str = (obj.get('metadata') or {}).get('key_id')
+        if not key_id_str:
+            return {'status': 'ignored', 'reason': 'no key_id in subscription metadata'}
+
+        price_id = obj['items']['data'][0]['price']['id']
+        tier = _PRICE_TO_TIER.get(price_id)
+        if not tier:
+            return {'status': 'ignored', 'reason': f'unknown price_id {price_id}'}
+
+        limits = TIER_LIMITS[tier]
+        with get_primary_conn() as conn:
+            with conn.cursor() as cur:
+                cur.execute(
+                    """UPDATE api_keys
+                       SET tier = %s,
+                           daily_limit = %s,
+                           answer_daily_limit = %s,
+                           stripe_customer_id = COALESCE(stripe_customer_id, %s)
+                       WHERE id = %s""",
+                    (tier, limits['daily_limit'], limits['answer_daily_limit'],
+                     obj.get('customer'), int(key_id_str)),
+                )
+        print(f'[stripe_webhook] Upgraded key_id={key_id_str} to {tier}')
+
+    elif etype == 'customer.subscription.deleted':
+        key_id_str = (obj.get('metadata') or {}).get('key_id')
+        if key_id_str:
+            with get_primary_conn() as conn:
+                with conn.cursor() as cur:
+                    cur.execute(
+                        """UPDATE api_keys
+                           SET tier = 'free',
+                               daily_limit = %s,
+                               answer_daily_limit = NULL
+                           WHERE id = %s""",
+                        (TIER_LIMITS['free']['daily_limit'], int(key_id_str)),
+                    )
+            print(f'[stripe_webhook] Downgraded key_id={key_id_str} to free')
+
+    elif etype == 'invoice.payment_failed':
+        print(f"[stripe_webhook] Payment failed for customer={obj.get('customer')}")
+
+    return {'status': 'ok', 'type': etype}
 
 
 @app.get('/health')
