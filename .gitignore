@@ -2,6 +2,7 @@
 .env
 .env.*
 !.env.example
+railway-env.txt
 
 # Python
 __pycache__/

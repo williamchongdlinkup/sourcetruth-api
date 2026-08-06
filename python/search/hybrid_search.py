@@ -35,7 +35,7 @@ FTS_LANGUAGES = {'en'}
 # Sanskrit with English queries), unchanged between full pool and isolated eval (2026-08-05).
 OPT_IN_ONLY_CORPORA = {'gretil'}
 
-# Tradition → optimal rerank mode from retrieval eval (2026-08-05)
+# Tradition → optimal rerank mode from retrieval eval
 TRADITION_RERANK: dict[str, Literal['mmr', 'text_dedup', 'none']] = {
     'islam':          'text_dedup',
     'theravada':      'text_dedup',
@@ -45,15 +45,22 @@ TRADITION_RERANK: dict[str, Literal['mmr', 'text_dedup', 'none']] = {
     'mahasanghika':   'text_dedup',
     'dharmaguptaka':  'text_dedup',
     'judaism':        'text_dedup',
+    'christianity':   'text_dedup',   # KJV chapter chunks — one result per book (provisional 2026-08-06)
+    'hinduism':       'mmr',           # BG + Upanishads — MMR wins realistic judge 0.932 vs dense 0.877 (2026-08-06)
+    'hellenism':      'text_dedup',   # Greek philosophy — text_dedup wins judge 0.9178 vs dense 0.870 (2026-08-07)
 }
 
 # Corpus code → optimal rerank mode (more specific than tradition; takes priority)
 CORPUS_RERANK: dict[str, Literal['mmr', 'text_dedup', 'none']] = {
-    'quran':              'mmr',         # Dense+MMR wins on chunk nDCG@5 (0.692)
+    'quran':              'mmr',          # Dense+MMR wins on chunk nDCG@5 (0.692)
     'sahih-bukhari':      'text_dedup',
-    'sahih-muslim':       'text_dedup',  # isnad variants make text_dedup the correct mode
-    'tanakh-jps1917':     'text_dedup',  # one result per book/chapter
-    'mishnah-silverstein': 'text_dedup', # one result per tractate
+    'sahih-muslim':       'text_dedup',   # isnad variants make text_dedup the correct mode
+    'tanakh-jps1917':     'text_dedup',   # one result per book/chapter
+    'mishnah-silverstein': 'text_dedup',  # one result per tractate
+    'kjv':               'text_dedup',    # provisional — confirm after eval
+    'bhagavad-gita':     'mmr',            # MMR wins LLM judge 0.9324 (2026-08-07)
+    'upanishads':        'mmr',            # MMR wins LLM judge 0.9324 (2026-08-07)
+    'greek-philosophy':  'text_dedup',    # text_dedup wins LLM judge 0.9178 (2026-08-07)
 }
 
 
@@ -79,22 +86,29 @@ def _infer_use_fts(
 ) -> bool:
     """Return True only if the scoped corpus benefits from FTS.
 
-    FTS confirmed zero-contribution for: Arabic (Quran), Pali, Sanskrit, Chinese.
-    FTS also 0.000 for English Hadith — NOT due to missing chunk_fts (column is
-    GENERATED ALWAYS and auto-populated). Root cause: question-answer vocabulary
-    mismatch — query words ('what', 'did', 'say') don't appear in declarative hadith
-    text; 'simple' tokenizer has no stemming so 'say' != 'said'.
+    FTS confirmed zero-contribution corpora (2026-08-05/06 eval):
+    - Non-English: quran (Arabic), gretil (Sanskrit), sc-data-lzh (Chinese),
+      suttacentral (Pali/Chinese)
+    - English Q&A mismatch (question-form query vs declarative text, 'simple'
+      tokenizer AND logic, no stemming): sahih-bukhari, sahih-muslim,
+      tanakh-jps1917, mishnah-silverstein
+
+    Corpus codes are checked first (most specific) before tradition or language.
     """
-    if languages:
-        return bool(set(languages) & FTS_LANGUAGES)
+    NON_FTS_CORPORA = {
+        'quran', 'gretil', 'sc-data-lzh', 'suttacentral',
+        'sahih-bukhari', 'sahih-muslim',
+        'tanakh-jps1917', 'mishnah-silverstein',  # English but Q&A vocab mismatch (2026-08-06)
+        'kjv', 'bhagavad-gita', 'upanishads', 'greek-philosophy',  # provisional (2026-08-06)
+    }
     if corpus_codes:
-        NON_FTS_CORPORA = {'quran', 'gretil', 'sc-data-lzh', 'suttacentral',
-                           'sahih-bukhari', 'sahih-muslim'}
         return not set(corpus_codes).issubset(NON_FTS_CORPORA)
     if traditions:
-        NON_FTS_TRADITIONS = {'pre-sectarian', 'theravada'}
+        NON_FTS_TRADITIONS = {'pre-sectarian', 'theravada', 'judaism'}
         if set(traditions).issubset(NON_FTS_TRADITIONS):
             return False
+    if languages:
+        return bool(set(languages) & FTS_LANGUAGES)
     return True
 
 

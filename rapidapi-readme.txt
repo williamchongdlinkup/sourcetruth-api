@@ -19,9 +19,31 @@ Each result includes the passage text, canonical reference (e.g. SN 56.11), trad
 
 AVAILABLE CORPORA
 
-pali-canon — Pali Canon (Tipitaka), SuttaCentral, CC-0
+Buddhism
+  pali-canon         — Pali Canon (Tipitaka), SuttaCentral, CC-0
+  sc-data-lzh        — Āgamas (Classical Chinese), SuttaCentral, CC-0
+  gretil             — Buddhist Sanskrit texts, GRETIL (opt-in only)
 
-More corpora added weekly. Islamic, Jewish, Christian Biblical, Hindu, Tibetan, Greek, Chinese, and Sanskrit texts coming in Month 1.
+Islam
+  quran              — Tanzil Qur'an (Arabic), CC BY 3.0
+  sahih-bukhari      — Sahih al-Bukhari (English), Unlicense
+  sahih-muslim       — Sahih Muslim (English), Unlicense
+
+Judaism
+  tanakh-jps1917     — Tanakh, JPS 1917 English translation, Public Domain
+  mishnah-silverstein — Mishnah with Bartenura commentary, Silverstein, CC BY
+
+Christianity
+  kjv                — King James Bible 1769, 66 books, Public Domain
+
+Hinduism
+  bhagavad-gita      — Bhagavad Gita, Edwin Arnold translation (1885), Public Domain
+  upanishads         — Upanishads (Isa, Katha, Kena), Public Domain translation
+
+Hellenism
+  greek-philosophy   — Marcus Aurelius Meditations, Epictetus Discourses, Plato Apology + Phaedo, Aristotle Nicomachean Ethics. All Public Domain translations.
+
+Use corpus_codes in your request body to scope queries to specific texts. More traditions added regularly — Tibetan, Sanskrit, and Sufi in progress.
 
 
 AUTHENTICATION

@@ -35,12 +35,37 @@ info:
     | `pali-canon`    | Buddhism   | Pali / English  | Pali Canon (Tipitaka) — SuttaCentral | CC0       |
     | `sc-data-lzh`   | Buddhism   | Classical Chinese | Āgamas — SuttaCentral sc-data      | CC0       |
     | `gretil`        | Buddhism   | Sanskrit        | GRETIL Buddhist Sanskrit (opt-in only) | Open    |
-    | `quran`         | Islam      | Arabic          | Tanzil Qur'an (Uthmani script)       | CC BY 3.0 |
-    | `sahih-bukhari` | Islam      | English         | Sahih al-Bukhari — fawazahmed0       | Unlicense |
-    | `sahih-muslim`  | Islam      | English         | Sahih Muslim — fawazahmed0           | Unlicense |
+    | `quran`              | Islam      | Arabic          | Tanzil Qur'an (Uthmani script)              | CC BY 3.0   |
+    | `sahih-bukhari`      | Islam      | English         | Sahih al-Bukhari — fawazahmed0              | Unlicense   |
+    | `sahih-muslim`       | Islam      | English         | Sahih Muslim — fawazahmed0                  | Unlicense   |
+    | `tanakh-jps1917`     | Judaism      | English         | Tanakh — JPS 1917 translation               | Public Domain |
+    | `mishnah-silverstein`| Judaism      | English         | Mishnah with Bartenura — Silverstein (CC-BY)| CC BY       |
+    | `kjv`                | Christianity | English         | King James Bible 1769 (66 books)            | Public Domain |
+    | `bhagavad-gita`      | Hinduism     | English         | Bhagavad Gita — Edwin Arnold (1885)          | Public Domain |
+    | `upanishads`         | Hinduism     | English         | Upanishads — Isa, Katha, Kena (PD trans.)   | Public Domain |
+    | `greek-philosophy`   | Hellenism    | English         | Marcus Aurelius, Epictetus, Plato, Aristotle | Public Domain |
 
     Note: `gretil` is excluded from unscoped searches due to low cross-lingual
     retrieval accuracy (18% R@5). Pass `corpus_codes: ["gretil"]` to access it explicitly.
+
+    ## Cross-corpus queries
+    When querying across multiple corpora in a single request (e.g. Tanakh + Mishnah
+    together), dense retrieval returns the globally highest-scoring passages. If one
+    corpus has stronger semantic overlap with the query, it will dominate the top-k
+    results and the other corpus may not appear.
+
+    For queries that require balanced coverage across two corpora — e.g. "What does
+    the biblical commandment say AND how does the Mishnah interpret it?" — make two
+    scoped calls using `corpus_codes` and merge the results on your side:
+
+    ```json
+    // Call 1
+    { "query": "honoring parents commandment", "corpus_codes": ["tanakh-jps1917"], "top_k": 5 }
+    // Call 2
+    { "query": "honoring parents commandment", "corpus_codes": ["mishnah-silverstein"], "top_k": 5 }
+    ```
+
+    This pattern also applies to Quran + Hadith, Pali Canon + Sanskrit, Bhagavad Gita + Upanishads, or Bible + any tradition.
 
   version: 1.0.0
   contact:
@@ -368,7 +393,14 @@ components:
           type: array
           items:
             type: string
-          description: "Most precise scope — filter by corpus code (e.g. `quran`, `sahih-bukhari`, `pali-canon`). Takes priority over traditions for reranking."
+          description: |
+            Most precise scope — filter by corpus code (e.g. `quran`, `sahih-bukhari`,
+            `tanakh-jps1917`). Takes priority over traditions for reranking.
+
+            **Cross-corpus tip:** when your query needs balanced results from two corpora
+            (e.g. Tanakh + Mishnah, or Quran + Hadith), make two scoped calls and merge
+            — a single unscoped call may be dominated by whichever corpus has the stronger
+            semantic match.
           example: ["sahih-bukhari", "sahih-muslim"]
         traditions:
           type: array
