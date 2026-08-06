@@ -44,13 +44,16 @@ TRADITION_RERANK: dict[str, Literal['mmr', 'text_dedup', 'none']] = {
     'sarvastivada':   'text_dedup',
     'mahasanghika':   'text_dedup',
     'dharmaguptaka':  'text_dedup',
+    'judaism':        'text_dedup',
 }
 
 # Corpus code → optimal rerank mode (more specific than tradition; takes priority)
 CORPUS_RERANK: dict[str, Literal['mmr', 'text_dedup', 'none']] = {
-    'quran':         'mmr',         # Dense+MMR wins on chunk nDCG@5 (0.692)
-    'sahih-bukhari': 'text_dedup',
-    'sahih-muslim':  'text_dedup',  # isnad variants make text_dedup the correct mode
+    'quran':              'mmr',         # Dense+MMR wins on chunk nDCG@5 (0.692)
+    'sahih-bukhari':      'text_dedup',
+    'sahih-muslim':       'text_dedup',  # isnad variants make text_dedup the correct mode
+    'tanakh-jps1917':     'text_dedup',  # one result per book/chapter
+    'mishnah-silverstein': 'text_dedup', # one result per tractate
 }
 
 
