@@ -254,6 +254,7 @@ class HybridSearch:
             FROM chunk_embeddings ce
             JOIN document_chunks dc ON dc.id = ce.chunk_id
             JOIN canon_texts ct ON ct.id = dc.text_id
+            JOIN source_corpora sc ON sc.id = ct.corpus_id
             WHERE TRUE {filter_sql}
             ORDER BY distance
             LIMIT %s
@@ -289,6 +290,7 @@ class HybridSearch:
                         ) AS kw_rank
                     FROM document_chunks dc
                     JOIN canon_texts ct ON ct.id = dc.text_id
+                    JOIN source_corpora sc ON sc.id = ct.corpus_id
                     WHERE dc.chunk_fts @@ to_tsquery('simple', %s)
                     {filter_sql}
                     ORDER BY kw_score DESC
