@@ -61,22 +61,22 @@ CORPUS_RERANK: dict[str, Literal['mmr', 'text_dedup', 'none']] = {
     'sahih-muslim':       'text_dedup',   # isnad variants make text_dedup the correct mode
     'tanakh-jps1917':     'text_dedup',   # one result per book/chapter
     'mishnah-silverstein': 'text_dedup',  # one result per tractate
-    'kjv':               'text_dedup',    # provisional — confirm after eval
+    'kjv':               'text_dedup',    # text_dedup wins LLM judge chunk 0.846 (2026-08-08)
     'bhagavad-gita':     'mmr',            # MMR wins LLM judge 0.9324 (2026-08-07)
     'upanishads':        'mmr',            # MMR wins LLM judge 0.9324 (2026-08-07)
     'greek-philosophy':  'text_dedup',    # text_dedup wins LLM judge 0.9178 (2026-08-07)
     # V4 eval results (2026-08-07)
     'classical-latin':    'none',          # dense wins judge 0.920; two_level best but not in prod (2026-08-07)
     'classical-chinese':  'none',          # dense wins judge 0.782 (2026-08-07)
-    'sanskrit-classical': 'none',          # dense wins judge 0.803 (2026-08-07)
-    'sggs':               'none',           # dense wins judge 0.883 (synthetic 0% — realistic 88%: topical queries work!) (2026-08-07)
+    'sanskrit-classical': 'text_dedup',   # text_dedup wins judge chunk 0.978 vs dense 0.910 (V5 expanded corpus 2026-08-08)
+    'sggs':               'none',          # dense wins judge 0.883 (synthetic 0% — realistic 88%: topical queries work!) (2026-08-07)
     'avesta':             'none',          # dense wins judge 0.804 (2026-08-07)
-    # V5 provisional (2026-08-08) — eval pending Anthropic credit top-up
-    'bible-web':          'text_dedup',   # same tradition as KJV; text_dedup provisional
-    'bible-asv':          'text_dedup',   # same tradition as KJV; text_dedup provisional
-    'bible-ylt':          'text_dedup',   # same tradition as KJV; text_dedup provisional
-    'tibetan-buddhist':   'none',          # dense provisional; eval pending
-    'rigveda':            'none',          # dense provisional; eval pending
+    # V5 eval results (2026-08-08)
+    'bible-web':          'text_dedup',   # text_dedup wins judge chunk 0.846 (confirmed 2026-08-08)
+    'bible-asv':          'text_dedup',   # text_dedup wins judge chunk 0.846 (confirmed 2026-08-08)
+    'bible-ylt':          'text_dedup',   # text_dedup wins judge chunk 0.846 (confirmed 2026-08-08)
+    'tibetan-buddhist':   'none',          # dense wins judge chunk 0.594 / source 1.000; text_dedup worse (0.500) (2026-08-08)
+    'rigveda':            'none',          # dense wins judge chunk 0.766; all modes within 0.01 (2026-08-08)
 }
 
 
@@ -120,7 +120,7 @@ def _infer_use_fts(
         'classical-latin', 'classical-chinese', 'sanskrit-classical',
         'sggs',   # Gurmukhi script — FTS zero (confirmed)
         'avesta', # DjVu OCR English — provisional non-FTS
-        'rigveda', 'tibetan-buddhist',  # DjVu OCR English — provisional non-FTS (2026-08-08)
+        'rigveda', 'tibetan-buddhist',  # DjVu OCR English — FTS=0 confirmed by LLM judge (2026-08-08)
     }
     if corpus_codes:
         return not set(corpus_codes).issubset(NON_FTS_CORPORA)

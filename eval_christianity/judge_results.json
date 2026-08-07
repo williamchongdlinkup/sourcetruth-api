@@ -1,0 +1,396 @@
+{
+  "summary": [
+    {
+      "system": "dense",
+      "chunk_ndcg5": 0.8435,
+      "source_ndcg5": 0.9847
+    },
+    {
+      "system": "dense_text_dedup",
+      "chunk_ndcg5": 0.8464,
+      "source_ndcg5": 0.9853
+    },
+    {
+      "system": "dense_two_level",
+      "chunk_ndcg5": 0.8266,
+      "source_ndcg5": 1.0
+    },
+    {
+      "system": "dense_mmr",
+      "chunk_ndcg5": 0.833,
+      "source_ndcg5": 0.9751
+    },
+    {
+      "system": "hybrid",
+      "chunk_ndcg5": 0.8435,
+      "source_ndcg5": 0.9847
+    },
+    {
+      "system": "fts",
+      "chunk_ndcg5": 0.0,
+      "source_ndcg5": 0.0
+    }
+  ],
+  "per_query": [
+    {
+      "query": "What does the Bible say about the resurrection of the dead?",
+      "type": "realistic_theology",
+      "chunk_ndcg5": {
+        "dense": 0.8558,
+        "dense_text_dedup": 0.8401,
+        "dense_two_level": 0.8772,
+        "dense_mmr": 0.7643,
+        "hybrid": 0.8558,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9047,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Gospel of John describe the nature of Jesus as the Word of God?",
+      "type": "realistic_theology",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.8772,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Paul teach about justification by faith in Romans?",
+      "type": "realistic_theology",
+      "chunk_ndcg5": {
+        "dense": 0.7003,
+        "dense_text_dedup": 0.7242,
+        "dense_two_level": 0.6973,
+        "dense_mmr": 0.7075,
+        "hybrid": 0.7003,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9795,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is the Sermon on the Mount and what does it teach?",
+      "type": "realistic_teaching",
+      "chunk_ndcg5": {
+        "dense": 0.992,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9563,
+        "dense_mmr": 1.0,
+        "hybrid": 0.992,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9675,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Proverbs say about the importance of wisdom?",
+      "type": "realistic_ethics",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9047,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9557,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What commandments did Jesus give about loving your neighbor?",
+      "type": "realistic_ethics",
+      "chunk_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.3869,
+        "hybrid": 0.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9864,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the book of James describe the relationship between faith and works?",
+      "type": "realistic_ethics",
+      "chunk_ndcg5": {
+        "dense": 0.7606,
+        "dense_text_dedup": 0.7606,
+        "dense_two_level": 0.6797,
+        "dense_mmr": 0.6509,
+        "hybrid": 0.7606,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Genesis describe the creation of the world?",
+      "type": "realistic_creation",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9252,
+        "dense_mmr": 0.9795,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the book of Revelation say about the end of the world?",
+      "type": "realistic_prophecy",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9047,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9606,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What messianic prophecies appear in Isaiah?",
+      "type": "realistic_prophecy",
+      "chunk_ndcg5": {
+        "dense": 0.8635,
+        "dense_text_dedup": 0.8635,
+        "dense_two_level": 0.9502,
+        "dense_mmr": 1.0,
+        "hybrid": 0.8635,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9091,
+        "dense_text_dedup": 0.9091,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9816,
+        "hybrid": 0.9091,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Psalm 23 say about God as a shepherd?",
+      "type": "realistic_poetry",
+      "chunk_ndcg5": {
+        "dense": 0.9197,
+        "dense_text_dedup": 0.9197,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8635,
+        "hybrid": 0.9197,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9714,
+        "dense_text_dedup": 0.9714,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9606,
+        "hybrid": 0.9714,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How do the Psalms express lament and trust in God?",
+      "type": "realistic_poetry",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9519,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What miracles did Jesus perform according to the Gospel of Mark?",
+      "type": "realistic_narrative",
+      "chunk_ndcg5": {
+        "dense": 0.7593,
+        "dense_text_dedup": 0.7542,
+        "dense_two_level": 0.8855,
+        "dense_mmr": 0.9197,
+        "hybrid": 0.7593,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8447,
+        "dense_text_dedup": 0.8558,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9829,
+        "hybrid": 0.8447,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is the parable of the prodigal son about?",
+      "type": "realistic_teaching",
+      "chunk_ndcg5": {
+        "dense": 0.6509,
+        "dense_text_dedup": 0.6509,
+        "dense_two_level": 0.4307,
+        "dense_mmr": 0.5438,
+        "hybrid": 0.6509,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Gospel of Luke describe the birth of Jesus?",
+      "type": "realistic_narrative",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9252,
+        "dense_mmr": 0.912,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9606,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the New Testament say about the fulfillment of the Law?",
+      "type": "realistic_cross",
+      "chunk_ndcg5": {
+        "dense": 0.8155,
+        "dense_text_dedup": 0.8558,
+        "dense_two_level": 0.9675,
+        "dense_mmr": 0.7075,
+        "hybrid": 0.8155,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9557,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Paul reference Abraham as an example of faith?",
+      "type": "realistic_cross",
+      "chunk_ndcg5": {
+        "dense": 0.8661,
+        "dense_text_dedup": 0.8661,
+        "dense_two_level": 0.7075,
+        "dense_mmr": 0.8069,
+        "hybrid": 0.8661,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9558,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the book of Hebrews say about Jesus as high priest?",
+      "type": "realistic_theology",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9907,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    }
+  ]
+}

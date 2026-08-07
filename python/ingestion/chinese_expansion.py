@@ -44,16 +44,12 @@ IA_HEADERS  = {'User-Agent': 'Mozilla/5.0 (compatible; academic-research/1.0)'}
 TEXTS = [
     {
         "external_id":  "mencius-legge",
-        "title":        "The Works of Mencius (Sayings of Mencius)",
+        "title":        "The Works of Mencius",
         "author":       "Mencius",
-        "translator":   "James Legge (1861)",
-        "source_type":  "gutenberg",
-        # Gutenberg cache CDN drops large files — try direct URL then mirror
-        "url":          "https://www.gutenberg.org/files/10056/10056.txt",
-        "fallback_urls": [
-            "https://gutenberg.org/cache/epub/10056/pg10056.txt",
-            "https://www.gutenberg.org/ebooks/10056.txt.utf-8",
-        ],
+        "translator":   "James Legge (1895)",
+        "source_type":  "ia",
+        # Internet Archive: Chinese Classics Vol. II — full standalone Mencius, 7 books
+        "url":          "https://archive.org/download/chineseclassics02legg/chineseclassics02legg_djvu.txt",
         "parse_mode":   "mencius",
         "collection":   "Confucian Classics",
     },
@@ -153,49 +149,54 @@ def _chunk_paragraphs(paras: list[str], ref_prefix: str) -> list[dict]:
 
 def _parse_mencius(text: str) -> list[dict]:
     """
-    Extract Mencius from the Chinese Literature anthology (#10056).
-    The anthology has sections labelled "SAYINGS OF MENCIUS" or "MENCIUS".
+    Parse James Legge's Works of Mencius from the standalone IA DjVu scan
+    (chineseclassics02legg). 7 books, each with Part I and Part II.
+    Skips the prolegomena by finding the first body BOOK header with
+    substantial translation content after it.
     """
-    # Find the Mencius section in the anthology
-    mencius_start = -1
-    for marker in ["SAYINGS OF MENCIUS", "MENCIUS", "Mencius"]:
-        idx = text.find(marker)
-        if idx >= 0:
-            mencius_start = idx
+    # Normalize double-spaces left by DjVu OCR
+    text = re.sub(r'  +', ' ', text)
+
+    # Fix OCR artifacts specific to this scan's Roman numerals:
+    #   V → Y  (e.g., "BOOK IY." = "BOOK IV.", "BOOK Y." = "BOOK V.")
+    #   III. → IIL (period absorbed into last numeral as L)
+    text = re.sub(r'(BOOK\s+)IIL\b', r'\1III', text)
+    text = re.sub(r'(BOOK\s+)IY\b', r'\1IV', text)
+    text = re.sub(r'(BOOK\s+)Y\b', r'\1V', text)
+
+    # Find BOOK headers on their own line (standalone, not embedded in sentences)
+    book_re = re.compile(r'(?:^|\n)(BOOK\s+[IVXLC]+\.?)\s*\n', re.MULTILINE)
+    all_matches = list(book_re.finditer(text))
+
+    # Skip TOC/prolegomena hits: find the first match followed by real paragraphs
+    # (at least 300 chars of non-header content within the next 2000 chars)
+    body_start_idx = None
+    for m in all_matches:
+        snippet = text[m.end():m.end() + 2000]
+        prose = re.sub(r'\n+', ' ', snippet).strip()
+        # Real body has numbered sayings like "1. Mencius went..." or long paragraphs
+        if len(prose) > 300 and re.search(r'\d+\.\s+[A-Z]', prose):
+            body_start_idx = m.start()
             break
 
-    if mencius_start < 0:
-        # Fallback: treat whole text as Mencius if it's a dedicated file
+    if body_start_idx is None:
+        # Fallback: chunk the whole text as paragraphs
         paras = [_clean(p) for p in re.split(r'\n{2,}', text) if p.strip() and len(p.split()) > 5]
         return _chunk_paragraphs(paras, "Mencius")
 
-    # Find end of Mencius section (next major section)
-    mencius_end = len(text)
-    for next_marker in ["SHI-KING", "TRAVELS", "SORROWS", "FAH-HIEN", "*** END"]:
-        idx = text.find(next_marker, mencius_start + 500)
-        if idx > 0:
-            mencius_end = idx
-            break
+    body_text = text[body_start_idx:]
+    body_matches = list(book_re.finditer(body_text))
 
-    mencius_text = text[mencius_start:mencius_end]
-
-    # Split by Book headers
-    book_re = re.compile(
-        r'(?:^|\n)(BOOK\s+[IVXLC]+\.?\s*[\w\s]*?)\n',
-        re.IGNORECASE | re.MULTILINE
-    )
-    matches = list(book_re.finditer(mencius_text))
-
-    if not matches:
-        paras = [_clean(p) for p in re.split(r'\n{2,}', mencius_text) if p.strip() and len(p.split()) > 5]
+    if not body_matches:
+        paras = [_clean(p) for p in re.split(r'\n{2,}', body_text) if p.strip() and len(p.split()) > 5]
         return _chunk_paragraphs(paras, "Mencius")
 
     chunks = []
-    for bi, match in enumerate(matches):
-        book_label = match.group(1).strip()
+    for bi, match in enumerate(body_matches):
+        book_label = match.group(1).strip()  # e.g. "BOOK I."
         start = match.start()
-        end   = matches[bi+1].start() if bi+1 < len(matches) else len(mencius_text)
-        body  = mencius_text[start:end]
+        end   = body_matches[bi + 1].start() if bi + 1 < len(body_matches) else len(body_text)
+        body  = body_text[start:end]
         paras = [_clean(p) for p in re.split(r'\n{2,}', body) if p.strip() and len(p.split()) > 5]
         sub   = _chunk_paragraphs(paras, f"Mencius {book_label}")
         chunks.extend(sub)

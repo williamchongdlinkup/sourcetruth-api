@@ -1,0 +1,676 @@
+{
+  "summary": [
+    {
+      "system": "dense",
+      "chunk_ndcg5": 0.766,
+      "source_ndcg5": 0.7528
+    },
+    {
+      "system": "dense_text_dedup",
+      "chunk_ndcg5": 0.762,
+      "source_ndcg5": 0.7437
+    },
+    {
+      "system": "dense_two_level",
+      "chunk_ndcg5": 0.7673,
+      "source_ndcg5": 0.7502
+    },
+    {
+      "system": "dense_mmr",
+      "chunk_ndcg5": 0.7584,
+      "source_ndcg5": 0.7418
+    },
+    {
+      "system": "hybrid",
+      "chunk_ndcg5": 0.766,
+      "source_ndcg5": 0.7528
+    },
+    {
+      "system": "fts",
+      "chunk_ndcg5": 0.0,
+      "source_ndcg5": 0.0
+    }
+  ],
+  "per_query": [
+    {
+      "query": "What are the hymns to Agni (fire deity) in the Rigveda and what do they teach?",
+      "type": "realistic_agni",
+      "chunk_ndcg5": {
+        "dense": 0.7123,
+        "dense_text_dedup": 0.7123,
+        "dense_two_level": 0.7328,
+        "dense_mmr": 0.6309,
+        "hybrid": 0.7123,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What are the hymns to Agni (fire deity) in the Rigveda and what do they teach?",
+      "type": "realistic_agni",
+      "chunk_ndcg5": {
+        "dense": 0.7123,
+        "dense_text_dedup": 0.7123,
+        "dense_two_level": 0.7328,
+        "dense_mmr": 0.6309,
+        "hybrid": 0.7123,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Rigveda describe Indra's victory over the dragon Vritra?",
+      "type": "realistic_indra_vritra",
+      "chunk_ndcg5": {
+        "dense": 0.9829,
+        "dense_text_dedup": 0.9829,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 0.9829,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.992,
+        "dense_text_dedup": 0.992,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 0.992,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Rigveda describe Indra's victory over the dragon Vritra?",
+      "type": "realistic_indra_vritra",
+      "chunk_ndcg5": {
+        "dense": 0.9829,
+        "dense_text_dedup": 0.9829,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 0.9829,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9829,
+        "dense_text_dedup": 0.9829,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 0.9829,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the Rigveda say about Varuna as the god of cosmic order (Rita)?",
+      "type": "realistic_varuna_rita",
+      "chunk_ndcg5": {
+        "dense": 0.992,
+        "dense_text_dedup": 0.9829,
+        "dense_two_level": 0.9864,
+        "dense_mmr": 0.9665,
+        "hybrid": 0.992,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9557,
+        "dense_text_dedup": 0.9557,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9557,
+        "hybrid": 0.9557,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the Rigveda say about Varuna as the god of cosmic order (Rita)?",
+      "type": "realistic_varuna_rita",
+      "chunk_ndcg5": {
+        "dense": 0.9829,
+        "dense_text_dedup": 0.9829,
+        "dense_two_level": 0.9611,
+        "dense_mmr": 0.9469,
+        "hybrid": 0.9829,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9557,
+        "dense_text_dedup": 0.9557,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9557,
+        "hybrid": 0.9557,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How is Soma described and praised in the Rigveda hymns?",
+      "type": "realistic_soma",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9558,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9558,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How is Soma described and praised in the Rigveda hymns?",
+      "type": "realistic_soma",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9558,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9558,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is the Purusha Sukta and what does it teach about the cosmic being?",
+      "type": "realistic_purusha_sukta",
+      "chunk_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is the Purusha Sukta and what does it teach about the cosmic being?",
+      "type": "realistic_purusha_sukta",
+      "chunk_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Rigveda describe Ushas, the goddess of dawn?",
+      "type": "realistic_ushas",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.6183,
+        "dense_text_dedup": 0.7606,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.7123,
+        "hybrid": 0.6183,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Rigveda describe Ushas, the goddess of dawn?",
+      "type": "realistic_ushas",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.6183,
+        "dense_text_dedup": 0.7606,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.7123,
+        "hybrid": 0.6183,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the Nasadiya Sukta (creation hymn) say about the origin of the universe?",
+      "type": "realistic_nasadiya",
+      "chunk_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the Nasadiya Sukta (creation hymn) say about the origin of the universe?",
+      "type": "realistic_nasadiya",
+      "chunk_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How are the Ashvins (divine twins) described in Rigveda hymns?",
+      "type": "realistic_ashvins",
+      "chunk_ndcg5": {
+        "dense": 0.9518,
+        "dense_text_dedup": 0.9795,
+        "dense_two_level": 0.9047,
+        "dense_mmr": 0.9386,
+        "hybrid": 0.9518,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.992,
+        "dense_text_dedup": 0.9795,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9557,
+        "hybrid": 0.992,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How are the Ashvins (divine twins) described in Rigveda hymns?",
+      "type": "realistic_ashvins",
+      "chunk_ndcg5": {
+        "dense": 0.9518,
+        "dense_text_dedup": 0.9795,
+        "dense_two_level": 0.9047,
+        "dense_mmr": 0.9386,
+        "hybrid": 0.9518,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.992,
+        "dense_text_dedup": 0.9795,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9557,
+        "hybrid": 0.992,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What role does Surya (sun god) play in the Rigveda's cosmology?",
+      "type": "realistic_surya",
+      "chunk_ndcg5": {
+        "dense": 0.9047,
+        "dense_text_dedup": 0.9047,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 0.9047,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8855,
+        "dense_text_dedup": 0.8855,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 0.8855,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What role does Surya (sun god) play in the Rigveda's cosmology?",
+      "type": "realistic_surya",
+      "chunk_ndcg5": {
+        "dense": 0.9047,
+        "dense_text_dedup": 0.9047,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.906,
+        "hybrid": 0.9047,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8855,
+        "dense_text_dedup": 0.8855,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 0.8855,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Rigveda describe the sacrifice (yajna) and its cosmic significance?",
+      "type": "realistic_yajna",
+      "chunk_ndcg5": {
+        "dense": 0.8855,
+        "dense_text_dedup": 0.906,
+        "dense_two_level": 0.9469,
+        "dense_mmr": 0.9558,
+        "hybrid": 0.8855,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.7075,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.7005,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Rigveda describe the sacrifice (yajna) and its cosmic significance?",
+      "type": "realistic_yajna",
+      "chunk_ndcg5": {
+        "dense": 0.8855,
+        "dense_text_dedup": 0.906,
+        "dense_two_level": 0.9469,
+        "dense_mmr": 0.9558,
+        "hybrid": 0.8855,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.7075,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.7005,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What hymns in the Rigveda address the concept of Rita (cosmic order/truth)?",
+      "type": "realistic_rita",
+      "chunk_ndcg5": {
+        "dense": 0.9675,
+        "dense_text_dedup": 0.9675,
+        "dense_two_level": 0.9283,
+        "dense_mmr": 1.0,
+        "hybrid": 0.9675,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9795,
+        "dense_text_dedup": 0.9852,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 0.9795,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What hymns in the Rigveda address the concept of Rita (cosmic order/truth)?",
+      "type": "realistic_rita",
+      "chunk_ndcg5": {
+        "dense": 0.9675,
+        "dense_text_dedup": 0.9675,
+        "dense_two_level": 0.9283,
+        "dense_mmr": 1.0,
+        "hybrid": 0.9675,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9558,
+        "dense_text_dedup": 0.9675,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 0.9558,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Rigveda portray Vishnu's three strides across the universe?",
+      "type": "realistic_vishnu",
+      "chunk_ndcg5": {
+        "dense": 0.9313,
+        "dense_text_dedup": 0.9283,
+        "dense_two_level": 0.9779,
+        "dense_mmr": 0.8836,
+        "hybrid": 0.9313,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9386,
+        "dense_text_dedup": 0.9283,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.896,
+        "hybrid": 0.9386,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Rigveda portray Vishnu's three strides across the universe?",
+      "type": "realistic_vishnu",
+      "chunk_ndcg5": {
+        "dense": 0.9313,
+        "dense_text_dedup": 0.9283,
+        "dense_two_level": 0.9779,
+        "dense_mmr": 0.8836,
+        "hybrid": 0.9313,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9907,
+        "dense_text_dedup": 0.9816,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9053,
+        "hybrid": 0.9907,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the Rigveda teach about the relationship between humans and the gods?",
+      "type": "realistic_human_divine",
+      "chunk_ndcg5": {
+        "dense": 0.9829,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9047,
+        "dense_mmr": 0.9829,
+        "hybrid": 0.9829,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.674,
+        "dense_text_dedup": 0.7239,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.7387,
+        "hybrid": 0.674,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the Rigveda teach about the relationship between humans and the gods?",
+      "type": "realistic_human_divine",
+      "chunk_ndcg5": {
+        "dense": 0.9829,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9047,
+        "dense_mmr": 0.9829,
+        "hybrid": 0.9829,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.674,
+        "dense_text_dedup": 0.7239,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.7387,
+        "hybrid": 0.674,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How is Rudra (ancestor of Shiva) described in the Rigveda?",
+      "type": "realistic_rudra",
+      "chunk_ndcg5": {
+        "dense": 0.9502,
+        "dense_text_dedup": 0.8772,
+        "dense_two_level": 0.9072,
+        "dense_mmr": 0.8772,
+        "hybrid": 0.9502,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9675,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9047,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How is Rudra (ancestor of Shiva) described in the Rigveda?",
+      "type": "realistic_rudra",
+      "chunk_ndcg5": {
+        "dense": 0.9502,
+        "dense_text_dedup": 0.8772,
+        "dense_two_level": 0.9072,
+        "dense_mmr": 0.8772,
+        "hybrid": 0.9502,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9675,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9047,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the Rigveda say about Mitra and Varuna as guardians of cosmic law?",
+      "type": "realistic_mitra_varuna",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the Rigveda say about Mitra and Varuna as guardians of cosmic law?",
+      "type": "realistic_mitra_varuna",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9907,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How do Rigveda hymns describe the afterlife or realm of the ancestors (Pitrs)?",
+      "type": "realistic_afterlife",
+      "chunk_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How do Rigveda hymns describe the afterlife or realm of the ancestors (Pitrs)?",
+      "type": "realistic_afterlife",
+      "chunk_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    }
+  ]
+}
