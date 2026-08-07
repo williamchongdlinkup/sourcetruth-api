@@ -137,7 +137,18 @@ def embed_query_vec(client, text):
 def main():
     qpath = HERE / "queries.jsonl"
     if not qpath.exists(): raise SystemExit("Run generate_queries.py first.")
-    queries   = [json.loads(l) for l in qpath.read_text(encoding='utf-8').splitlines() if l.strip()]
+    raw = [json.loads(l) for l in qpath.read_text(encoding='utf-8').splitlines() if l.strip()]
+    # Normalize: support both {query, query_type} and {natural, paraphrase, type} formats
+    queries = []
+    for r in raw:
+        if 'query_type' in r:
+            queries.append(r)
+        else:
+            qtype = r.get('type', 'synthetic')
+            for variant, text in (('natural', r.get('natural')), ('paraphrase', r.get('paraphrase'))):
+                if text:
+                    queries.append({'query': text, 'query_type': f'{qtype}_{variant}' if qtype == 'synthetic' else f'realistic_{qtype}',
+                                    'chunk_id': r.get('chunk_id'), 'corpus': r.get('corpus'), 'reference': r.get('reference')})
     synthetic = [q for q in queries if q['query_type'].startswith('synthetic') and q.get('chunk_id')]
     realistic = [q for q in queries if q['query_type'].startswith('realistic')]
     print(f"Loaded {len(synthetic)} synthetic, {len(realistic)} realistic queries.")
