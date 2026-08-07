@@ -44,6 +44,11 @@ info:
     | `bhagavad-gita`      | Hinduism     | English         | Bhagavad Gita — Edwin Arnold (1885)          | Public Domain |
     | `upanishads`         | Hinduism     | English         | Upanishads — Isa, Katha, Kena (PD trans.)   | Public Domain |
     | `greek-philosophy`   | Hellenism    | English         | Marcus Aurelius, Epictetus, Plato, Aristotle | Public Domain |
+    | `classical-latin`    | Classicism   | English         | Caesar, Virgil, Lucretius, Tacitus, Cicero   | Public Domain |
+    | `classical-chinese`  | East Asian   | English         | Confucius Analects, Tao Te Ching, Art of War | Public Domain |
+    | `sanskrit-classical` | Hinduism     | English         | Ramayana (Griffith), Kalidasa (Ryder)        | Public Domain |
+    | `sggs`               | Sikhism      | Punjabi/Gurmukhi| Sri Guru Granth Sahib Ji — Shabados DB       | Public Domain |
+    | `avesta`             | Zoroastrianism | English       | Vendidad + Yasna — Darmesteter/Mills (1880-87)| Public Domain |
 
     Note: `gretil` is excluded from unscoped searches due to low cross-lingual
     retrieval accuracy (18% R@5). Pass `corpus_codes: ["gretil"]` to access it explicitly.

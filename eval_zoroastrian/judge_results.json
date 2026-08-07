@@ -1,0 +1,356 @@
+{
+  "summary": [
+    {
+      "system": "dense",
+      "chunk_ndcg5": 0.8035,
+      "source_ndcg5": 0.8056
+    },
+    {
+      "system": "dense_text_dedup",
+      "chunk_ndcg5": 0.6863,
+      "source_ndcg5": 0.8683
+    },
+    {
+      "system": "dense_two_level",
+      "chunk_ndcg5": 0.7955,
+      "source_ndcg5": 0.844
+    },
+    {
+      "system": "dense_mmr",
+      "chunk_ndcg5": 0.7984,
+      "source_ndcg5": 0.8097
+    },
+    {
+      "system": "hybrid",
+      "chunk_ndcg5": 0.8035,
+      "source_ndcg5": 0.8056
+    },
+    {
+      "system": "fts",
+      "chunk_ndcg5": 0.0,
+      "source_ndcg5": 0.0
+    }
+  ],
+  "per_query": [
+    {
+      "query": "Who is Ahura Mazda and what is his role in Zoroastrian theology?",
+      "type": "realistic_ahura_mazda",
+      "chunk_ndcg5": {
+        "dense": 0.6183,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.7123,
+        "dense_mmr": 0.6183,
+        "hybrid": 0.6183,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9714,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9519,
+        "hybrid": 0.9714,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the Vendidad say about purification rituals after contact with corpses?",
+      "type": "realistic_vendidad_purity",
+      "chunk_ndcg5": {
+        "dense": 0.9795,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9795,
+        "hybrid": 0.9795,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.6309,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Zoroastrian text describe the creation of the world by Ahura Mazda?",
+      "type": "realistic_creation",
+      "chunk_ndcg5": {
+        "dense": 0.4307,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.3869,
+        "dense_mmr": 0.5,
+        "hybrid": 0.4307,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Asha (truth/righteousness) and how is it contrasted with Druj (lie/evil)?",
+      "type": "realistic_asha_druj",
+      "chunk_ndcg5": {
+        "dense": 0.6934,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.6934,
+        "dense_mmr": 0.5,
+        "hybrid": 0.6934,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What are the teachings of Zarathustra (Zoroaster) as recorded in the Gathas?",
+      "type": "realistic_zarathustra_gathas",
+      "chunk_ndcg5": {
+        "dense": 0.5706,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.5,
+        "dense_mmr": 0.4307,
+        "hybrid": 0.5706,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9864,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the Vendidad say about the treatment of the dead and funerary practices?",
+      "type": "realistic_vendidad_death",
+      "chunk_ndcg5": {
+        "dense": 0.8268,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.8646,
+        "dense_mmr": 0.8841,
+        "hybrid": 0.8268,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Zoroastrian scripture describe the conflict between good and evil?",
+      "type": "realistic_cosmic_dualism",
+      "chunk_ndcg5": {
+        "dense": 0.8661,
+        "dense_text_dedup": 0.8597,
+        "dense_two_level": 0.8084,
+        "dense_mmr": 0.8879,
+        "hybrid": 0.8661,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What agricultural and pastoral laws are described in the Vendidad?",
+      "type": "realistic_vendidad_agriculture",
+      "chunk_ndcg5": {
+        "dense": 0.8772,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.8772,
+        "dense_mmr": 1.0,
+        "hybrid": 0.8772,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the Yasna say about fire as a sacred element in Zoroastrianism?",
+      "type": "realistic_yasna_fire",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.8734,
+        "dense_mmr": 0.8155,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9714,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9467,
+        "hybrid": 0.9714,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Avesta describe the afterlife and judgment of souls?",
+      "type": "realistic_afterlife",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9777,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is the role of the Fravashis (divine spirits) in Zoroastrian belief?",
+      "type": "realistic_fravashis",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9563,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Zoroastrian scripture describe the Chinvat Bridge and the soul's journey?",
+      "type": "realistic_chinvat",
+      "chunk_ndcg5": {
+        "dense": 0.9779,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9639,
+        "dense_mmr": 1.0,
+        "hybrid": 0.9779,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9469,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9469,
+        "hybrid": 0.9469,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What purification requirements does the Vendidad set for dealing with pollution?",
+      "type": "realistic_vendidad_pollution",
+      "chunk_ndcg5": {
+        "dense": 0.6597,
+        "dense_text_dedup": 0.6309,
+        "dense_two_level": 0.6585,
+        "dense_mmr": 0.6763,
+        "hybrid": 0.6597,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.5,
+        "dense_text_dedup": 0.6309,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.4307,
+        "hybrid": 0.5,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Zarathustra describe his divine revelation and mission in the Gathas?",
+      "type": "realistic_gathas_revelation",
+      "chunk_ndcg5": {
+        "dense": 0.5,
+        "dense_text_dedup": 0.6309,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.7123,
+        "hybrid": 0.5,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.5,
+        "dense_text_dedup": 0.6309,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.6934,
+        "hybrid": 0.5,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What Zoroastrian prayers and rituals are described in the Yasna liturgy?",
+      "type": "realistic_yasna_ritual",
+      "chunk_ndcg5": {
+        "dense": 0.8887,
+        "dense_text_dedup": 0.8597,
+        "dense_two_level": 0.8879,
+        "dense_mmr": 0.8793,
+        "hybrid": 0.8887,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What do Zoroastrian texts say about the proper care of dogs?",
+      "type": "realistic_vendidad_dogs",
+      "chunk_ndcg5": {
+        "dense": 0.9665,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9573,
+        "hybrid": 0.9665,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    }
+  ]
+}

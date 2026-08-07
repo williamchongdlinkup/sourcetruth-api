@@ -1,0 +1,396 @@
+{
+  "summary": [
+    {
+      "system": "dense",
+      "chunk_ndcg5": 0.7818,
+      "source_ndcg5": 0.7374
+    },
+    {
+      "system": "dense_text_dedup",
+      "chunk_ndcg5": 0.692,
+      "source_ndcg5": 0.7467
+    },
+    {
+      "system": "dense_two_level",
+      "chunk_ndcg5": 0.7441,
+      "source_ndcg5": 0.7402
+    },
+    {
+      "system": "dense_mmr",
+      "chunk_ndcg5": 0.7725,
+      "source_ndcg5": 0.7132
+    },
+    {
+      "system": "hybrid",
+      "chunk_ndcg5": 0.7779,
+      "source_ndcg5": 0.7374
+    },
+    {
+      "system": "fts",
+      "chunk_ndcg5": 0.0,
+      "source_ndcg5": 0.0
+    }
+  ],
+  "per_query": [
+    {
+      "query": "What does Confucius say about the qualities of a junzi (gentleman/superior man)?",
+      "type": "realistic_confucius_junzi",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9519,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9557,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Analects describe the relationship between ren (benevolence) and ritual?",
+      "type": "realistic_confucius_ren",
+      "chunk_ndcg5": {
+        "dense": 0.5,
+        "dense_text_dedup": 0.6309,
+        "dense_two_level": 0.4307,
+        "dense_mmr": 0.5,
+        "hybrid": 0.5,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.5438,
+        "dense_text_dedup": 0.6309,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.5,
+        "hybrid": 0.5438,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Confucius's teaching about filial piety and respect for parents?",
+      "type": "realistic_confucius_filial",
+      "chunk_ndcg5": {
+        "dense": 0.8787,
+        "dense_text_dedup": 0.8597,
+        "dense_two_level": 0.779,
+        "dense_mmr": 0.8305,
+        "hybrid": 0.8787,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8887,
+        "dense_text_dedup": 0.8597,
+        "dense_two_level": 0.8224,
+        "dense_mmr": 0.8887,
+        "hybrid": 0.8887,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Confucius describe the ideal ruler and good governance?",
+      "type": "realistic_confucius_ruler",
+      "chunk_ndcg5": {
+        "dense": 0.9386,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9665,
+        "hybrid": 0.9386,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8855,
+        "dense_text_dedup": 0.9502,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.905,
+        "hybrid": 0.8855,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Confucius say about the importance of learning and self-cultivation?",
+      "type": "realistic_confucius_learning",
+      "chunk_ndcg5": {
+        "dense": 0.9573,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9688,
+        "dense_mmr": 0.8518,
+        "hybrid": 0.9573,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9148,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Tao Te Ching describe the nature of the Tao (Way)?",
+      "type": "realistic_tao_nature",
+      "chunk_ndcg5": {
+        "dense": 0.992,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9557,
+        "hybrid": 0.992,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Laozi say about wu-wei (non-action) as a principle of governance?",
+      "type": "realistic_tao_wuwei",
+      "chunk_ndcg5": {
+        "dense": 0.8305,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.8671,
+        "dense_mmr": 0.7075,
+        "hybrid": 0.8305,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9558,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8772,
+        "hybrid": 0.9558,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Tao Te Ching describe the relationship between opposites like hard and soft?",
+      "type": "realistic_tao_opposites",
+      "chunk_ndcg5": {
+        "dense": 0.6024,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.6309,
+        "dense_mmr": 0.586,
+        "hybrid": 0.6024,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is the Tao Te Ching's teaching about water as a metaphor for the Tao?",
+      "type": "realistic_tao_water",
+      "chunk_ndcg5": {
+        "dense": 0.8529,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 0.8529,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Sun Tzu say about the importance of knowing your enemy?",
+      "type": "realistic_sunzi_enemy",
+      "chunk_ndcg5": {
+        "dense": 0.5,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.5,
+        "dense_mmr": 0.4307,
+        "hybrid": 0.4307,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Sun Tzu describe the five essential qualities of a general?",
+      "type": "realistic_sunzi_general",
+      "chunk_ndcg5": {
+        "dense": 0.6309,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.6309,
+        "dense_mmr": 0.4307,
+        "hybrid": 0.6309,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Sun Tzu's teaching on deception as a military strategy?",
+      "type": "realistic_sunzi_deception",
+      "chunk_ndcg5": {
+        "dense": 0.4307,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.3869,
+        "hybrid": 0.4307,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9047,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What are the nine variations of tactics described in the Art of War?",
+      "type": "realistic_sunzi_tactics",
+      "chunk_ndcg5": {
+        "dense": 0.7602,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.7602,
+        "dense_mmr": 1.0,
+        "hybrid": 0.7602,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9558,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Shih King portray nature and seasonal cycles in its odes?",
+      "type": "realistic_shih_nature",
+      "chunk_ndcg5": {
+        "dense": 0.9047,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9197,
+        "dense_mmr": 0.8558,
+        "hybrid": 0.9047,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What themes of love and courtship appear in the Book of Poetry?",
+      "type": "realistic_shih_love",
+      "chunk_ndcg5": {
+        "dense": 0.3869,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.6309,
+        "hybrid": 0.3869,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How do Confucian and Taoist philosophies differ in their approach to society?",
+      "type": "realistic_cross_confucian_tao",
+      "chunk_ndcg5": {
+        "dense": 0.9065,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9065,
+        "dense_mmr": 0.9558,
+        "hybrid": 0.9065,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9558,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What Chinese philosophical texts discuss the nature of virtue and moral character?",
+      "type": "realistic_cross_virtue",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9652,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8855,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How is political leadership described across different classical Chinese texts?",
+      "type": "realistic_cross_leadership",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9795,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9795,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    }
+  ]
+}

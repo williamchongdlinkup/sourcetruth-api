@@ -48,6 +48,10 @@ TRADITION_RERANK: dict[str, Literal['mmr', 'text_dedup', 'none']] = {
     'christianity':   'text_dedup',   # KJV chapter chunks — one result per book (provisional 2026-08-06)
     'hinduism':       'mmr',           # BG + Upanishads — MMR wins realistic judge 0.932 vs dense 0.877 (2026-08-06)
     'hellenism':      'text_dedup',   # Greek philosophy — text_dedup wins judge 0.9178 vs dense 0.870 (2026-08-07)
+    'classicism':     'none',          # Latin — dense wins judge 0.920 (2026-08-07)
+    'east-asian':     'none',          # Classical Chinese — dense wins judge 0.782 (2026-08-07)
+    'sikhism':        'mmr',           # SGGS — Gurmukhi cross-lingual; MMR for diversity (eval pending)
+    'zoroastrianism': 'none',          # Avesta — dense wins judge 0.804 (2026-08-07)
 }
 
 # Corpus code → optimal rerank mode (more specific than tradition; takes priority)
@@ -61,6 +65,12 @@ CORPUS_RERANK: dict[str, Literal['mmr', 'text_dedup', 'none']] = {
     'bhagavad-gita':     'mmr',            # MMR wins LLM judge 0.9324 (2026-08-07)
     'upanishads':        'mmr',            # MMR wins LLM judge 0.9324 (2026-08-07)
     'greek-philosophy':  'text_dedup',    # text_dedup wins LLM judge 0.9178 (2026-08-07)
+    # V4 eval results (2026-08-07)
+    'classical-latin':    'none',          # dense wins judge 0.920; two_level best but not in prod (2026-08-07)
+    'classical-chinese':  'none',          # dense wins judge 0.782 (2026-08-07)
+    'sanskrit-classical': 'none',          # dense wins judge 0.803 (2026-08-07)
+    'sggs':               'mmr',           # Gurmukhi cross-lingual — MMR for diversity (eval pending Sikh ingestion)
+    'avesta':             'none',          # dense wins judge 0.804 (2026-08-07)
 }
 
 
@@ -100,6 +110,10 @@ def _infer_use_fts(
         'sahih-bukhari', 'sahih-muslim',
         'tanakh-jps1917', 'mishnah-silverstein',  # English but Q&A vocab mismatch (2026-08-06)
         'kjv', 'bhagavad-gita', 'upanishads', 'greek-philosophy',  # provisional (2026-08-06)
+        # V4 batch: all confirmed/provisional Q&A vocab mismatch (2026-08-07)
+        'classical-latin', 'classical-chinese', 'sanskrit-classical',
+        'sggs',   # Gurmukhi script — FTS zero (confirmed)
+        'avesta', # DjVu OCR English — provisional non-FTS
     }
     if corpus_codes:
         return not set(corpus_codes).issubset(NON_FTS_CORPORA)

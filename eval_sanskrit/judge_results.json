@@ -1,0 +1,376 @@
+{
+  "summary": [
+    {
+      "system": "dense",
+      "chunk_ndcg5": 0.803,
+      "source_ndcg5": 0.9292
+    },
+    {
+      "system": "dense_text_dedup",
+      "chunk_ndcg5": 0.7719,
+      "source_ndcg5": 0.9401
+    },
+    {
+      "system": "dense_two_level",
+      "chunk_ndcg5": 0.7887,
+      "source_ndcg5": 0.9204
+    },
+    {
+      "system": "dense_mmr",
+      "chunk_ndcg5": 0.7952,
+      "source_ndcg5": 0.9393
+    },
+    {
+      "system": "hybrid",
+      "chunk_ndcg5": 0.803,
+      "source_ndcg5": 0.9292
+    },
+    {
+      "system": "fts",
+      "chunk_ndcg5": 0.0,
+      "source_ndcg5": 0.0
+    }
+  ],
+  "per_query": [
+    {
+      "query": "How does Valmiki describe Rama's character and virtues in the Ramayana?",
+      "type": "realistic_ramayana_rama",
+      "chunk_ndcg5": {
+        "dense": 0.5706,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.5,
+        "dense_mmr": 0.5339,
+        "hybrid": 0.5706,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9829,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What happens when Rama, Sita, and Lakshmana are exiled to the forest?",
+      "type": "realistic_ramayana_exile",
+      "chunk_ndcg5": {
+        "dense": 0.4744,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.3869,
+        "dense_mmr": 0.5271,
+        "hybrid": 0.4744,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.6183,
+        "dense_text_dedup": 0.6309,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.5438,
+        "hybrid": 0.6183,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Ramayana describe Ravana's abduction of Sita?",
+      "type": "realistic_ramayana_abduction",
+      "chunk_ndcg5": {
+        "dense": 0.4841,
+        "dense_text_dedup": 0.6309,
+        "dense_two_level": 0.4307,
+        "dense_mmr": 0.5,
+        "hybrid": 0.4841,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8734,
+        "dense_text_dedup": 0.8597,
+        "dense_two_level": 0.8224,
+        "dense_mmr": 1.0,
+        "hybrid": 0.8734,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What role does Hanuman play in the Ramayana's search for Sita?",
+      "type": "realistic_ramayana_hanuman",
+      "chunk_ndcg5": {
+        "dense": 0.6309,
+        "dense_text_dedup": 0.6309,
+        "dense_two_level": 0.4307,
+        "dense_mmr": 0.5,
+        "hybrid": 0.6309,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How is the battle between Rama and Ravana described in the Yuddha Kanda?",
+      "type": "realistic_ramayana_battle",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9315,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is the nature of dharma (righteousness) as portrayed in the Ramayana?",
+      "type": "realistic_ramayana_dharma",
+      "chunk_ndcg5": {
+        "dense": 0.7623,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.8597,
+        "dense_mmr": 0.7075,
+        "hybrid": 0.7623,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9047,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9558,
+        "hybrid": 0.9047,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Ramayana describe the forest of Dandaka and its sages?",
+      "type": "realistic_ramayana_forest",
+      "chunk_ndcg5": {
+        "dense": 0.5,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.3869,
+        "dense_mmr": 0.4307,
+        "hybrid": 0.5,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.7606,
+        "dense_text_dedup": 0.6309,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.7606,
+        "hybrid": 0.7606,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What events occur in the Bala Kanda (childhood book) of the Ramayana?",
+      "type": "realistic_ramayana_childhood",
+      "chunk_ndcg5": {
+        "dense": 0.8597,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.8597,
+        "dense_mmr": 1.0,
+        "hybrid": 0.8597,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Kalidasa portray the love between Dushyanta and Shakuntala?",
+      "type": "realistic_kalidasa_love",
+      "chunk_ndcg5": {
+        "dense": 0.9779,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9502,
+        "hybrid": 0.9779,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is the dramatic climax of Kalidasa's Shakuntala play?",
+      "type": "realistic_kalidasa_climax",
+      "chunk_ndcg5": {
+        "dense": 0.9675,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9197,
+        "hybrid": 0.9675,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Kalidasa use nature imagery in his poetry?",
+      "type": "realistic_kalidasa_nature",
+      "chunk_ndcg5": {
+        "dense": 0.9795,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.973,
+        "hybrid": 0.9795,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is the role of the curse and its reversal in Shakuntala?",
+      "type": "realistic_kalidasa_curse",
+      "chunk_ndcg5": {
+        "dense": 0.9518,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9816,
+        "hybrid": 0.9518,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How do Indian epics portray the relationship between devotion and duty?",
+      "type": "realistic_cross_devotion",
+      "chunk_ndcg5": {
+        "dense": 0.7606,
+        "dense_text_dedup": 0.8597,
+        "dense_two_level": 0.7005,
+        "dense_mmr": 0.7602,
+        "hybrid": 0.7606,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8471,
+        "dense_text_dedup": 0.8597,
+        "dense_two_level": 0.8224,
+        "dense_mmr": 0.8471,
+        "hybrid": 0.8471,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What themes of separation and reunion appear in Sanskrit literature?",
+      "type": "realistic_cross_separation",
+      "chunk_ndcg5": {
+        "dense": 0.9795,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9558,
+        "hybrid": 0.9795,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Sanskrit epic literature describe cosmic battles between gods and demons?",
+      "type": "realistic_cross_battle",
+      "chunk_ndcg5": {
+        "dense": 0.894,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9313,
+        "dense_mmr": 0.973,
+        "hybrid": 0.894,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8855,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8772,
+        "hybrid": 0.8855,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How is the forest portrayed as a spiritual space in Indian literature?",
+      "type": "realistic_cross_forest",
+      "chunk_ndcg5": {
+        "dense": 0.936,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9502,
+        "hybrid": 0.936,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.906,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 0.906,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What do Sanskrit epics say about the proper qualities of a king?",
+      "type": "realistic_cross_kingship",
+      "chunk_ndcg5": {
+        "dense": 0.922,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.922,
+        "dense_mmr": 0.9239,
+        "hybrid": 0.922,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    }
+  ]
+}

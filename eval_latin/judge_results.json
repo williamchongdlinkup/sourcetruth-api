@@ -1,0 +1,396 @@
+{
+  "summary": [
+    {
+      "system": "dense",
+      "chunk_ndcg5": 0.9201,
+      "source_ndcg5": 1.0
+    },
+    {
+      "system": "dense_text_dedup",
+      "chunk_ndcg5": 0.8866,
+      "source_ndcg5": 0.9972
+    },
+    {
+      "system": "dense_two_level",
+      "chunk_ndcg5": 0.932,
+      "source_ndcg5": 1.0
+    },
+    {
+      "system": "dense_mmr",
+      "chunk_ndcg5": 0.8862,
+      "source_ndcg5": 0.99
+    },
+    {
+      "system": "hybrid",
+      "chunk_ndcg5": 0.9201,
+      "source_ndcg5": 1.0
+    },
+    {
+      "system": "fts",
+      "chunk_ndcg5": 0.0,
+      "source_ndcg5": 0.0
+    }
+  ],
+  "per_query": [
+    {
+      "query": "How does Caesar describe the geography and tribes of Gaul at the start of his commentaries?",
+      "type": "realistic_caesar_gaul",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9502,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What was Caesar's strategy for dealing with the Helvetii tribe in the Gallic Wars?",
+      "type": "realistic_caesar_helvetii",
+      "chunk_ndcg5": {
+        "dense": 0.9558,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8836,
+        "hybrid": 0.9558,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Caesar portray himself as a leader and general in De Bello Gallico?",
+      "type": "realistic_caesar_leadership",
+      "chunk_ndcg5": {
+        "dense": 0.4841,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.5,
+        "dense_mmr": 0.5013,
+        "hybrid": 0.4841,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Virgil describe the fall of Troy in the Aeneid?",
+      "type": "realistic_virgil_troy",
+      "chunk_ndcg5": {
+        "dense": 0.9239,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8518,
+        "hybrid": 0.9239,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What role do the gods play in guiding Aeneas in the Aeneid?",
+      "type": "realistic_virgil_gods",
+      "chunk_ndcg5": {
+        "dense": 0.8635,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9148,
+        "hybrid": 0.8635,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Dido's love for Aeneas lead to her tragic end in the Aeneid?",
+      "type": "realistic_virgil_dido",
+      "chunk_ndcg5": {
+        "dense": 0.9907,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9518,
+        "hybrid": 0.9907,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is the prophetic vision of Rome's future that Anchises reveals to Aeneas in the underworld?",
+      "type": "realistic_virgil_rome",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Lucretius say about the nature of atoms and the composition of matter?",
+      "type": "realistic_lucretius_atoms",
+      "chunk_ndcg5": {
+        "dense": 0.8879,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.8671,
+        "dense_mmr": 0.8887,
+        "hybrid": 0.8879,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Lucretius argue that death should not be feared?",
+      "type": "realistic_lucretius_death",
+      "chunk_ndcg5": {
+        "dense": 0.7239,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.6697,
+        "dense_mmr": 0.5438,
+        "hybrid": 0.7239,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8855,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Lucretius's Epicurean account of the origin of the universe and life?",
+      "type": "realistic_lucretius_origin",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.936,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Tacitus portray the character of Emperor Tiberius?",
+      "type": "realistic_tacitus_tiberius",
+      "chunk_ndcg5": {
+        "dense": 0.9829,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 0.9829,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Tacitus say about the political intrigues at the court of Tiberius?",
+      "type": "realistic_tacitus_politics",
+      "chunk_ndcg5": {
+        "dense": 0.8787,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.8671,
+        "dense_mmr": 0.8305,
+        "hybrid": 0.8787,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Cicero argue about the nature of moral duty in De Officiis?",
+      "type": "realistic_cicero_duty",
+      "chunk_ndcg5": {
+        "dense": 0.9877,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9386,
+        "hybrid": 0.9877,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Cicero define the relationship between honesty and expediency in his ethics?",
+      "type": "realistic_cicero_honesty",
+      "chunk_ndcg5": {
+        "dense": 0.9795,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9795,
+        "hybrid": 0.9795,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Cicero say about the importance of friendship in Roman life?",
+      "type": "realistic_cicero_friendship",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.992,
+        "dense_mmr": 0.992,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.992,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How do Roman authors discuss the concept of fate and divine will in human affairs?",
+      "type": "realistic_cross_fate",
+      "chunk_ndcg5": {
+        "dense": 0.9652,
+        "dense_text_dedup": 0.9583,
+        "dense_two_level": 0.9239,
+        "dense_mmr": 0.9252,
+        "hybrid": 0.9652,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9864,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What do Latin authors say about virtue and the good life?",
+      "type": "realistic_cross_virtue",
+      "chunk_ndcg5": {
+        "dense": 0.9386,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9557,
+        "dense_mmr": 0.9047,
+        "hybrid": 0.9386,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How is Roman civic duty portrayed across different Latin works?",
+      "type": "realistic_cross_civic",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9091,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9557,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    }
+  ]
+}
