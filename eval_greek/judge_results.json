@@ -1,0 +1,396 @@
+{
+  "summary": [
+    {
+      "system": "dense",
+      "chunk_ndcg5": 0.8702,
+      "source_ndcg5": 0.909
+    },
+    {
+      "system": "dense_text_dedup",
+      "chunk_ndcg5": 0.9178,
+      "source_ndcg5": 0.9451
+    },
+    {
+      "system": "dense_two_level",
+      "chunk_ndcg5": 0.8676,
+      "source_ndcg5": 0.9347
+    },
+    {
+      "system": "dense_mmr",
+      "chunk_ndcg5": 0.853,
+      "source_ndcg5": 0.9332
+    },
+    {
+      "system": "hybrid",
+      "chunk_ndcg5": 0.8702,
+      "source_ndcg5": 0.909
+    },
+    {
+      "system": "fts",
+      "chunk_ndcg5": 0.0,
+      "source_ndcg5": 0.0
+    }
+  ],
+  "per_query": [
+    {
+      "query": "What does Marcus Aurelius say about the impermanence of life and accepting fate?",
+      "type": "realistic_stoic_fate",
+      "chunk_ndcg5": {
+        "dense": 0.9714,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9714,
+        "dense_mmr": 0.9148,
+        "hybrid": 0.9714,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9469,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Marcus Aurelius advise dealing with anger and difficult people?",
+      "type": "realistic_stoic_anger",
+      "chunk_ndcg5": {
+        "dense": 0.8268,
+        "dense_text_dedup": 0.9197,
+        "dense_two_level": 0.8841,
+        "dense_mmr": 0.8772,
+        "hybrid": 0.8268,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9558,
+        "dense_text_dedup": 0.9197,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9558,
+        "hybrid": 0.9558,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Marcus Aurelius's teaching about living according to nature and reason?",
+      "type": "realistic_stoic_nature",
+      "chunk_ndcg5": {
+        "dense": 0.9313,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9688,
+        "dense_mmr": 0.9072,
+        "hybrid": 0.9313,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9469,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 0.9469,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the Meditations of Marcus Aurelius say about the nature of the rational soul?",
+      "type": "realistic_stoic_soul",
+      "chunk_ndcg5": {
+        "dense": 0.5706,
+        "dense_text_dedup": 0.6309,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.6509,
+        "hybrid": 0.5706,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.5706,
+        "dense_text_dedup": 0.6309,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.6509,
+        "hybrid": 0.5706,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Epictetus's doctrine about what is within our control and what is not?",
+      "type": "realistic_epictetus_control",
+      "chunk_ndcg5": {
+        "dense": 0.9557,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9606,
+        "dense_mmr": 0.9557,
+        "hybrid": 0.9557,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Epictetus describe the path to freedom through philosophy?",
+      "type": "realistic_epictetus_freedom",
+      "chunk_ndcg5": {
+        "dense": 0.896,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.912,
+        "dense_mmr": 0.9239,
+        "hybrid": 0.896,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the Enchiridion say about the proper response to external misfortune?",
+      "type": "realistic_epictetus_misfortune",
+      "chunk_ndcg5": {
+        "dense": 0.748,
+        "dense_text_dedup": 0.6309,
+        "dense_two_level": 0.6024,
+        "dense_mmr": 0.7328,
+        "hybrid": 0.748,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8879,
+        "dense_text_dedup": 0.8597,
+        "dense_two_level": 0.8224,
+        "dense_mmr": 0.8879,
+        "hybrid": 0.8879,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Plato's Apology depict Socrates defending his philosophical mission?",
+      "type": "realistic_plato_apology",
+      "chunk_ndcg5": {
+        "dense": 0.7623,
+        "dense_text_dedup": 0.9197,
+        "dense_two_level": 0.7623,
+        "dense_mmr": 0.8787,
+        "hybrid": 0.7623,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the Phaedo say about the immortality of the soul and the afterlife?",
+      "type": "realistic_plato_immortality",
+      "chunk_ndcg5": {
+        "dense": 0.8558,
+        "dense_text_dedup": 0.9197,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8793,
+        "hybrid": 0.8558,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Socrates argue that death should not be feared by a philosopher?",
+      "type": "realistic_plato_death",
+      "chunk_ndcg5": {
+        "dense": 0.9795,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9864,
+        "dense_mmr": 0.9864,
+        "hybrid": 0.9795,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9816,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Plato's theory of the Forms and how does it relate to knowledge?",
+      "type": "realistic_plato_forms",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8935,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.906,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Aristotle define happiness (eudaimonia) in the Nicomachean Ethics?",
+      "type": "realistic_aristotle_eudaimonia",
+      "chunk_ndcg5": {
+        "dense": 0.8964,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.8821,
+        "dense_mmr": 0.8503,
+        "hybrid": 0.8964,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9469,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Aristotle say about the role of virtue in achieving the good life?",
+      "type": "realistic_aristotle_virtue",
+      "chunk_ndcg5": {
+        "dense": 0.8471,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.8403,
+        "dense_mmr": 0.8372,
+        "hybrid": 0.8471,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9558,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Aristotle describe the relationship between reason and moral character?",
+      "type": "realistic_aristotle_reason",
+      "chunk_ndcg5": {
+        "dense": 0.8887,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.8807,
+        "dense_mmr": 0.8661,
+        "hybrid": 0.8887,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9829,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Aristotle's doctrine of the mean between virtues and vices?",
+      "type": "realistic_aristotle_mean",
+      "chunk_ndcg5": {
+        "dense": 0.8879,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.8671,
+        "dense_mmr": 0.86,
+        "hybrid": 0.8879,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How do Stoic philosophers compare to Plato in their views on the soul?",
+      "type": "realistic_cross_soul",
+      "chunk_ndcg5": {
+        "dense": 0.7606,
+        "dense_text_dedup": 0.5,
+        "dense_two_level": 0.6934,
+        "dense_mmr": 0.7606,
+        "hybrid": 0.7606,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9197,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What do ancient Greek philosophers say about the examined life and self-knowledge?",
+      "type": "realistic_cross_self",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9047,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.7328,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.6797,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How do Aristotle and the Stoics differ in their understanding of virtue?",
+      "type": "realistic_cross_virtue",
+      "chunk_ndcg5": {
+        "dense": 0.8855,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9047,
+        "dense_mmr": 0.6742,
+        "hybrid": 0.8855,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9675,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8855,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    }
+  ]
+}

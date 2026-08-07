@@ -12,7 +12,7 @@ HERE = Path(__file__).resolve().parent
 OUT  = HERE / "queries.jsonl"
 random.seed(42)
 CORPORA = ["classical-chinese"]
-SAMPLES_PER_CORPUS = 50
+SAMPLES_PER_CORPUS = 60
 
 QUERY_PROMPT = """\
 You are building a retrieval benchmark for Classical Chinese philosophy
@@ -49,6 +49,21 @@ REALISTIC_QUERIES = [
     {"query": "What are the nine variations of tactics described in the Art of War?", "type": "sunzi_tactics"},
     {"query": "How does the Shih King portray nature and seasonal cycles in its odes?", "type": "shih_nature"},
     {"query": "What themes of love and courtship appear in the Book of Poetry?", "type": "shih_love"},
+    {"query": "How do Confucian and Taoist philosophies differ in their approach to society?", "type": "cross_confucian_tao"},
+    {"query": "What Chinese philosophical texts discuss the nature of virtue and moral character?", "type": "cross_virtue"},
+    {"query": "How is political leadership described across different classical Chinese texts?", "type": "cross_leadership"},
+    # Zhuangzi (new)
+    {"query": "How does Zhuangzi describe the relativity of perspective in the story of Cook Ding?", "type": "zhuangzi_perspective"},
+    {"query": "What is Zhuangzi's teaching about the transformation of things and the unity of Tao?", "type": "zhuangzi_transformation"},
+    {"query": "How does Zhuangzi contrast the ideal sage with the Confucian view of virtue?", "type": "zhuangzi_sage"},
+    {"query": "What does Zhuangzi say about death and the naturalness of dying?", "type": "zhuangzi_death"},
+    {"query": "How does the Zhuangzi story of the butterfly dream illustrate the problem of reality?", "type": "zhuangzi_dream"},
+    # Xunzi (new)
+    {"query": "How does Xunzi argue that human nature is inherently evil and requires ritual correction?", "type": "xunzi_nature"},
+    {"query": "What does Xunzi say about the importance of education and self-improvement?", "type": "xunzi_education"},
+    {"query": "How does Xunzi's view of human nature differ from Mencius's view?", "type": "xunzi_vs_mencius"},
+    {"query": "What does Xunzi say about the role of ritual (li) in ordering society?", "type": "xunzi_ritual"},
+    # Cross-text (new)
     {"query": "How do Confucian and Taoist philosophies differ in their approach to society?", "type": "cross_confucian_tao"},
     {"query": "What Chinese philosophical texts discuss the nature of virtue and moral character?", "type": "cross_virtue"},
     {"query": "How is political leadership described across different classical Chinese texts?", "type": "cross_leadership"},

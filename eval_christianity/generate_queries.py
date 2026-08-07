@@ -31,7 +31,7 @@ OUT  = HERE / "queries.jsonl"
 
 random.seed(42)
 
-CHRISTIAN_CORPORA  = ["kjv", "bible-web", "bible-asv", "bible-ylt"]
+CHRISTIAN_CORPORA  = ["kjv", "bible-web", "bible-asv", "bible-ylt", "christian-theology"]
 SAMPLES_PER_CORPUS = 50
 
 QUERY_PROMPT = """\
@@ -79,6 +79,22 @@ REALISTIC_QUERIES = [
     {"query": "What does the New Testament say about the fulfillment of the Law?", "corpus": "kjv", "type": "cross"},
     {"query": "How does Paul reference Abraham as an example of faith?", "corpus": "kjv", "type": "cross"},
     {"query": "What does the book of Hebrews say about Jesus as high priest?", "corpus": "kjv", "type": "theology"},
+    # Augustine Confessions (new)
+    {"query": "How does Augustine describe his spiritual restlessness before conversion in the Confessions?", "corpus": "christian-theology", "type": "augustine_confessions"},
+    {"query": "What does Augustine say about God's role in his intellectual journey in the Confessions?", "corpus": "christian-theology", "type": "augustine_confessions"},
+    {"query": "How does Augustine describe his time in Carthage and his struggles with desire?", "corpus": "christian-theology", "type": "augustine_confessions"},
+    {"query": "What is Augustine's famous prayer 'our heart is restless until it rests in Thee'?", "corpus": "christian-theology", "type": "augustine_confessions"},
+    # Augustine City of God (new)
+    {"query": "What does Augustine say about the two cities — the City of God and the City of Man?", "corpus": "christian-theology", "type": "augustine_city"},
+    {"query": "How does Augustine respond to the accusation that Christianity caused the fall of Rome?", "corpus": "christian-theology", "type": "augustine_city"},
+    {"query": "What does Augustine argue about providence and God's sovereignty in history?", "corpus": "christian-theology", "type": "augustine_city"},
+    # Apostolic Fathers (new)
+    {"query": "What does the Didache say about baptism and the Eucharist in early Christianity?", "corpus": "christian-theology", "type": "apostolic_fathers"},
+    {"query": "How does Ignatius of Antioch describe the role of the bishop in the early church?", "corpus": "christian-theology", "type": "apostolic_fathers"},
+    {"query": "What does Clement of Rome say about church order and authority in 1 Clement?", "corpus": "christian-theology", "type": "apostolic_fathers"},
+    # Cross-corpus (Bible + Patristics)
+    {"query": "How do the Church Fathers interpret the Sermon on the Mount?", "corpus": "christian-theology", "type": "cross_patristics"},
+    {"query": "What do Christian theologians say about the nature of evil and original sin?", "corpus": "christian-theology", "type": "cross_theology"},
     # Negative controls
     {"query": "What does the Bible say about artificial intelligence?", "corpus": "kjv", "type": "negative"},
     {"query": "Which Bible verse discusses the internet?", "corpus": "kjv", "type": "negative"},
@@ -90,6 +106,26 @@ def connect():
     if not url:
         raise SystemExit("DATABASE_URL not set in .env")
     return psycopg2.connect(url, cursor_factory=psycopg2.extras.RealDictCursor)
+
+
+THEOLOGY_PROMPT = """\
+You are building a retrieval benchmark for early Christian theological writings
+(Augustine Confessions, Augustine City of God, Apostolic Fathers — Lightfoot PD translations).
+
+Below is a passage from "{source}" ({reference}).
+Write EXACTLY two questions a theology student or Christian historian might ask:
+1. NATURAL: A direct question this passage answers. Reference the author or work.
+2. PARAPHRASE: The same need, rephrased with different vocabulary.
+
+Rules:
+- Questions must be answerable from this specific passage.
+- Reference authors, works, or theological concepts (grace, providence, original sin, church, martyrdom, etc.).
+- English output only.
+- Output ONLY: {{"natural": "...", "paraphrase": "..."}}
+
+Passage from {source} ({reference}):
+{text}
+"""
 
 
 def main():
@@ -114,13 +150,21 @@ def main():
         rows = cur.fetchall()
         print(f"{corpus}: sampling {len(rows)} chunks for synthetic queries")
 
+        is_theology = corpus == "christian-theology"
         for row in rows:
-            prompt = QUERY_PROMPT.format(
-                book      = row['book'],
-                reference = row['reference'] or row['chapter'] or '',
-                testament = row['testament'] or 'Bible',
-                text      = (row['chunk_text'] or '')[:1200],
-            )
+            if is_theology:
+                prompt = THEOLOGY_PROMPT.format(
+                    source    = (row['book'] or '').split(' — ')[0],
+                    reference = row['reference'] or row['chapter'] or '',
+                    text      = (row['chunk_text'] or '')[:1200],
+                )
+            else:
+                prompt = QUERY_PROMPT.format(
+                    book      = row['book'],
+                    reference = row['reference'] or row['chapter'] or '',
+                    testament = row['testament'] or 'Bible',
+                    text      = (row['chunk_text'] or '')[:1200],
+                )
             for attempt in range(3):
                 try:
                     msg = client.messages.create(

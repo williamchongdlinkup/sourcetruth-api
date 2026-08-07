@@ -35,11 +35,11 @@ def main():
     SOURCES = [
         'suttacentral', '84000', 'cbeta', 'bdrc', 'gretil',
         'quran', 'hadith', 'tanakh', 'mishnah', 'kjv',
-        'bhagavad-gita', 'upanishads', 'greek-philosophy',
+        'bhagavad-gita', 'upanishads', 'yoga-sutras', 'greek-philosophy',
         'classical-latin', 'classical-chinese', 'sanskrit-classical',
         'sikh', 'zoroastrian',
         'bible-web', 'bible-asv', 'bible-ylt', 'rigveda',
-        'tibetan', 'chinese-expansion', 'all',
+        'tibetan', 'chinese-expansion', 'rumi', 'christian-theology', 'all',
     ]
     parser.add_argument('--source', required=True, choices=SOURCES, help='Corpus to ingest')
     parser.add_argument('--nikayas', nargs='+', default=None,
@@ -149,6 +149,18 @@ def main():
     if args.source in ('chinese-expansion', 'all'):
         from ingestion.chinese_expansion import run as chinese_exp_run
         chinese_exp_run(force=args.force)
+
+    if args.source in ('yoga-sutras', 'all'):
+        from ingestion.yoga_sutras import run as yoga_run
+        yoga_run(force=args.force)
+
+    if args.source in ('rumi', 'all'):
+        from ingestion.rumi import run as rumi_run
+        rumi_run(force=args.force)
+
+    if args.source in ('christian-theology', 'all'):
+        from ingestion.christian_theology import run as ct_run
+        ct_run(force=args.force)
 
 
 if __name__ == '__main__':

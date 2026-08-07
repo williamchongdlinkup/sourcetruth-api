@@ -38,7 +38,12 @@ GUTENBERG_PARTS = [
     {
         "gutenberg_id": 3283,
         "url": "https://www.gutenberg.org/cache/epub/3283/pg3283.txt",
-        "description": "The Upanishads (Isa, Katha, Kena)",
+        "description": "The Upanishads Part I (SBE Vol 1) — Chandogya, Kena",
+    },
+    {
+        "gutenberg_id": 8310,
+        "url": "https://www.gutenberg.org/cache/epub/8310/pg8310.txt",
+        "description": "The Upanishads Part II (SBE Vol 15) — Katha, Mundaka, Taittiriya, Aitareya, Brihadaranyaka, Prasna",
     },
 ]
 

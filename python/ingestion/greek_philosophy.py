@@ -98,6 +98,67 @@ TEXTS = [
         "parse_mode":   "ethics",
         "collection":   "Aristotelian Works",
     },
+    # ── Phase A additions ──────────────────────────────────────────────────────
+    {
+        "external_id":  "plato-republic",
+        "title":        "The Republic",
+        "author":       "Plato",
+        "translator":   "Benjamin Jowett (1871)",
+        "gutenberg_id": 55201,
+        "url":          "https://www.gutenberg.org/cache/epub/55201/pg55201.txt",
+        "parse_mode":   "dialogue",
+        "collection":   "Platonic Dialogues",
+    },
+    {
+        "external_id":  "plato-symposium",
+        "title":        "The Symposium",
+        "author":       "Plato",
+        "translator":   "Benjamin Jowett (1871)",
+        "gutenberg_id": 1600,
+        "url":          "https://www.gutenberg.org/cache/epub/1600/pg1600.txt",
+        "parse_mode":   "dialogue",
+        "collection":   "Platonic Dialogues",
+    },
+    {
+        "external_id":  "plato-meno",
+        "title":        "Meno",
+        "author":       "Plato",
+        "translator":   "Benjamin Jowett (1871)",
+        "gutenberg_id": 1643,
+        "url":          "https://www.gutenberg.org/cache/epub/1643/pg1643.txt",
+        "parse_mode":   "dialogue",
+        "collection":   "Platonic Dialogues",
+    },
+    {
+        "external_id":  "plato-timaeus",
+        "title":        "Timaeus",
+        "author":       "Plato",
+        "translator":   "Benjamin Jowett (1871)",
+        "gutenberg_id": 1572,
+        "url":          "https://www.gutenberg.org/cache/epub/1572/pg1572.txt",
+        "parse_mode":   "dialogue",
+        "collection":   "Platonic Dialogues",
+    },
+    {
+        "external_id":  "aristotle-politics",
+        "title":        "Politics: A Treatise on Government",
+        "author":       "Aristotle",
+        "translator":   "William Ellis (1776)",
+        "gutenberg_id": 6762,
+        "url":          "https://www.gutenberg.org/cache/epub/6762/pg6762.txt",
+        "parse_mode":   "politics",
+        "collection":   "Aristotelian Works",
+    },
+    {
+        "external_id":  "aristotle-rhetoric",
+        "title":        "Rhetoric",
+        "author":       "Aristotle",
+        "translator":   "W. Rhys Roberts (1924)",
+        "gutenberg_id": 1080,
+        "url":          "https://www.gutenberg.org/cache/epub/1080/pg1080.txt",
+        "parse_mode":   "politics",
+        "collection":   "Aristotelian Works",
+    },
 ]
 
 TARGET_WORDS = 350
@@ -377,6 +438,57 @@ def _parse_ethics(text: str) -> list[dict]:
     return chunks
 
 
+# ── Politics / Rhetoric parser (Aristotle) ────────────────────────────────────
+
+def _parse_politics(text: str, title: str) -> list[dict]:
+    """
+    Aristotle Politics and Rhetoric: Book I-VIII structure with chapters.
+    Falls through to paragraph chunking if no Book headers are detected.
+    """
+    book_pattern = re.compile(
+        r'(?:^|\n)(BOOK\s+(?:I{1,3}V?|V?I{0,3}|IX|X{1,3})\b)',
+        re.IGNORECASE | re.MULTILINE
+    )
+    matches = list(book_pattern.finditer(text))
+    if not matches:
+        paras = [_clean(p) for p in re.split(r'\n{2,}', text) if p.strip() and len(p.split()) > 5]
+        return _chunk_paragraphs(paras, title)
+
+    chunks = []
+    for bi, match in enumerate(matches):
+        book_label = match.group(1).strip()
+        book_start = match.start()
+        book_end   = matches[bi + 1].start() if bi + 1 < len(matches) else len(text)
+        book_text  = text[book_start:book_end]
+
+        chap_pattern = re.compile(r'(?:^|\n)\s*(CHAPTER\s+\w+)', re.IGNORECASE | re.MULTILINE)
+        chap_matches = list(chap_pattern.finditer(book_text))
+
+        if chap_matches:
+            for ci, cm in enumerate(chap_matches):
+                c_start = cm.start()
+                c_end   = chap_matches[ci + 1].start() if ci + 1 < len(chap_matches) else len(book_text)
+                c_label = cm.group(1).strip()
+                c_text  = _clean(book_text[c_start:c_end])
+                if not c_text or len(c_text.split()) < 10:
+                    continue
+                # Split long chapters into ~TARGET_WORDS passages
+                if len(c_text.split()) > TARGET_WORDS * 2:
+                    paras = [_clean(p) for p in re.split(r'\n{2,}', book_text[c_start:c_end]) if p.strip()]
+                    sub   = _chunk_paragraphs(paras, f"{title}, {book_label}, {c_label}")
+                    chunks.extend(sub)
+                else:
+                    ref = f"{title}, {book_label}, {c_label}"
+                    chunks.append({'text': c_text, 'reference': ref, 'chapter': book_label,
+                                   'word_count': len(c_text.split()), 'token_count': _approx_tokens(c_text)})
+        else:
+            paras = [_clean(p) for p in re.split(r'\n{2,}', book_text) if p.strip() and len(p.split()) > 5]
+            sub   = _chunk_paragraphs(paras, f"{title}, {book_label}")
+            chunks.extend(sub)
+
+    return chunks
+
+
 # ── Generic paragraph chunker ──────────────────────────────────────────────────
 
 def _chunk_paragraphs(paras: list[str], ref_prefix: str) -> list[dict]:
@@ -480,6 +592,8 @@ def run(force: bool = False) -> None:
             chunks = _parse_dialogue(text, text_def['title'])
         elif mode == "ethics":
             chunks = _parse_ethics(text)
+        elif mode == "politics":
+            chunks = _parse_politics(text, text_def['title'])
         else:
             paras = [_clean(p) for p in re.split(r'\n{2,}', text) if p.strip() and len(p.split()) > 5]
             chunks = _chunk_paragraphs(paras, text_def['title'])

@@ -57,6 +57,16 @@ COLLECTIONS = [
         "base_url": "https://sunnah.com/muslim",
         "ref_prefix": "Muslim",
     },
+    {
+        "code":     "sunan-abu-dawood",
+        "name":     "Sunan Abu Dawood",
+        "edition":  "eng-abudawud",
+        "tradition": "islam",
+        "language": "en",
+        "license":  "Unlicense",
+        "base_url": "https://sunnah.com/abudawud",
+        "ref_prefix": "Abu Dawood",
+    },
 ]
 
 EMBED_BATCH = 500   # hadiths to embed per voyage call batch

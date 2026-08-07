@@ -1,0 +1,336 @@
+{
+  "summary": [
+    {
+      "system": "dense",
+      "chunk_ndcg5": 0.8776,
+      "source_ndcg5": 0.8471
+    },
+    {
+      "system": "dense_text_dedup",
+      "chunk_ndcg5": 0.8818,
+      "source_ndcg5": 0.8484
+    },
+    {
+      "system": "dense_two_level",
+      "chunk_ndcg5": 0.8765,
+      "source_ndcg5": 0.8548
+    },
+    {
+      "system": "dense_mmr",
+      "chunk_ndcg5": 0.9282,
+      "source_ndcg5": 0.8532
+    },
+    {
+      "system": "hybrid",
+      "chunk_ndcg5": 0.8776,
+      "source_ndcg5": 0.848
+    },
+    {
+      "system": "fts",
+      "chunk_ndcg5": 0.0565,
+      "source_ndcg5": 0.0667
+    }
+  ],
+  "per_query": [
+    {
+      "query": "What does Krishna teach about performing one's duty without attachment to results?",
+      "type": "realistic_gita_karma",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9383,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.992,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Bhagavad Gita describe the eternal, imperishable nature of the soul?",
+      "type": "realistic_gita_atman",
+      "chunk_ndcg5": {
+        "dense": 0.8375,
+        "dense_text_dedup": 0.8757,
+        "dense_two_level": 0.8224,
+        "dense_mmr": 0.8908,
+        "hybrid": 0.8375,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8375,
+        "dense_text_dedup": 0.8757,
+        "dense_two_level": 0.8224,
+        "dense_mmr": 0.8908,
+        "hybrid": 0.8375,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Krishna say about the three paths to liberation in the Bhagavad Gita?",
+      "type": "realistic_gita_yoga",
+      "chunk_ndcg5": {
+        "dense": 0.8855,
+        "dense_text_dedup": 0.8855,
+        "dense_two_level": 0.9197,
+        "dense_mmr": 1.0,
+        "hybrid": 0.8855,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.7911,
+        "dense_text_dedup": 0.7911,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9197,
+        "hybrid": 0.7911,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Arjuna's despondency at the battlefield lead to Krishna's teachings?",
+      "type": "realistic_gita_narrative",
+      "chunk_ndcg5": {
+        "dense": 0.9252,
+        "dense_text_dedup": 0.9252,
+        "dense_two_level": 0.9714,
+        "dense_mmr": 0.8518,
+        "hybrid": 0.9252,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9252,
+        "dense_text_dedup": 0.9252,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9148,
+        "hybrid": 0.9252,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the Bhagavad Gita say about devotion (bhakti) as a path to God?",
+      "type": "realistic_gita_bhakti",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9665,
+        "dense_two_level": 0.9091,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9777,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.973,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Krishna's description of the imperishable Brahman and the nature of the supreme?",
+      "type": "realistic_gita_brahman",
+      "chunk_ndcg5": {
+        "dense": 0.9383,
+        "dense_text_dedup": 0.9714,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9714,
+        "hybrid": 0.9383,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9563,
+        "dense_text_dedup": 0.9606,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9557,
+        "hybrid": 0.9563,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Bhagavad Gita describe a person of steady wisdom (sthitaprajna)?",
+      "type": "realistic_gita_wisdom",
+      "chunk_ndcg5": {
+        "dense": 0.9864,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.8529,
+        "dense_mmr": 0.9895,
+        "hybrid": 0.9864,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9829,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is the Upanishadic concept of Brahman as the ultimate reality?",
+      "type": "realistic_upanishad_brahman",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.992,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How do the Upanishads describe the relationship between the individual self (Atman) and universal Brahman?",
+      "type": "realistic_upanishad_atman",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9795,
+        "dense_mmr": 0.9557,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9864,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9383,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the Chandogya Upanishad teach about the syllable Om as the essence of the universe?",
+      "type": "realistic_upanishad_om",
+      "chunk_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.4307,
+        "hybrid": 0.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.4307,
+        "dense_text_dedup": 0.4307,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.4307,
+        "hybrid": 0.4307,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How do the Upanishads describe the nature of consciousness and the self in deep sleep?",
+      "type": "realistic_upanishad_consciousness",
+      "chunk_ndcg5": {
+        "dense": 0.9558,
+        "dense_text_dedup": 0.9675,
+        "dense_two_level": 0.8772,
+        "dense_mmr": 0.9829,
+        "hybrid": 0.9558,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What do the Upanishads say about moksha or liberation from the cycle of rebirth?",
+      "type": "realistic_upanishad_moksha",
+      "chunk_ndcg5": {
+        "dense": 0.779,
+        "dense_text_dedup": 0.779,
+        "dense_two_level": 0.8772,
+        "dense_mmr": 0.8908,
+        "hybrid": 0.779,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8224,
+        "dense_text_dedup": 0.8224,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8793,
+        "hybrid": 0.8224,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is the teaching of 'Tat tvam asi' (That thou art) in the Chandogya Upanishad?",
+      "type": "realistic_upanishad_identity",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How do both the Bhagavad Gita and the Upanishads describe the eternal self or Atman?",
+      "type": "realistic_cross",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.8471
+      },
+      "source_ndcg5": {
+        "dense": 0.9864,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9522,
+        "hybrid": 1.0,
+        "fts": 1.0
+      }
+    },
+    {
+      "query": "What is the concept of dharma in Hindu philosophical texts?",
+      "type": "realistic_cross",
+      "chunk_ndcg5": {
+        "dense": 0.8558,
+        "dense_text_dedup": 0.8558,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9675,
+        "hybrid": 0.8558,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9563,
+        "dense_text_dedup": 0.9563,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9682,
+        "hybrid": 0.9563,
+        "fts": 0.0
+      }
+    }
+  ]
+}

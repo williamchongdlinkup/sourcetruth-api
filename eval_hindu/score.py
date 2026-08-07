@@ -1,13 +1,9 @@
 # -*- coding: utf-8 -*-
 """
-Retrieval evaluation for the Christian corpus (KJV Bible).
+Retrieval evaluation for the Hindu corpus (Bhagavad Gita + Upanishads).
 
-Systems: fts_only, dense, hybrid RRF, dense+MMR, dense_text_dedup, dense_two_level
-Metrics: C-Recall@K, T-Recall@K, MRR, nDCG@10 (synthetic track)
-         chunk nDCG@5, source nDCG@5 (realistic / LLM-judge track via judge.py)
-
-Run: python eval_christianity/score.py
-Prereq: python eval_christianity/generate_queries.py
+Run: python eval_hindu/score.py
+Prereq: python eval_hindu/generate_queries.py
 """
 from __future__ import annotations
 
@@ -30,8 +26,8 @@ load_dotenv()
 
 HERE = Path(__file__).resolve().parent
 
-CHRISTIAN_CORPORA = ["kjv", "bible-web", "bible-asv", "bible-ylt", "christian-theology"]
-EMBED_MODEL       = "voyage-multilingual-2"
+HINDU_CORPORA = ["bhagavad-gita", "upanishads", "yoga-sutras"]
+EMBED_MODEL   = "voyage-multilingual-2"
 KS    = [1, 3, 5, 10, 15]
 DEPTH = 50
 N_ART  = 8
@@ -54,16 +50,16 @@ def load_matrix(conn):
         JOIN canon_texts ct ON ct.id = dc.text_id
         JOIN source_corpora sc ON sc.id = ct.corpus_id
         WHERE sc.code = ANY(%s)
-    """, (CHRISTIAN_CORPORA,))
+    """, (HINDU_CORPORA,))
     rows = cur.fetchall()
     if not rows:
-        raise SystemExit("No embeddings found for Christian corpus. Check ingestion.")
+        raise SystemExit("No embeddings found for Hindu corpora. Check ingestion.")
 
     mat        = np.stack([np.array(json.loads(r['embedding']), dtype=np.float32) for r in rows])
-    chunk_ids  = np.array([r['chunk_id'] for r in rows], dtype=np.int64)
-    text_ids   = np.array([r['text_id']  for r in rows], dtype=np.int64)
+    chunk_ids  = np.array([r['chunk_id']    for r in rows], dtype=np.int64)
+    text_ids   = np.array([r['text_id']     for r in rows], dtype=np.int64)
     tok_lens   = np.array([r['token_count'] or 0 for r in rows], dtype=np.int32)
-    corpus_arr = np.array([r['code']     for r in rows])
+    corpus_arr = np.array([r['code']        for r in rows])
 
     norms = np.linalg.norm(mat, axis=1, keepdims=True)
     mat  /= np.where(norms > 0, norms, 1.0)
@@ -87,7 +83,7 @@ def fts_retrieve(conn, query: str, depth: int) -> list[tuple[int, int]]:
               AND dc.chunk_fts @@ websearch_to_tsquery('simple', %s)
             ORDER BY ts_rank_cd(dc.chunk_fts, websearch_to_tsquery('simple', %s)) DESC
             LIMIT %s
-        """, (CHRISTIAN_CORPORA, query, query, depth))
+        """, (HINDU_CORPORA, query, query, depth))
         return [(r['id'], r['text_id']) for r in cur.fetchall()]
     except Exception:
         return []
@@ -126,15 +122,15 @@ def mmr_rerank(qv, results, mat, chunk_ids, depth, lam=0.7):
     if not valid:
         return results[:depth]
     cand_vecs = np.stack([mat[idx_map[cid]] for cid, _ in valid])
-    q_sims = (cand_vecs @ qv).tolist()
+    q_sims    = (cand_vecs @ qv).tolist()
     selected, sel_vecs, remaining = [], [], list(range(len(valid)))
     while remaining and len(selected) < depth:
         if not sel_vecs:
             best_i = max(remaining, key=lambda i: q_sims[i])
         else:
             sel_mat = np.stack(sel_vecs)
-            best_i = max(remaining,
-                         key=lambda i: lam * q_sims[i] - (1 - lam) * float(np.max(sel_mat @ cand_vecs[i])))
+            best_i  = max(remaining,
+                          key=lambda i: lam * q_sims[i] - (1-lam) * float(np.max(sel_mat @ cand_vecs[i])))
         selected.append(best_i)
         sel_vecs.append(cand_vecs[best_i])
         remaining.remove(best_i)
@@ -169,38 +165,30 @@ def two_level(qv, mat, chunk_ids, text_ids, n_art, n_para):
 
 
 def compute_metrics(results, gold_chunk, gold_text, ks):
-    chunk_hit = {k: int(gold_chunk in [cid for cid, _ in results[:k]]) for k in ks}
-    text_hit  = {k: int(gold_text  in [tid for _, tid in results[:k]]) for k in ks}
+    chunk_hit = {k: int(gold_chunk in [c for c, _ in results[:k]]) for k in ks}
+    text_hit  = {k: int(gold_text  in [t for _, t in results[:k]]) for k in ks}
 
-    def _rr(items, gold, key_idx):
+    def _rr(items, gold, ki):
         for rank, item in enumerate(items, 1):
-            if item[key_idx] == gold:
+            if item[ki] == gold:
                 return 1.0 / rank
         return 0.0
 
-    def _ndcg(items, gold, key_idx, k):
-        dcg = sum(
-            (1.0 / math.log2(rank + 2))
-            for rank, item in enumerate(items[:k])
-            if item[key_idx] == gold
-        )
-        return dcg  # ideal DCG = 1 (one relevant doc)
+    def _ndcg(items, gold, ki, k):
+        return sum(1.0/math.log2(r+2) for r, it in enumerate(items[:k]) if it[ki] == gold)
 
-    return {
-        'c_hit': chunk_hit, 't_hit': text_hit,
-        'c_mrr': _rr(results, gold_chunk, 0),
-        't_mrr': _rr(results, gold_text,  1),
-        'c_ndcg10': _ndcg(results, gold_chunk, 0, 10),
-        't_ndcg10': _ndcg(results, gold_text,  1, 10),
-    }
+    return {'c_hit': chunk_hit, 't_hit': text_hit,
+            'c_mrr': _rr(results, gold_chunk, 0), 't_mrr': _rr(results, gold_text, 1),
+            'c_ndcg10': _ndcg(results, gold_chunk, 0, 10),
+            't_ndcg10': _ndcg(results, gold_text, 1, 10)}
 
 
 def embed_query_vec(client, text: str) -> np.ndarray:
     for attempt in range(3):
         try:
             res = client.embed([text], model=EMBED_MODEL, input_type='query')
-            v   = np.array(res.embeddings[0], dtype=np.float32)
-            n   = np.linalg.norm(v)
+            v = np.array(res.embeddings[0], dtype=np.float32)
+            n = np.linalg.norm(v)
             return v / n if n else v
         except Exception as e:
             if attempt < 2:
@@ -212,9 +200,9 @@ def embed_query_vec(client, text: str) -> np.ndarray:
 def main():
     queries_path = HERE / "queries.jsonl"
     if not queries_path.exists():
-        raise SystemExit(f"Run generate_queries.py first — {queries_path} not found.")
+        raise SystemExit(f"Run generate_queries.py first.")
 
-    queries = [json.loads(l) for l in queries_path.read_text(encoding='utf-8').splitlines() if l.strip()]
+    queries   = [json.loads(l) for l in queries_path.read_text(encoding='utf-8').splitlines() if l.strip()]
     synthetic = [q for q in queries if q['query_type'].startswith('synthetic') and q.get('chunk_id')]
     realistic = [q for q in queries if q['query_type'].startswith('realistic')]
     print(f"Loaded {len(synthetic)} synthetic, {len(realistic)} realistic queries.")
@@ -225,20 +213,18 @@ def main():
 
     SYSTEMS = ['fts_only', 'dense', 'hybrid', 'dense_mmr', 'dense_text_dedup', 'dense_two_level']
     agg = {s: defaultdict(list) for s in SYSTEMS}
-    agg['dense_per_corpus'] = {c: defaultdict(list) for c in CHRISTIAN_CORPORA}
+    agg['per_corpus'] = {c: defaultdict(list) for c in HINDU_CORPORA}
 
     for qi, q in enumerate(synthetic):
         if qi % 10 == 0:
             print(f"  Synthetic {qi+1}/{len(synthetic)} ...", flush=True)
         gold_chunk = q['chunk_id']
-        # Resolve text_id for gold chunk
         cur = conn.cursor()
         cur.execute("SELECT text_id FROM document_chunks WHERE id = %s", (gold_chunk,))
         row = cur.fetchone()
         if not row:
             continue
         gold_text = row['text_id']
-
         qv = embed_query_vec(client, q['query'])
 
         dense_res = dense_retrieve(qv, mat, chunk_ids, text_ids, DEPTH)
@@ -256,50 +242,41 @@ def main():
                 agg[sys_name][f'c_r{k}'].append(m['c_hit'][k])
                 agg[sys_name][f't_r{k}'].append(m['t_hit'][k])
             agg[sys_name]['c_mrr'].append(m['c_mrr'])
-            agg[sys_name]['t_mrr'].append(m['t_mrr'])
             agg[sys_name]['c_ndcg10'].append(m['c_ndcg10'])
-            agg[sys_name]['t_ndcg10'].append(m['t_ndcg10'])
 
-        # Per-corpus for dense
-        corp = q.get('corpus', 'kjv')
+        corp = q.get('corpus', 'bhagavad-gita')
         m_d  = compute_metrics(dense_res, gold_chunk, gold_text, KS)
         for k in KS:
-            agg['dense_per_corpus'][corp][f'c_r{k}'].append(m_d['c_hit'][k])
-            agg['dense_per_corpus'][corp][f't_r{k}'].append(m_d['t_hit'][k])
+            agg['per_corpus'][corp][f'c_r{k}'].append(m_d['c_hit'][k])
+            agg['per_corpus'][corp][f't_r{k}'].append(m_d['t_hit'][k])
 
     def avg(lst): return round(sum(lst)/len(lst), 4) if lst else 0.0
 
-    scorecard_lines = ["# Christianity Retrieval Evaluation — Synthetic Track\n"]
-    scorecard_lines.append(f"N = {len(synthetic)} queries | Pool = {mat.shape[0]:,} chunks | KJV Bible\n")
-    scorecard_lines.append("\n## System comparison (Dense)\n")
-    scorecard_lines.append("| System | C-R@1 | C-R@5 | C-R@10 | C-MRR | C-nDCG@10 | T-R@5 | T-nDCG@10 |")
-    scorecard_lines.append("|---|---|---|---|---|---|---|---|")
+    lines = ["# Hindu Retrieval Evaluation — Synthetic Track\n"]
+    lines.append(f"N = {len(synthetic)} queries | Pool = {mat.shape[0]:,} chunks\n")
+    lines.append("\n## System comparison\n")
+    lines.append("| System | C-R@1 | C-R@5 | C-R@10 | C-MRR | C-nDCG@10 | T-R@5 |")
+    lines.append("|---|---|---|---|---|---|---|")
     for s in SYSTEMS:
         d = agg[s]
-        scorecard_lines.append(
-            f"| {s} | {avg(d['c_r1'])} | {avg(d['c_r5'])} | {avg(d['c_r10'])} | "
-            f"{avg(d['c_mrr'])} | {avg(d['c_ndcg10'])} | {avg(d['t_r5'])} | {avg(d['t_ndcg10'])} |"
-        )
+        lines.append(f"| {s} | {avg(d['c_r1'])} | {avg(d['c_r5'])} | {avg(d['c_r10'])} | "
+                     f"{avg(d['c_mrr'])} | {avg(d['c_ndcg10'])} | {avg(d['t_r5'])} |")
+    lines.append("\n## Per-corpus (Dense)\n")
+    lines.append("| Corpus | n | C-R@1 | C-R@5 | C-MRR | C-nDCG@10 |")
+    lines.append("|---|---|---|---|---|---|")
+    for corp in HINDU_CORPORA:
+        d = agg['per_corpus'].get(corp, {})
+        n = len(d.get('c_r1', []))
+        lines.append(f"| {corp} | {n} | {avg(d.get('c_r1',[]))} | {avg(d.get('c_r5',[]))} | "
+                     f"{avg(d.get('c_mrr',[]))} | {avg(d.get('c_ndcg10',[]))} |")
 
-    scorecard_lines.append("\n## Per-corpus breakdown (Dense)\n")
-    scorecard_lines.append("| Corpus | n | C-R@1 | C-R@5 | C-MRR | C-nDCG@10 |")
-    scorecard_lines.append("|---|---|---|---|---|---|")
-    for corp in CHRISTIAN_CORPORA:
-        d  = agg['dense_per_corpus'].get(corp, {})
-        n  = len(d.get('c_r1', []))
-        scorecard_lines.append(
-            f"| {corp} | {n} | {avg(d.get('c_r1',[]))} | {avg(d.get('c_r5',[]))} | "
-            f"{avg(d.get('c_mrr',[]))} | {avg(d.get('c_ndcg10',[]))} |"
-        )
-
-    scorecard = '\n'.join(scorecard_lines)
+    scorecard = '\n'.join(lines)
     (HERE / "scorecard.md").write_text(scorecard, encoding='utf-8')
     print("\n" + scorecard)
 
-    # Build realistic pool for judge.py
     pool = []
     for q in realistic:
-        qv = embed_query_vec(client, q['query'])
+        qv        = embed_query_vec(client, q['query'])
         dense_res = dense_retrieve(qv, mat, chunk_ids, text_ids, DEPTH)
         dedup_r   = text_dedup(dense_res, DEPTH)
         two_r     = two_level(qv, mat, chunk_ids, text_ids, N_ART, N_PARA)
@@ -307,47 +284,36 @@ def main():
         hybrid_r  = rrf_fuse(dense_res, fts_retrieve(conn, q['query'], DEPTH))
         fts_r     = fts_retrieve(conn, q['query'], DEPTH)
 
-        candidate_ids = list({cid for res in [dense_res, dedup_r, two_r, mmr_r, hybrid_r, fts_r]
-                                  for cid, _ in res[:5]})
-
-        cur = conn.cursor()
-        if candidate_ids:
-            ph = ','.join(['%s'] * len(candidate_ids))
+        cids = list({cid for res in [dense_res, dedup_r, two_r, mmr_r, hybrid_r, fts_r]
+                         for cid, _ in res[:5]})
+        cand_rows: dict[int, dict] = {}
+        if cids:
+            cur = conn.cursor()
+            ph  = ','.join(['%s'] * len(cids))
             cur.execute(f"""
-                SELECT dc.id, dc.chunk_text, dc.reference,
-                       ct.title_english AS book, ct.collection AS testament
+                SELECT dc.id, dc.chunk_text, dc.reference, ct.title_english AS source
                 FROM document_chunks dc
                 JOIN canon_texts ct ON ct.id = dc.text_id
                 WHERE dc.id IN ({ph})
-            """, candidate_ids)
+            """, cids)
             cand_rows = {r['id']: dict(r) for r in cur.fetchall()}
-        else:
-            cand_rows = {}
 
         def fmt(res):
             return [{'chunk_id': cid, 'text_id': tid,
                      'text':      cand_rows.get(cid, {}).get('chunk_text', ''),
                      'reference': cand_rows.get(cid, {}).get('reference', ''),
-                     'source':    cand_rows.get(cid, {}).get('book', '')}
+                     'source':    cand_rows.get(cid, {}).get('source', '')}
                     for cid, tid in res[:5]]
 
-        pool.append({
-            'query':     q['query'],
-            'type':      q['query_type'],
-            'results': {
-                'dense':             fmt(dense_res),
-                'dense_text_dedup':  fmt(dedup_r),
-                'dense_two_level':   fmt(two_r),
-                'dense_mmr':         fmt(mmr_r),
-                'hybrid':            fmt(hybrid_r),
-                'fts':               fmt(fts_r),
-            }
-        })
+        pool.append({'query': q['query'], 'type': q['query_type'],
+                     'results': {'dense': fmt(dense_res), 'dense_text_dedup': fmt(dedup_r),
+                                 'dense_two_level': fmt(two_r), 'dense_mmr': fmt(mmr_r),
+                                 'hybrid': fmt(hybrid_r), 'fts': fmt(fts_r)}})
 
     (HERE / "realistic_pool.json").write_text(
         json.dumps(pool, indent=2, ensure_ascii=False), encoding='utf-8'
     )
-    print(f"\nWrote scorecard.md and realistic_pool.json ({len(pool)} realistic queries).")
+    print(f"\nWrote scorecard.md and realistic_pool.json ({len(pool)} realistic).")
     conn.close()
 
 

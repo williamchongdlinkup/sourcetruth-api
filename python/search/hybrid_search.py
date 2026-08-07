@@ -77,6 +77,11 @@ CORPUS_RERANK: dict[str, Literal['mmr', 'text_dedup', 'none']] = {
     'bible-ylt':          'text_dedup',   # text_dedup wins judge chunk 0.846 (confirmed 2026-08-08)
     'tibetan-buddhist':   'none',          # dense wins judge chunk 0.594 / source 1.000; text_dedup worse (0.500) (2026-08-08)
     'rigveda':            'none',          # dense wins judge chunk 0.766; all modes within 0.01 (2026-08-08)
+    # Phase A provisional (2026-08-09) — update after eval results
+    'yoga-sutras':        'mmr',           # provisional: same tradition as BG/Upanishads (hinduism=mmr)
+    'sunan-abu-dawood':   'text_dedup',   # provisional: same pattern as Bukhari/Muslim (hadith=text_dedup)
+    'rumi-masnavi':       'none',          # provisional: poetry — dense likely best; confirm with eval
+    'christian-theology': 'text_dedup',   # provisional: same tradition as Bible (christianity=text_dedup)
 }
 
 
@@ -121,6 +126,11 @@ def _infer_use_fts(
         'sggs',   # Gurmukhi script — FTS zero (confirmed)
         'avesta', # DjVu OCR English — provisional non-FTS
         'rigveda', 'tibetan-buddhist',  # DjVu OCR English — FTS=0 confirmed by LLM judge (2026-08-08)
+        # Phase A additions (provisional 2026-08-09)
+        'yoga-sutras',        # Q&A vocab mismatch expected (like Upanishads)
+        'sunan-abu-dawood',   # same pattern as Bukhari/Muslim
+        'rumi-masnavi',       # poetry — FTS unlikely to contribute
+        'christian-theology', # patristic prose — FTS provisional off; re-eval after judge results
     }
     if corpus_codes:
         return not set(corpus_codes).issubset(NON_FTS_CORPORA)

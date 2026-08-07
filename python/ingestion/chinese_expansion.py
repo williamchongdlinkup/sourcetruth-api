@@ -63,6 +63,34 @@ TEXTS = [
         "parse_mode":   "iching",
         "collection":   "Taoist Classics",
     },
+    # ── Phase A additions ──────────────────────────────────────────────────────
+    {
+        "external_id":  "zhuangzi-giles",
+        "title":        "Chuang Tzu: Mystic, Moralist, and Social Reformer",
+        "author":       "Zhuangzi",
+        "translator":   "Herbert Giles (1889)",
+        "source_type":  "ia",
+        "url":          "https://archive.org/download/chuangtzumysticm00chua/chuangtzumysticm00chua_djvu.txt",
+        "fallback_urls": [
+            "https://archive.org/download/chuangtzu00gilegoog/chuangtzu00gilegoog_djvu.txt",
+        ],
+        "parse_mode":   "zhuangzi",
+        "collection":   "Taoist Classics",
+    },
+    {
+        "external_id":  "xunzi-dubs",
+        "title":        "The Works of Hsuntze (Xunzi)",
+        "author":       "Xunzi",
+        "translator":   "Homer H. Dubs (1928)",
+        "source_type":  "ia",
+        "url":          "https://archive.org/download/in.gov.ignca.14722/14722_djvu.txt",
+        "fallback_urls": [
+            "https://archive.org/download/in.ernet.dli.2015.103953/2015.103953_djvu.txt",
+            "https://archive.org/download/in.ernet.dli.2015.103953/in.ernet.dli.2015.103953_djvu.txt",
+        ],
+        "parse_mode":   "xunzi",
+        "collection":   "Confucian Classics",
+    },
 ]
 
 TARGET_WORDS = 350
@@ -204,6 +232,81 @@ def _parse_mencius(text: str) -> list[dict]:
     return chunks
 
 
+def _parse_zhuangzi(text: str) -> list[dict]:
+    """
+    Giles 1889 Zhuangzi: chapters (篇) titled "Part I — Inner Chapters",
+    "Part II", or individual chapter names.
+    Strategy: find chapter/part headers, then paragraph-chunk each section.
+    """
+    # Chapter headers: "CHAPTER I", "CHAPTER II", or similar
+    chap_re = re.compile(
+        r'(?:^|\n)(CHAPTER\s+[IVXLC\d]+\.?\s*[\w ,\-]*)\n',
+        re.MULTILINE | re.IGNORECASE
+    )
+    matches = list(chap_re.finditer(text))
+
+    # Fallback: part headers
+    if len(matches) < 3:
+        chap_re = re.compile(
+            r'(?:^|\n)(PART\s+(?:I{1,3}|IV|V|VI|ONE|TWO|THREE)\b[\w\s\-,]*)\n',
+            re.MULTILINE | re.IGNORECASE
+        )
+        matches = list(chap_re.finditer(text))
+
+    if len(matches) < 2:
+        paras = [_clean(p) for p in re.split(r'\n{2,}', text) if p.strip() and len(p.split()) > 5]
+        return _chunk_paragraphs(paras, "Zhuangzi")
+
+    chunks = []
+    for ci, match in enumerate(matches):
+        label = match.group(1).strip()
+        start = match.start()
+        end   = matches[ci + 1].start() if ci + 1 < len(matches) else len(text)
+        body  = text[start:end]
+        paras = [_clean(p) for p in re.split(r'\n{2,}', body) if p.strip() and len(p.split()) > 5]
+        sub   = _chunk_paragraphs(paras, f"Zhuangzi — {label}")
+        chunks.extend(sub)
+
+    return chunks
+
+
+def _parse_xunzi(text: str) -> list[dict]:
+    """
+    Dubs 1928 Xunzi (Hsuntze): structured in books/essays.
+    Headers typically: "BOOK I — ENCOURAGING LEARNING" or numbered chapters.
+    """
+    # Try book headers
+    book_re = re.compile(
+        r'(?:^|\n)(BOOK\s+[IVXLC\d]+\.?\s*[\w ,\-—–]*)\n',
+        re.MULTILINE | re.IGNORECASE
+    )
+    matches = list(book_re.finditer(text))
+
+    if len(matches) < 2:
+        # Try chapter headers
+        book_re = re.compile(
+            r'(?:^|\n)(CHAPTER\s+[IVXLC\d]+\.?\s*[\w ,\-—–]*)\n',
+            re.MULTILINE | re.IGNORECASE
+        )
+        matches = list(book_re.finditer(text))
+
+    if len(matches) < 2:
+        paras = [_clean(p) for p in re.split(r'\n{2,}', text) if p.strip() and len(p.split()) > 5]
+        return _chunk_paragraphs(paras, "Xunzi")
+
+    chunks = []
+    for ci, match in enumerate(matches):
+        label = match.group(1).strip()
+        start = match.start()
+        end   = matches[ci + 1].start() if ci + 1 < len(matches) else len(text)
+        body  = text[start:end]
+        paras = [_clean(p) for p in re.split(r'\n{2,}', body) if p.strip() and len(p.split()) > 5]
+        sub   = _chunk_paragraphs(paras, f"Xunzi — {label}")
+        chunks.extend(sub)
+
+    return chunks
+
+
 def _parse_iching(text: str) -> list[dict]:
     """
     I Ching: 64 hexagrams + appendices.
@@ -337,6 +440,10 @@ def run(force: bool = False) -> None:
             chunks = _parse_mencius(text)
         elif mode == 'iching':
             chunks = _parse_iching(text)
+        elif mode == 'zhuangzi':
+            chunks = _parse_zhuangzi(text)
+        elif mode == 'xunzi':
+            chunks = _parse_xunzi(text)
         else:
             paras = [_clean(p) for p in re.split(r'\n{2,}', text) if p.strip() and len(p.split()) > 5]
             chunks = _chunk_paragraphs(paras, text_def['title'])
