@@ -38,7 +38,8 @@ def main():
         'bhagavad-gita', 'upanishads', 'greek-philosophy',
         'classical-latin', 'classical-chinese', 'sanskrit-classical',
         'sikh', 'zoroastrian',
-        'bible-web', 'bible-asv', 'bible-ylt', 'rigveda', 'all',
+        'bible-web', 'bible-asv', 'bible-ylt', 'rigveda',
+        'tibetan', 'chinese-expansion', 'all',
     ]
     parser.add_argument('--source', required=True, choices=SOURCES, help='Corpus to ingest')
     parser.add_argument('--nikayas', nargs='+', default=None,
@@ -140,6 +141,14 @@ def main():
     if args.source in ('rigveda', 'all'):
         from ingestion.rigveda import run as rigveda_run
         rigveda_run(force=args.force)
+
+    if args.source in ('tibetan', 'all'):
+        from ingestion.tibetan_buddhist import run as tibetan_run
+        tibetan_run(force=args.force)
+
+    if args.source in ('chinese-expansion', 'all'):
+        from ingestion.chinese_expansion import run as chinese_exp_run
+        chinese_exp_run(force=args.force)
 
 
 if __name__ == '__main__':

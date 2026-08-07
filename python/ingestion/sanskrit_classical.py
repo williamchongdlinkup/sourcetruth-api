@@ -45,9 +45,9 @@ LANGUAGE    = "en"
 LICENSE     = "Public Domain"
 BASE_URL    = "https://www.gutenberg.org"
 
-# For the Ramayana, we sample the key kandas to keep ingestion manageable.
-# Full text is 2.3MB / ~5000 chapters. Phase 1 covers Bala + Yuddha + Uttara kandas.
-RAMAYANA_SAMPLE_KANDAS = {"BOOK I", "BOOK II", "BOOK VI", "BOOK VII"}
+# All 7 kandas — Phase 2 expansion adds Aranya (III), Kishkindha (IV), Sundara (V)
+# to the original 4 (Bala I, Ayodhya II, Yuddha VI, Uttara VII).
+RAMAYANA_SAMPLE_KANDAS = {"BOOK I", "BOOK II", "BOOK III", "BOOK IV", "BOOK V", "BOOK VI", "BOOK VII"}
 
 TEXTS = [
     {
@@ -80,12 +80,12 @@ RETRY_DELAY  = 30
 _WHITESPACE = re.compile(r'\s+')
 
 KANDA_NAMES = {
-    "BOOK I": "Bala Kanda (Book of Childhood)",
-    "BOOK II": "Ayodhya Kanda (Book of Ayodhya)",
+    "BOOK I":   "Bala Kanda (Book of Childhood)",
+    "BOOK II":  "Ayodhya Kanda (Book of Ayodhya)",
     "BOOK III": "Aranya Kanda (Book of the Forest)",
-    "BOOK IV": "Kishkindha Kanda (Book of Kishkindha)",
-    "BOOK V": "Sundara Kanda (Book of Beauty)",
-    "BOOK VI": "Yuddha Kanda (Book of War)",
+    "BOOK IV":  "Kishkindha Kanda (Book of Kishkindha)",
+    "BOOK V":   "Sundara Kanda (Book of Beauty)",
+    "BOOK VI":  "Yuddha Kanda (Book of War)",
     "BOOK VII": "Uttara Kanda (Epilogue)",
 }
 

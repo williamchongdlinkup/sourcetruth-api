@@ -39,7 +39,12 @@ LANGUAGE    = "en"
 LICENSE     = "Public Domain"
 BASE_URL    = "https://www.gutenberg.org/ebooks/8496"
 
-GUTENBERG_URL = "https://www.gutenberg.org/cache/epub/8496/pg8496.txt"
+# Internet Archive sources (Gutenberg CDN drops connection for large Griffith files)
+IA_HEADERS   = {'User-Agent': 'Mozilla/5.0 (compatible; academic-research/1.0)'}
+IA_URLS = [
+    "https://archive.org/download/hymnsrigveda00grifgoog/hymnsrigveda00grifgoog_djvu.txt",  # Vol 1 (Mandalas I-VI)
+    "https://archive.org/download/hymnsrigveda02grifgoog/hymnsrigveda02grifgoog_djvu.txt",  # Vol 2 (Mandalas VII-X)
+]
 
 TARGET_WORDS = 350
 MIN_WORDS    = 80
@@ -254,31 +259,60 @@ def _upsert_text(conn, corpus_id: int, mandala_num: str) -> int:
     return row['id']
 
 
-def run(force: bool = False) -> None:
-    print(f"Downloading Rigveda (Griffith, Gutenberg #8496) ...")
-    raw = None
-    for attempt in range(3):
-        try:
-            resp = httpx.get(GUTENBERG_URL, timeout=120.0, follow_redirects=True,
-                             headers={'Accept-Encoding': 'identity'})
-            if resp.status_code == 404:
-                print("  404 — skipping.")
-                return
-            resp.raise_for_status()
-            raw = resp.content.decode('utf-8', errors='replace')
-            break
-        except Exception as e:
-            if attempt < 2:
-                print(f"  Retry {attempt+1}: {e}")
-                time.sleep(5)
-            else:
-                print(f"  [ERROR] Failed: {e}")
+def _clean_djvu_ia(text: str) -> str:
+    """Remove Internet Archive / Google Books header and OCR artifacts."""
+    import re as _re
+    # Remove page numbers on their own lines
+    text = _re.sub(r'(?:^|\n)\s*\d{1,4}\s*(?:\n|$)', '\n', text, flags=_re.MULTILINE)
+    # Fix spaced-out letter sequences (DjVu OCR: "R I G V E D A" → "RIGVEDA")
+    text = _re.sub(r'\b([A-Z]) ([A-Z])( [A-Z])+\b',
+                   lambda m: m.group(0).replace(' ', ''), text)
+    # Remove Google Books boilerplate (appears in first ~3KB)
+    for marker in ['This is a digital copy', 'Google Books']:
+        idx = text.find(marker)
+        if idx >= 0 and idx < 5000:
+            # Skip to first HYMN
+            hymn_idx = text.find('HYMN', idx)
+            if hymn_idx > 0:
+                text = text[hymn_idx:]
+    # Collapse broken hyphenation
+    text = _re.sub(r'-\n\s+', '', text)
+    text = _re.sub(r'\n{3,}', '\n\n', text)
+    return text.strip()
 
-    if not raw:
+
+def run(force: bool = False) -> None:
+    print(f"Downloading Rigveda (Griffith) from Internet Archive ...")
+    all_raw_parts = []
+    for url in IA_URLS:
+        raw = None
+        for attempt in range(3):
+            try:
+                resp = httpx.get(url, timeout=120.0, follow_redirects=True, headers=IA_HEADERS)
+                if resp.status_code == 404:
+                    print(f"  404 for {url} — skipping.")
+                    break
+                resp.raise_for_status()
+                raw = resp.content.decode('utf-8', errors='replace')
+                print(f"  Downloaded {len(raw)//1024}KB from {url.split('/')[-1]}")
+                break
+            except Exception as e:
+                if attempt < 2:
+                    print(f"  Retry {attempt+1}: {e}")
+                    time.sleep(5)
+                else:
+                    print(f"  [ERROR] Failed: {e}")
+        if raw:
+            all_raw_parts.append(raw)
+
+    if not all_raw_parts:
+        print("[ERROR] No Rigveda content downloaded")
         return
 
-    text = _strip_gutenberg(raw).replace('\r\n', '\n').replace('\r', '\n')
-    print(f"  Downloaded {len(text)//1024}KB")
+    # Combine volumes
+    combined = '\n\n'.join(all_raw_parts)
+    text = _clean_djvu_ia(combined).replace('\r\n', '\n').replace('\r', '\n')
+    print(f"  Combined text: {len(text)//1024}KB")
 
     all_chunks = _parse_rigveda(text)
     print(f"  Parsed {len(all_chunks)} chunks total")
