@@ -48,7 +48,12 @@ TEXTS = [
         "author":       "Mencius",
         "translator":   "James Legge (1861)",
         "source_type":  "gutenberg",
-        "url":          "https://www.gutenberg.org/cache/epub/10056/pg10056.txt",
+        # Gutenberg cache CDN drops large files — try direct URL then mirror
+        "url":          "https://www.gutenberg.org/files/10056/10056.txt",
+        "fallback_urls": [
+            "https://gutenberg.org/cache/epub/10056/pg10056.txt",
+            "https://www.gutenberg.org/ebooks/10056.txt.utf-8",
+        ],
         "parse_mode":   "mencius",
         "collection":   "Confucian Classics",
     },
@@ -296,23 +301,27 @@ def run(force: bool = False) -> None:
         print(f"Ingesting: {text_def['title']}")
 
         raw = None
-        for attempt in range(3):
-            try:
-                headers = IA_HEADERS if text_def['source_type'] == 'ia' else {'Accept-Encoding': 'identity'}
-                resp = httpx.get(text_def['url'], timeout=90.0, follow_redirects=True, headers=headers)
-                if resp.status_code == 404:
-                    print(f"  404 — skipping.")
+        urls_to_try = [text_def['url']] + text_def.get('fallback_urls', [])
+        headers = IA_HEADERS if text_def['source_type'] == 'ia' else {'Accept-Encoding': 'identity'}
+        for url in urls_to_try:
+            for attempt in range(3):
+                try:
+                    resp = httpx.get(url, timeout=120.0, follow_redirects=True, headers=headers)
+                    if resp.status_code == 404:
+                        print(f"  404 — skip {url.split('/')[-1]}")
+                        break
+                    resp.raise_for_status()
+                    raw = resp.content.decode('utf-8', errors='replace')
+                    print(f"  Downloaded {len(raw)//1024}KB from {url.split('/')[-1]}")
                     break
-                resp.raise_for_status()
-                raw = resp.content.decode('utf-8', errors='replace')
-                print(f"  Downloaded {len(raw)//1024}KB")
+                except Exception as e:
+                    if attempt < 2:
+                        print(f"  Retry {attempt+1}: {e}")
+                        time.sleep(5)
+                    else:
+                        print(f"  [ERROR] {url.split('/')[-1]}: {e}")
+            if raw:
                 break
-            except Exception as e:
-                if attempt < 2:
-                    print(f"  Retry {attempt+1}: {e}")
-                    time.sleep(5)
-                else:
-                    print(f"  [ERROR] Failed: {e}")
 
         if raw is None:
             continue

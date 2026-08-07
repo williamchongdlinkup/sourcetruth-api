@@ -49,14 +49,17 @@ BASE_URL    = "https://www.gutenberg.org"
 # to the original 4 (Bala I, Ayodhya II, Yuddha VI, Uttara VII).
 RAMAYANA_SAMPLE_KANDAS = {"BOOK I", "BOOK II", "BOOK III", "BOOK IV", "BOOK V", "BOOK VI", "BOOK VII"}
 
+IA_HEADERS = {'User-Agent': 'Mozilla/5.0 (compatible; academic-research/1.0)'}
+
 TEXTS = [
     {
         "external_id":  "ramayana-griffith",
         "title":        "The Ramayana",
         "author":       "Valmiki",
         "translator":   "Ralph T. H. Griffith (1870-1874)",
-        "gutenberg_id": 24869,
-        "url":          "https://www.gutenberg.org/cache/epub/24869/pg24869.txt",
+        "gutenberg_id": None,
+        "url":          "https://archive.org/download/ramayanofvlm00valmrich/ramayanofvlm00valmrich_djvu.txt",
+        "source_type":  "ia",
         "parse_mode":   "ramayana",
         "collection":   "Ramayana",
     },
@@ -67,6 +70,7 @@ TEXTS = [
         "translator":   "Arthur W. Ryder (1912)",
         "gutenberg_id": 16659,
         "url":          "https://www.gutenberg.org/cache/epub/16659/pg16659.txt",
+        "source_type":  "gutenberg",
         "parse_mode":   "kalidasa",
         "collection":   "Kalidasa",
     },
@@ -148,64 +152,77 @@ def _chunk_paragraphs(paras: list[str], ref_prefix: str) -> list[dict]:
 
 def _parse_ramayana(text: str) -> list[dict]:
     """
-    Griffith's Ramayana uses BOOK I ... BOOK VII for kandas, then CANTO headings.
-    We sample specific kandas (I, II, VI, VII) and chunk by canto.
+    Griffith's Ramayana (IA DjVu): BOOK I-VI content + CANTO headings.
+    The file contains a table of contents in the first ~30KB then actual content.
+    DjVu double-spaces are collapsed in run() before calling here.
     """
-    # Find book boundaries
+    # Match book markers — ordered longest-first to avoid partial matches
     book_re = re.compile(
-        r'(?:^|\n)(BOOK\s+(?:I{1,3}|IV|V?I{1,3}|VII))\b',
+        r'(?:^|\n)(BOOK\s+(?:VII|VIII|VI|IV|V|IX|X{1,3}|I{1,3}))[.\'\d\s]*\n',
         re.IGNORECASE | re.MULTILINE
     )
-    book_matches = list(book_re.finditer(text))
+    all_matches = list(book_re.finditer(text))
 
-    if not book_matches:
-        # Fallback: paragraph chunks on whole text
+    # TOC entries appear in the first ~30KB; real content follows after
+    TOC_CUTOFF = 30_000
+    content_matches = [m for m in all_matches if m.start() >= TOC_CUTOFF]
+
+    # Locate the first content-area CANTO (= start of Book I body)
+    canto_re = re.compile(
+        r'(?:^|\n)(CANTO\s+[IVXLCDM\d]+\.?\s*[\w\s]*?)\n',
+        re.IGNORECASE | re.MULTILINE
+    )
+    book1_start = TOC_CUTOFF
+    for m in canto_re.finditer(text):
+        if m.start() > TOC_CUTOFF:
+            book1_start = m.start()
+            break
+
+    # Build ordered list of (start_pos, label) — Book I synthetic, rest from content
+    sections: list[dict] = [{'label': 'BOOK I', 'start': book1_start}]
+    for m in content_matches:
+        label = re.sub(r'\s+', ' ', m.group(1).strip().upper())
+        if label != 'BOOK I':  # skip any spurious content-area Book I markers
+            sections.append({'label': label, 'start': m.start()})
+    sections.sort(key=lambda x: x['start'])
+
+    if not sections:
         paras = [_clean(p) for p in re.split(r'\n{2,}', text) if p.strip() and len(p.split()) > 5]
         return _chunk_paragraphs(paras, "Ramayana")
 
     chunks = []
-    for bi, match in enumerate(book_matches):
-        book_label = match.group(1).strip().upper()
-        # Only ingest sampled kandas
+    for i, section in enumerate(sections):
+        book_label = section['label']
         if book_label not in RAMAYANA_SAMPLE_KANDAS:
             continue
 
         kanda_name = KANDA_NAMES.get(book_label, book_label)
-        start = match.start()
-        end   = book_matches[bi+1].start() if bi+1 < len(book_matches) else len(text)
+        start = section['start']
+        end   = sections[i + 1]['start'] if i + 1 < len(sections) else len(text)
         body  = text[start:end]
 
-        # Split by canto within this kanda
-        canto_re = re.compile(
-            r'(?:^|\n)(CANTO\s+[IVXLCDM\d]+\.?\s*[\w\s]*)\n',
-            re.IGNORECASE | re.MULTILINE
-        )
         canto_matches = list(canto_re.finditer(body))
 
         if canto_matches:
             for ci, cm in enumerate(canto_matches):
                 canto_label = cm.group(1).strip()
                 cs = cm.start()
-                ce = canto_matches[ci+1].start() if ci+1 < len(canto_matches) else len(body)
+                ce = canto_matches[ci + 1].start() if ci + 1 < len(canto_matches) else len(body)
                 canto_body = _clean(body[cs:ce])
                 if not canto_body or len(canto_body.split()) < 20:
                     continue
                 ref = f"Ramayana, {kanda_name}, {canto_label}"
-                # If canto is very long, sub-chunk it
                 if len(canto_body.split()) > TARGET_WORDS * 2:
                     sub_paras = [_clean(p) for p in re.split(r'\n{2,}', body[cs:ce]) if p.strip()]
-                    sub_chunks = _chunk_paragraphs(sub_paras, ref)
-                    chunks.extend(sub_chunks)
+                    chunks.extend(_chunk_paragraphs(sub_paras, ref))
                 else:
                     chunks.append({'text': canto_body, 'reference': ref,
                                    'chapter': kanda_name,
                                    'word_count': len(canto_body.split()),
                                    'token_count': _approx_tokens(canto_body)})
         else:
-            # No canto splits — paragraph chunk the whole kanda
             paras = [_clean(p) for p in re.split(r'\n{2,}', body) if p.strip() and len(p.split()) > 5]
-            sub = _chunk_paragraphs(paras, f"Ramayana, {kanda_name}")
-            chunks.extend(sub)
+            chunks.extend(_chunk_paragraphs(paras, f"Ramayana, {kanda_name}"))
 
     return chunks
 
@@ -252,7 +269,7 @@ def _upsert_corpus(conn) -> int:
 
 
 def _upsert_text(conn, corpus_id: int, text_def: dict) -> int:
-    url = f"https://www.gutenberg.org/ebooks/{text_def['gutenberg_id']}"
+    url = text_def.get('url', f"https://www.gutenberg.org/ebooks/{text_def.get('gutenberg_id', '')}")
     display = f"{text_def['title']} — {text_def['author']} (trans. {text_def['translator']})"
     row = execute_one(conn, """
         INSERT INTO canon_texts
@@ -277,18 +294,21 @@ def run(force: bool = False) -> None:
     for text_def in TEXTS:
         print(f"\n{'='*60}")
         print(f"Ingesting: {text_def['title']} by {text_def['author']}")
-        print(f"  Source: Gutenberg #{text_def['gutenberg_id']}")
+        source_type = text_def.get('source_type', 'gutenberg')
+        dl_headers = IA_HEADERS if source_type == 'ia' else {'Accept-Encoding': 'identity'}
+        print(f"  Source: {source_type} — {text_def['url'].split('/')[-1]}")
 
         raw = None
         for attempt in range(3):
             try:
                 resp = httpx.get(text_def['url'], timeout=180.0, follow_redirects=True,
-                                 headers={'Accept-Encoding': 'identity'})
+                                 headers=dl_headers)
                 if resp.status_code == 404:
                     print(f"  404 — skipping.")
                     break
                 resp.raise_for_status()
                 raw = resp.content.decode('utf-8', errors='replace')
+                print(f"  Downloaded {len(raw)//1024}KB")
                 break
             except Exception as e:
                 if attempt < 2:
@@ -300,8 +320,18 @@ def run(force: bool = False) -> None:
         if raw is None:
             continue
 
-        text = _strip_gutenberg(raw)
-        text = text.replace('\r\n', '\n').replace('\r', '\n')
+        if source_type == 'ia':
+            # Clean DjVu OCR artefacts for IA sources
+            import re as _re
+            raw = _re.sub(r'(?:^|\n)\s*\d{1,4}\s*(?:\n|$)', '\n', raw, flags=_re.MULTILINE)
+            raw = _re.sub(r'\b([A-Z]) ([A-Z])( [A-Z])+\b',
+                          lambda m: m.group(0).replace(' ', ''), raw)
+            # Collapse multiple spaces to single (DjVu OCR double-spaces everything)
+            raw = _re.sub(r'  +', ' ', raw)
+            text = raw.replace('\r\n', '\n').replace('\r', '\n')
+        else:
+            text = _strip_gutenberg(raw).replace('\r\n', '\n').replace('\r', '\n')
+
         mode = text_def['parse_mode']
 
         if mode == 'ramayana':

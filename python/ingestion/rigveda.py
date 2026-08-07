@@ -39,11 +39,13 @@ LANGUAGE    = "en"
 LICENSE     = "Public Domain"
 BASE_URL    = "https://www.gutenberg.org/ebooks/8496"
 
-# Internet Archive sources (Gutenberg CDN drops connection for large Griffith files)
-IA_HEADERS   = {'User-Agent': 'Mozilla/5.0 (compatible; academic-research/1.0)'}
+# Internet Archive sources — 3 Google Books volumes, ordered to give I-X sequence
+# Vol 02 contains Mandalas I-II, Vol 00 = III-VI, Vol 01 = VII-IX
+IA_HEADERS = {'User-Agent': 'Mozilla/5.0 (compatible; academic-research/1.0)'}
 IA_URLS = [
-    "https://archive.org/download/hymnsrigveda00grifgoog/hymnsrigveda00grifgoog_djvu.txt",  # Vol 1 (Mandalas I-VI)
-    "https://archive.org/download/hymnsrigveda02grifgoog/hymnsrigveda02grifgoog_djvu.txt",  # Vol 2 (Mandalas VII-X)
+    "https://archive.org/download/hymnsrigveda02grifgoog/hymnsrigveda02grifgoog_djvu.txt",  # Mandalas I-II
+    "https://archive.org/download/hymnsrigveda00grifgoog/hymnsrigveda00grifgoog_djvu.txt",  # Mandalas III-VI
+    "https://archive.org/download/hymnsrigveda01grifgoog/hymnsrigveda01grifgoog_djvu.txt",  # Mandalas VII-IX
 ]
 
 TARGET_WORDS = 350
@@ -81,37 +83,129 @@ def _approx_tokens(text: str) -> int:
     return max(1, len(text.encode('utf-8')) // 4)
 
 
+_VALID_MANDALAS = {'I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X'}
+
+
+def _normalize_mandala(raw: str) -> str:
+    """Resolve OCR artifacts in DjVu running-header Roman numerals.
+
+    DjVu OCR commonly reads "." as "l"/"L", turning "VIII." → "VIIL",
+    and can misread "X." as "L" entirely (X dropped). For Rigveda mandalas
+    I-X, no valid label contains L, C, D, or M.
+    """
+    s = raw.strip().upper()
+    if s in _VALID_MANDALAS:
+        return s
+    # "L" alone = "X." with X dropped — common in Mandala X running headers
+    if s == 'L':
+        return 'X'
+    # Replace OCR-misread chars (L, C, D, M → I restores trailing-dot artifacts)
+    fixed = re.sub(r'[LCDM]', 'I', s)
+    if fixed in _VALID_MANDALAS:
+        return fixed
+    # Try stripping non-IVX suffix (e.g. "XI" from "XL" after L→I)
+    m = re.match(r'^([IVX]+)', fixed)
+    if m and m.group(1) in _VALID_MANDALAS:
+        return m.group(1)
+    return ''
+
+
 def _parse_rigveda(text: str) -> list[dict]:
     """
-    Griffith's Rigveda uses:
-    - Mandala headers: MANDALA I / BOOK I etc.
-    - Hymn headers: HYMN I. Agni. or I. Agni.
-    Each hymn = one chunk. Short hymns may be merged (< MIN_WORDS).
+    Griffith's Rigveda (Google Books DjVu via IA).
+
+    The DjVu text has no standalone MANDALA headers; mandala info comes from
+    running page footers: " OF [BOOK III. "  (with common OCR artifacts).
+    Strategy:
+      1. Build a (position → mandala) map from [BOOK X.] footer markers.
+      2. Split by HYMN headers.
+      3. Tag each hymn with the most recent mandala seen before it.
     """
-    # Split by Mandala first
-    mandala_re = re.compile(
-        r'(?:^|\n)((?:MANDALA|BOOK)\s+(?:I{1,3}V?|VI{0,3}|IX|X)\.?\s*$)',
+    # Running header pattern: "[BOOK III." or "[BOOK III]" (OCR artifacts handled)
+    hdr_re = re.compile(r'\[BOOK\s+([IVXLCDM]+)\.?\]?', re.IGNORECASE)
+    mandala_map: list[tuple[int, str]] = []
+    for m in hdr_re.finditer(text):
+        mn = _normalize_mandala(m.group(1))
+        if mn:
+            mandala_map.append((m.start(), mn))
+
+    # Also accept standalone mandala headers if they exist
+    standalone_re = re.compile(
+        r'(?:^|\n)(?:MANDALA|BOOK)\s+([IVXLCDM]+)\.?\s*\n',
         re.IGNORECASE | re.MULTILINE
     )
-    mandala_matches = list(mandala_re.finditer(text))
+    for m in standalone_re.finditer(text):
+        mn = _normalize_mandala(m.group(1))
+        if mn:
+            mandala_map.append((m.start(), mn))
 
-    if not mandala_matches:
-        # Fallback: split by HYMN headers directly
+    mandala_map.sort(key=lambda x: x[0])
+
+    def mandala_at(pos: int) -> str:
+        result = 'I'
+        for p, mn in mandala_map:
+            if p <= pos:
+                result = mn
+            else:
+                break
+        return result
+
+    # Split by HYMN headers — [^\n]*? matches any header title including periods and OCR artifacts
+    hymn_re = re.compile(
+        r'(?:^|\n)(HYMN\s+[IVXLCDM]+[^\n]*?)\n',
+        re.MULTILINE | re.IGNORECASE
+    )
+    hymn_matches = list(hymn_re.finditer(text))
+
+    if not hymn_matches:
         return _parse_hymns_flat(text)
 
-    chunks = []
-    for mi, match in enumerate(mandala_matches):
-        mandala_label = match.group(1).strip()
-        # Extract mandala number
-        m_num_match = re.search(r'(I{1,3}V?|VI{0,3}|IX|X)\b', mandala_label, re.IGNORECASE)
-        mandala_num = m_num_match.group(1).upper() if m_num_match else str(mi + 1)
-
+    # Group hymns by mandala, then merge short ones within each mandala
+    by_mandala: dict[str, list[tuple[str, str, int]]] = {}  # mandala → [(label, text, words)]
+    for hi, match in enumerate(hymn_matches):
+        hymn_label = match.group(1).strip()
         start = match.start()
-        end   = mandala_matches[mi+1].start() if mi+1 < len(mandala_matches) else len(text)
-        body  = text[start:end]
+        end   = hymn_matches[hi + 1].start() if hi + 1 < len(hymn_matches) else len(text)
+        hymn_text = _clean(text[start:end])
+        hymn_words = len(hymn_text.split())
+        if not hymn_text or hymn_words < 10:
+            continue
+        mn = mandala_at(start)
+        by_mandala.setdefault(mn, []).append((hymn_label, hymn_text, hymn_words))
 
-        sub = _parse_hymns_in_mandala(body, mandala_num)
-        chunks.extend(sub)
+    # Mandala order: I II III IV V VI VII VIII IX X
+    order = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX', 'X']
+
+    chunks = []
+    for mn in order:
+        hymns = by_mandala.get(mn)
+        if not hymns:
+            continue
+        buffer_hymns: list[tuple[str, str]] = []
+        buf_words = 0
+
+        def flush_mandala():
+            if not buffer_hymns:
+                return
+            first_label = buffer_hymns[0][0]
+            txt = ' '.join(h[1] for h in buffer_hymns)
+            num_m = re.search(r'([IVXLCDM]+|\d+)', first_label, re.IGNORECASE)
+            hymn_num = num_m.group(1) if num_m else first_label
+            ref = f"RV {mn}.{hymn_num}"
+            chunks.append({'text': txt, 'reference': ref,
+                           'chapter': f"Mandala {mn}",
+                           'word_count': len(txt.split()),
+                           'token_count': _approx_tokens(txt)})
+
+        for hymn_label, hymn_text, hymn_words in hymns:
+            if buffer_hymns and buf_words + hymn_words > TARGET_WORDS and buf_words >= MIN_WORDS:
+                flush_mandala()
+                buffer_hymns = [(hymn_label, hymn_text)]
+                buf_words    = hymn_words
+            else:
+                buffer_hymns.append((hymn_label, hymn_text))
+                buf_words += hymn_words
+        flush_mandala()
 
     return chunks
 
@@ -267,14 +361,22 @@ def _clean_djvu_ia(text: str) -> str:
     # Fix spaced-out letter sequences (DjVu OCR: "R I G V E D A" → "RIGVEDA")
     text = _re.sub(r'\b([A-Z]) ([A-Z])( [A-Z])+\b',
                    lambda m: m.group(0).replace(' ', ''), text)
-    # Remove Google Books boilerplate (appears in first ~3KB)
+    # Strip Google Books boilerplate paragraphs (may appear at start of each volume)
     for marker in ['This is a digital copy', 'Google Books']:
-        idx = text.find(marker)
-        if idx >= 0 and idx < 5000:
-            # Skip to first HYMN
-            hymn_idx = text.find('HYMN', idx)
-            if hymn_idx > 0:
-                text = text[hymn_idx:]
+        while True:
+            idx = text.find(marker)
+            if idx < 0:
+                break
+            # Find end of boilerplate block (ends at first blank line after a long paragraph)
+            end = text.find('\n\n', idx + 200)
+            if end < 0:
+                break
+            # Only strip if this block is short (boilerplate, not actual content)
+            block_len = end - idx
+            if block_len < 4000:
+                text = text[:idx] + text[end:]
+            else:
+                break
     # Collapse broken hyphenation
     text = _re.sub(r'-\n\s+', '', text)
     text = _re.sub(r'\n{3,}', '\n\n', text)
