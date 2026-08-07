@@ -37,7 +37,7 @@ OPT_IN_ONLY_CORPORA = {'gretil'}
 
 # Tradition → optimal rerank mode from retrieval eval
 TRADITION_RERANK: dict[str, Literal['mmr', 'text_dedup', 'none']] = {
-    'islam':          'text_dedup',
+    'islam':          'none',           # dense wins full Islamic pool judge 0.849 Phase A (was text_dedup per-collection; per-corpus CORPUS_RERANK handles scoped Quran=mmr, Hadith=text_dedup)
     'theravada':      'text_dedup',
     'pre-sectarian':  'text_dedup',
     'early-buddhist': 'text_dedup',
@@ -46,10 +46,10 @@ TRADITION_RERANK: dict[str, Literal['mmr', 'text_dedup', 'none']] = {
     'dharmaguptaka':  'text_dedup',
     'judaism':        'text_dedup',
     'christianity':   'text_dedup',   # KJV chapter chunks — one result per book (provisional 2026-08-06)
-    'hinduism':       'mmr',           # BG + Upanishads — MMR wins realistic judge 0.932 vs dense 0.877 (2026-08-06)
-    'hellenism':      'text_dedup',   # Greek philosophy — text_dedup wins judge 0.9178 vs dense 0.870 (2026-08-07)
+    'hinduism':       'mmr',           # BG+Upanishads+YogaSutras — MMR wins 0.861 Phase A (was 0.932 at 154 chunks; confirmed 2026-08-09)
+    'hellenism':      'text_dedup',   # Greek philosophy — text_dedup wins 0.828 Phase A 11-text (was 0.918 5-text; confirmed 2026-08-09)
     'classicism':     'none',          # Latin — dense wins judge 0.920 (2026-08-07)
-    'east-asian':     'none',          # Classical Chinese — dense wins judge 0.782 (2026-08-07)
+    'east-asian':     'none',          # Classical Chinese — dense wins 0.770 Phase A 8-text (was 0.782 4-text; confirmed 2026-08-09)
     'sikhism':        'none',           # SGGS — dense wins realistic judge 0.883 (2026-08-07); topical English queries work
     'zoroastrianism': 'none',          # Avesta — dense wins judge 0.804 (2026-08-07)
 }
@@ -62,12 +62,12 @@ CORPUS_RERANK: dict[str, Literal['mmr', 'text_dedup', 'none']] = {
     'tanakh-jps1917':     'text_dedup',   # one result per book/chapter
     'mishnah-silverstein': 'text_dedup',  # one result per tractate
     'kjv':               'text_dedup',    # text_dedup wins LLM judge chunk 0.846 (2026-08-08)
-    'bhagavad-gita':     'mmr',            # MMR wins LLM judge 0.9324 (2026-08-07)
-    'upanishads':        'mmr',            # MMR wins LLM judge 0.9324 (2026-08-07)
-    'greek-philosophy':  'text_dedup',    # text_dedup wins LLM judge 0.9178 (2026-08-07)
+    'bhagavad-gita':     'mmr',            # MMR wins LLM judge 0.9324 V3; 0.861 pool Phase A (2026-08-09)
+    'upanishads':        'mmr',            # MMR wins LLM judge 0.9324 V3; Part II chunking issue (Brihadaranyaka/Mundaka queries score 0)
+    'greek-philosophy':  'text_dedup',    # text_dedup wins LLM judge 0.828 Phase A 11-text (was 0.918 5-text 2026-08-07); still optimal despite synthetic reversal
     # V4 eval results (2026-08-07)
     'classical-latin':    'none',          # dense wins judge 0.920; two_level best but not in prod (2026-08-07)
-    'classical-chinese':  'none',          # dense wins judge 0.782 (2026-08-07)
+    'classical-chinese':  'none',          # dense wins judge 0.770 Phase A 8-text (was 0.782 4-text 2026-08-07); text_dedup worse (0.647)
     'sanskrit-classical': 'text_dedup',   # text_dedup wins judge chunk 0.978 vs dense 0.910 (V5 expanded corpus 2026-08-08)
     'sggs':               'none',          # dense wins judge 0.883 (synthetic 0% — realistic 88%: topical queries work!) (2026-08-07)
     'avesta':             'none',          # dense wins judge 0.804 (2026-08-07)
@@ -77,11 +77,11 @@ CORPUS_RERANK: dict[str, Literal['mmr', 'text_dedup', 'none']] = {
     'bible-ylt':          'text_dedup',   # text_dedup wins judge chunk 0.846 (confirmed 2026-08-08)
     'tibetan-buddhist':   'none',          # dense wins judge chunk 0.594 / source 1.000; text_dedup worse (0.500) (2026-08-08)
     'rigveda':            'none',          # dense wins judge chunk 0.766; all modes within 0.01 (2026-08-08)
-    # Phase A provisional (2026-08-09) — update after eval results
-    'yoga-sutras':        'mmr',           # provisional: same tradition as BG/Upanishads (hinduism=mmr)
-    'sunan-abu-dawood':   'text_dedup',   # provisional: same pattern as Bukhari/Muslim (hadith=text_dedup)
-    'rumi-masnavi':       'none',          # provisional: poetry — dense likely best; confirm with eval
-    'christian-theology': 'text_dedup',   # provisional: same tradition as Bible (christianity=text_dedup)
+    # Phase A (2026-08-09)
+    'yoga-sutras':        'mmr',           # CONFIRMED: MMR wins Hindu judge 0.861; same pool as BG/Upanishads (2026-08-09)
+    'sunan-abu-dawood':   'text_dedup',   # CONFIRMED: same pattern as Bukhari/Muslim; Islamic judge 2026-08-09
+    'rumi-masnavi':       'none',          # CONFIRMED: dense wins for Islamic pool (0.849 nDCG@5); Rumi retrievable for love/journey topics
+    'christian-theology': 'text_dedup',   # CONFIRMED: text_dedup wins 0.813 nDCG@5 Phase A (Bible+Patristics pool; 2026-08-09)
 }
 
 

@@ -2,33 +2,33 @@
   "summary": [
     {
       "system": "dense",
-      "chunk_ndcg5": 0.8776,
-      "source_ndcg5": 0.8471
+      "chunk_ndcg5": 0.8177,
+      "source_ndcg5": 0.7762
     },
     {
       "system": "dense_text_dedup",
-      "chunk_ndcg5": 0.8818,
-      "source_ndcg5": 0.8484
+      "chunk_ndcg5": 0.8098,
+      "source_ndcg5": 0.7933
     },
     {
       "system": "dense_two_level",
-      "chunk_ndcg5": 0.8765,
-      "source_ndcg5": 0.8548
+      "chunk_ndcg5": 0.8142,
+      "source_ndcg5": 0.7817
     },
     {
       "system": "dense_mmr",
-      "chunk_ndcg5": 0.9282,
-      "source_ndcg5": 0.8532
+      "chunk_ndcg5": 0.8613,
+      "source_ndcg5": 0.812
     },
     {
       "system": "hybrid",
-      "chunk_ndcg5": 0.8776,
-      "source_ndcg5": 0.848
+      "chunk_ndcg5": 0.8197,
+      "source_ndcg5": 0.7766
     },
     {
       "system": "fts",
-      "chunk_ndcg5": 0.0565,
-      "source_ndcg5": 0.0667
+      "chunk_ndcg5": 0.0323,
+      "source_ndcg5": 0.0385
     }
   ],
   "per_query": [
@@ -39,7 +39,7 @@
         "dense": 1.0,
         "dense_text_dedup": 1.0,
         "dense_two_level": 0.9383,
-        "dense_mmr": 1.0,
+        "dense_mmr": 0.992,
         "hybrid": 1.0,
         "fts": 0.0
       },
@@ -84,11 +84,11 @@
         "fts": 0.0
       },
       "source_ndcg5": {
-        "dense": 0.7911,
-        "dense_text_dedup": 0.7911,
+        "dense": 0.9047,
+        "dense_text_dedup": 0.9047,
         "dense_two_level": 1.0,
-        "dense_mmr": 0.9197,
-        "hybrid": 0.7911,
+        "dense_mmr": 0.8503,
+        "hybrid": 0.9047,
         "fts": 0.0
       }
     },
@@ -104,11 +104,11 @@
         "fts": 0.0
       },
       "source_ndcg5": {
-        "dense": 0.9252,
-        "dense_text_dedup": 0.9252,
+        "dense": 0.9563,
+        "dense_text_dedup": 0.9563,
         "dense_two_level": 1.0,
-        "dense_mmr": 0.9148,
-        "hybrid": 0.9252,
+        "dense_mmr": 0.9467,
+        "hybrid": 0.9563,
         "fts": 0.0
       }
     },
@@ -117,7 +117,7 @@
       "type": "realistic_gita_bhakti",
       "chunk_ndcg5": {
         "dense": 1.0,
-        "dense_text_dedup": 0.9665,
+        "dense_text_dedup": 0.9469,
         "dense_two_level": 0.9091,
         "dense_mmr": 1.0,
         "hybrid": 1.0,
@@ -136,11 +136,11 @@
       "query": "What is Krishna's description of the imperishable Brahman and the nature of the supreme?",
       "type": "realistic_gita_brahman",
       "chunk_ndcg5": {
-        "dense": 0.9383,
-        "dense_text_dedup": 0.9714,
+        "dense": 0.8558,
+        "dense_text_dedup": 0.8734,
         "dense_two_level": 1.0,
-        "dense_mmr": 0.9714,
-        "hybrid": 0.9383,
+        "dense_mmr": 0.8734,
+        "hybrid": 0.8558,
         "fts": 0.0
       },
       "source_ndcg5": {
@@ -156,18 +156,18 @@
       "query": "How does the Bhagavad Gita describe a person of steady wisdom (sthitaprajna)?",
       "type": "realistic_gita_wisdom",
       "chunk_ndcg5": {
-        "dense": 0.9864,
+        "dense": 1.0,
         "dense_text_dedup": 1.0,
         "dense_two_level": 0.8529,
-        "dense_mmr": 0.9895,
-        "hybrid": 0.9864,
+        "dense_mmr": 0.912,
+        "hybrid": 1.0,
         "fts": 0.0
       },
       "source_ndcg5": {
         "dense": 1.0,
         "dense_text_dedup": 1.0,
         "dense_two_level": 1.0,
-        "dense_mmr": 0.9829,
+        "dense_mmr": 0.906,
         "hybrid": 1.0,
         "fts": 0.0
       }
@@ -196,16 +196,16 @@
       "query": "How do the Upanishads describe the relationship between the individual self (Atman) and universal Brahman?",
       "type": "realistic_upanishad_atman",
       "chunk_ndcg5": {
-        "dense": 1.0,
+        "dense": 0.9795,
         "dense_text_dedup": 1.0,
-        "dense_two_level": 0.9795,
+        "dense_two_level": 0.9777,
         "dense_mmr": 0.9557,
-        "hybrid": 1.0,
+        "hybrid": 0.9795,
         "fts": 0.0
       },
       "source_ndcg5": {
         "dense": 1.0,
-        "dense_text_dedup": 0.9864,
+        "dense_text_dedup": 0.9688,
         "dense_two_level": 1.0,
         "dense_mmr": 0.9383,
         "hybrid": 1.0,
@@ -216,19 +216,19 @@
       "query": "What does the Chandogya Upanishad teach about the syllable Om as the essence of the universe?",
       "type": "realistic_upanishad_om",
       "chunk_ndcg5": {
-        "dense": 0.0,
-        "dense_text_dedup": 0.0,
-        "dense_two_level": 0.0,
-        "dense_mmr": 0.4307,
-        "hybrid": 0.0,
+        "dense": 0.8772,
+        "dense_text_dedup": 0.8772,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9197,
+        "hybrid": 0.8772,
         "fts": 0.0
       },
       "source_ndcg5": {
-        "dense": 0.4307,
-        "dense_text_dedup": 0.4307,
+        "dense": 0.5013,
+        "dense_text_dedup": 0.5013,
         "dense_two_level": 0.0,
-        "dense_mmr": 0.4307,
-        "hybrid": 0.4307,
+        "dense_mmr": 0.5438,
+        "hybrid": 0.5013,
         "fts": 0.0
       }
     },
@@ -236,11 +236,11 @@
       "query": "How do the Upanishads describe the nature of consciousness and the self in deep sleep?",
       "type": "realistic_upanishad_consciousness",
       "chunk_ndcg5": {
-        "dense": 0.9558,
-        "dense_text_dedup": 0.9675,
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
         "dense_two_level": 0.8772,
         "dense_mmr": 0.9829,
-        "hybrid": 0.9558,
+        "hybrid": 1.0,
         "fts": 0.0
       },
       "source_ndcg5": {
@@ -296,18 +296,18 @@
       "query": "How do both the Bhagavad Gita and the Upanishads describe the eternal self or Atman?",
       "type": "realistic_cross",
       "chunk_ndcg5": {
-        "dense": 1.0,
+        "dense": 0.9467,
         "dense_text_dedup": 1.0,
         "dense_two_level": 1.0,
         "dense_mmr": 1.0,
         "hybrid": 1.0,
-        "fts": 0.8471
+        "fts": 0.8399
       },
       "source_ndcg5": {
-        "dense": 0.9864,
+        "dense": 0.992,
         "dense_text_dedup": 1.0,
         "dense_two_level": 1.0,
-        "dense_mmr": 0.9522,
+        "dense_mmr": 0.9852,
         "hybrid": 1.0,
         "fts": 1.0
       }
@@ -319,7 +319,7 @@
         "dense": 0.8558,
         "dense_text_dedup": 0.8558,
         "dense_two_level": 1.0,
-        "dense_mmr": 0.9675,
+        "dense_mmr": 1.0,
         "hybrid": 0.8558,
         "fts": 0.0
       },
@@ -327,8 +327,228 @@
         "dense": 0.9563,
         "dense_text_dedup": 0.9563,
         "dense_two_level": 1.0,
-        "dense_mmr": 0.9682,
+        "dense_mmr": 1.0,
         "hybrid": 0.9563,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Patanjali say about the definition of yoga in the Yoga Sutras?",
+      "type": "realistic_yoga_definition",
+      "chunk_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.5,
+        "hybrid": 0.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.3869,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.5706,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Patanjali describe the eight limbs of yoga (ashtanga)?",
+      "type": "realistic_yoga_ashtanga",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9502,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8836,
+        "dense_text_dedup": 0.9502,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 0.8836,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is samadhi according to the Yoga Sutras of Patanjali?",
+      "type": "realistic_yoga_samadhi",
+      "chunk_ndcg5": {
+        "dense": 0.9502,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9877,
+        "dense_mmr": 0.9639,
+        "hybrid": 0.9502,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8999,
+        "dense_text_dedup": 0.922,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8518,
+        "hybrid": 0.8999,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Patanjali explain the fluctuations of the mind (chitta vritti) in the Yoga Sutras?",
+      "type": "realistic_yoga_mind",
+      "chunk_ndcg5": {
+        "dense": 0.5,
+        "dense_text_dedup": 0.5,
+        "dense_two_level": 0.3869,
+        "dense_mmr": 0.4307,
+        "hybrid": 0.5,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.6309,
+        "dense_text_dedup": 0.6309,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.7328,
+        "hybrid": 0.6309,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Patanjali say about the obstacles to yoga practice?",
+      "type": "realistic_yoga_obstacles",
+      "chunk_ndcg5": {
+        "dense": 0.9558,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8503,
+        "hybrid": 0.9558,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9558,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8529,
+        "hybrid": 0.9558,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Yoga Sutras describe pratyahara (withdrawal of the senses)?",
+      "type": "realistic_yoga_pratyahara",
+      "chunk_ndcg5": {
+        "dense": 0.9047,
+        "dense_text_dedup": 0.906,
+        "dense_two_level": 0.8855,
+        "dense_mmr": 0.7763,
+        "hybrid": 0.9047,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.906,
+        "dense_text_dedup": 0.906,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.7643,
+        "hybrid": 0.906,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What are the siddhis or supernatural powers described in the Yoga Sutras?",
+      "type": "realistic_yoga_siddhis",
+      "chunk_ndcg5": {
+        "dense": 0.8757,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.8821,
+        "dense_mmr": 0.86,
+        "hybrid": 0.8757,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9829,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the Brihadaranyaka Upanishad teach about the nature of Brahman?",
+      "type": "realistic_upanishad_brihadaranyaka",
+      "chunk_ndcg5": {
+        "dense": 0.5,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.5,
+        "dense_mmr": 0.5,
+        "hybrid": 0.5,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.906,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9047,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Katha Upanishad describe the journey of the self after death?",
+      "type": "realistic_upanishad_katha",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9895,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9795,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9665,
+        "hybrid": 0.9795,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the Mundaka Upanishad say about the two kinds of knowledge?",
+      "type": "realistic_upanishad_mundaka",
+      "chunk_ndcg5": {
+        "dense": 0.6309,
+        "dense_text_dedup": 0.6309,
+        "dense_two_level": 0.4307,
+        "dense_mmr": 0.6309,
+        "hybrid": 0.6309,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Taittiriya Upanishad describe the five sheaths or koshas of the self?",
+      "type": "realistic_upanishad_taittiriya",
+      "chunk_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.6309,
+        "hybrid": 0.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.6241,
+        "hybrid": 0.0,
         "fts": 0.0
       }
     }

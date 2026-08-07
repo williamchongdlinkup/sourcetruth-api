@@ -2,28 +2,28 @@
   "summary": [
     {
       "system": "dense",
-      "chunk_ndcg5": 0.8435,
-      "source_ndcg5": 0.9847
+      "chunk_ndcg5": 0.8062,
+      "source_ndcg5": 0.9217
     },
     {
       "system": "dense_text_dedup",
-      "chunk_ndcg5": 0.8464,
-      "source_ndcg5": 0.9853
+      "chunk_ndcg5": 0.8133,
+      "source_ndcg5": 0.9287
     },
     {
       "system": "dense_two_level",
-      "chunk_ndcg5": 0.8266,
-      "source_ndcg5": 1.0
+      "chunk_ndcg5": 0.8089,
+      "source_ndcg5": 0.9334
     },
     {
       "system": "dense_mmr",
-      "chunk_ndcg5": 0.833,
-      "source_ndcg5": 0.9751
+      "chunk_ndcg5": 0.7635,
+      "source_ndcg5": 0.9308
     },
     {
       "system": "hybrid",
-      "chunk_ndcg5": 0.8435,
-      "source_ndcg5": 0.9847
+      "chunk_ndcg5": 0.8062,
+      "source_ndcg5": 0.9217
     },
     {
       "system": "fts",
@@ -36,19 +36,19 @@
       "query": "What does the Bible say about the resurrection of the dead?",
       "type": "realistic_theology",
       "chunk_ndcg5": {
-        "dense": 0.8558,
-        "dense_text_dedup": 0.8401,
-        "dense_two_level": 0.8772,
-        "dense_mmr": 0.7643,
-        "hybrid": 0.8558,
+        "dense": 0.9777,
+        "dense_text_dedup": 0.9467,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9557,
+        "hybrid": 0.9777,
         "fts": 0.0
       },
       "source_ndcg5": {
-        "dense": 1.0,
-        "dense_text_dedup": 1.0,
-        "dense_two_level": 1.0,
-        "dense_mmr": 0.9047,
-        "hybrid": 1.0,
+        "dense": 0.5706,
+        "dense_text_dedup": 0.7606,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.6241,
+        "hybrid": 0.5706,
         "fts": 0.0
       }
     },
@@ -76,18 +76,18 @@
       "query": "What does Paul teach about justification by faith in Romans?",
       "type": "realistic_theology",
       "chunk_ndcg5": {
-        "dense": 0.7003,
-        "dense_text_dedup": 0.7242,
+        "dense": 0.6697,
+        "dense_text_dedup": 0.6863,
         "dense_two_level": 0.6973,
-        "dense_mmr": 0.7075,
-        "hybrid": 0.7003,
+        "dense_mmr": 0.7242,
+        "hybrid": 0.6697,
         "fts": 0.0
       },
       "source_ndcg5": {
         "dense": 1.0,
         "dense_text_dedup": 1.0,
         "dense_two_level": 1.0,
-        "dense_mmr": 0.9795,
+        "dense_mmr": 0.9518,
         "hybrid": 1.0,
         "fts": 0.0
       }
@@ -107,7 +107,7 @@
         "dense": 1.0,
         "dense_text_dedup": 1.0,
         "dense_two_level": 1.0,
-        "dense_mmr": 0.9675,
+        "dense_mmr": 0.9469,
         "hybrid": 1.0,
         "fts": 0.0
       }
@@ -136,19 +136,19 @@
       "query": "What commandments did Jesus give about loving your neighbor?",
       "type": "realistic_ethics",
       "chunk_ndcg5": {
-        "dense": 0.0,
-        "dense_text_dedup": 0.0,
-        "dense_two_level": 0.0,
-        "dense_mmr": 0.3869,
-        "hybrid": 0.0,
+        "dense": 0.7606,
+        "dense_text_dedup": 0.7328,
+        "dense_two_level": 0.6509,
+        "dense_mmr": 0.6241,
+        "hybrid": 0.7606,
         "fts": 0.0
       },
       "source_ndcg5": {
-        "dense": 1.0,
-        "dense_text_dedup": 1.0,
+        "dense": 0.9829,
+        "dense_text_dedup": 0.9558,
         "dense_two_level": 1.0,
-        "dense_mmr": 0.9864,
-        "hybrid": 1.0,
+        "dense_mmr": 0.912,
+        "hybrid": 0.9829,
         "fts": 0.0
       }
     },
@@ -156,19 +156,19 @@
       "query": "How does the book of James describe the relationship between faith and works?",
       "type": "realistic_ethics",
       "chunk_ndcg5": {
-        "dense": 0.7606,
-        "dense_text_dedup": 0.7606,
+        "dense": 0.668,
+        "dense_text_dedup": 0.668,
         "dense_two_level": 0.6797,
-        "dense_mmr": 0.6509,
-        "hybrid": 0.7606,
+        "dense_mmr": 0.7003,
+        "hybrid": 0.668,
         "fts": 0.0
       },
       "source_ndcg5": {
-        "dense": 1.0,
-        "dense_text_dedup": 1.0,
+        "dense": 0.9829,
+        "dense_text_dedup": 0.9829,
         "dense_two_level": 1.0,
-        "dense_mmr": 1.0,
-        "hybrid": 1.0,
+        "dense_mmr": 0.9003,
+        "hybrid": 0.9829,
         "fts": 0.0
       }
     },
@@ -179,7 +179,7 @@
         "dense": 1.0,
         "dense_text_dedup": 1.0,
         "dense_two_level": 0.9252,
-        "dense_mmr": 0.9795,
+        "dense_mmr": 0.9583,
         "hybrid": 1.0,
         "fts": 0.0
       },
@@ -187,7 +187,7 @@
         "dense": 1.0,
         "dense_text_dedup": 1.0,
         "dense_two_level": 1.0,
-        "dense_mmr": 1.0,
+        "dense_mmr": 0.8855,
         "hybrid": 1.0,
         "fts": 0.0
       }
@@ -196,19 +196,19 @@
       "query": "What does the book of Revelation say about the end of the world?",
       "type": "realistic_prophecy",
       "chunk_ndcg5": {
-        "dense": 1.0,
-        "dense_text_dedup": 1.0,
+        "dense": 0.9675,
+        "dense_text_dedup": 0.9829,
         "dense_two_level": 1.0,
         "dense_mmr": 0.9047,
-        "hybrid": 1.0,
+        "hybrid": 0.9675,
         "fts": 0.0
       },
       "source_ndcg5": {
-        "dense": 1.0,
-        "dense_text_dedup": 1.0,
+        "dense": 0.9829,
+        "dense_text_dedup": 0.9558,
         "dense_two_level": 1.0,
-        "dense_mmr": 0.9606,
-        "hybrid": 1.0,
+        "dense_mmr": 0.9386,
+        "hybrid": 0.9829,
         "fts": 0.0
       }
     },
@@ -216,19 +216,19 @@
       "query": "What messianic prophecies appear in Isaiah?",
       "type": "realistic_prophecy",
       "chunk_ndcg5": {
-        "dense": 0.8635,
-        "dense_text_dedup": 0.8635,
-        "dense_two_level": 0.9502,
-        "dense_mmr": 1.0,
-        "hybrid": 0.8635,
+        "dense": 0.8069,
+        "dense_text_dedup": 0.8069,
+        "dense_two_level": 0.7075,
+        "dense_mmr": 0.8302,
+        "hybrid": 0.8069,
         "fts": 0.0
       },
       "source_ndcg5": {
-        "dense": 0.9091,
-        "dense_text_dedup": 0.9091,
-        "dense_two_level": 1.0,
-        "dense_mmr": 0.9816,
-        "hybrid": 0.9091,
+        "dense": 0.674,
+        "dense_text_dedup": 0.674,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.6509,
+        "hybrid": 0.674,
         "fts": 0.0
       }
     },
@@ -239,7 +239,7 @@
         "dense": 0.9197,
         "dense_text_dedup": 0.9197,
         "dense_two_level": 1.0,
-        "dense_mmr": 0.8635,
+        "dense_mmr": 0.894,
         "hybrid": 0.9197,
         "fts": 0.0
       },
@@ -259,7 +259,7 @@
         "dense": 1.0,
         "dense_text_dedup": 1.0,
         "dense_two_level": 1.0,
-        "dense_mmr": 0.9519,
+        "dense_mmr": 1.0,
         "hybrid": 1.0,
         "fts": 0.0
       },
@@ -276,11 +276,11 @@
       "query": "What miracles did Jesus perform according to the Gospel of Mark?",
       "type": "realistic_narrative",
       "chunk_ndcg5": {
-        "dense": 0.7593,
-        "dense_text_dedup": 0.7542,
-        "dense_two_level": 0.8855,
-        "dense_mmr": 0.9197,
-        "hybrid": 0.7593,
+        "dense": 0.6083,
+        "dense_text_dedup": 0.668,
+        "dense_two_level": 0.4307,
+        "dense_mmr": 0.3869,
+        "hybrid": 0.6083,
         "fts": 0.0
       },
       "source_ndcg5": {
@@ -318,7 +318,7 @@
       "chunk_ndcg5": {
         "dense": 1.0,
         "dense_text_dedup": 1.0,
-        "dense_two_level": 0.9252,
+        "dense_two_level": 0.9283,
         "dense_mmr": 0.912,
         "hybrid": 1.0,
         "fts": 0.0
@@ -336,19 +336,19 @@
       "query": "What does the New Testament say about the fulfillment of the Law?",
       "type": "realistic_cross",
       "chunk_ndcg5": {
-        "dense": 0.8155,
-        "dense_text_dedup": 0.8558,
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
         "dense_two_level": 0.9675,
-        "dense_mmr": 0.7075,
-        "hybrid": 0.8155,
+        "dense_mmr": 0.768,
+        "hybrid": 1.0,
         "fts": 0.0
       },
       "source_ndcg5": {
-        "dense": 1.0,
-        "dense_text_dedup": 1.0,
+        "dense": 0.9047,
+        "dense_text_dedup": 0.9047,
         "dense_two_level": 1.0,
-        "dense_mmr": 0.9557,
-        "hybrid": 1.0,
+        "dense_mmr": 0.8812,
+        "hybrid": 0.9047,
         "fts": 0.0
       }
     },
@@ -356,18 +356,18 @@
       "query": "How does Paul reference Abraham as an example of faith?",
       "type": "realistic_cross",
       "chunk_ndcg5": {
-        "dense": 0.8661,
-        "dense_text_dedup": 0.8661,
+        "dense": 0.8268,
+        "dense_text_dedup": 0.8268,
         "dense_two_level": 0.7075,
-        "dense_mmr": 0.8069,
-        "hybrid": 0.8661,
+        "dense_mmr": 0.846,
+        "hybrid": 0.8268,
         "fts": 0.0
       },
       "source_ndcg5": {
         "dense": 1.0,
         "dense_text_dedup": 1.0,
         "dense_two_level": 1.0,
-        "dense_mmr": 0.9558,
+        "dense_mmr": 1.0,
         "hybrid": 1.0,
         "fts": 0.0
       }
@@ -381,6 +381,246 @@
         "dense_two_level": 1.0,
         "dense_mmr": 0.9907,
         "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Augustine describe his spiritual restlessness before conversion in the Confessions?",
+      "type": "realistic_augustine_confessions",
+      "chunk_ndcg5": {
+        "dense": 0.9519,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9652,
+        "dense_mmr": 0.9519,
+        "hybrid": 0.9519,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Augustine say about God's role in his intellectual journey in the Confessions?",
+      "type": "realistic_augustine_confessions",
+      "chunk_ndcg5": {
+        "dense": 0.7262,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.8403,
+        "dense_mmr": 0.9197,
+        "hybrid": 0.7262,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8855,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9197,
+        "hybrid": 0.8855,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Augustine describe his time in Carthage and his struggles with desire?",
+      "type": "realistic_augustine_confessions",
+      "chunk_ndcg5": {
+        "dense": 0.922,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9502,
+        "dense_mmr": 1.0,
+        "hybrid": 0.922,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9675,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Augustine's famous prayer 'our heart is restless until it rests in Thee'?",
+      "type": "realistic_augustine_confessions",
+      "chunk_ndcg5": {
+        "dense": 0.6934,
+        "dense_text_dedup": 0.5438,
+        "dense_two_level": 0.6934,
+        "dense_mmr": 0.5013,
+        "hybrid": 0.6934,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9315,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9047,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Augustine say about the two cities — the City of God and the City of Man?",
+      "type": "realistic_augustine_city",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9714,
+        "dense_mmr": 0.9682,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Augustine respond to the accusation that Christianity caused the fall of Rome?",
+      "type": "realistic_augustine_city",
+      "chunk_ndcg5": {
+        "dense": 0.8807,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.8671,
+        "dense_mmr": 0.7623,
+        "hybrid": 0.8807,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Augustine argue about providence and God's sovereignty in history?",
+      "type": "realistic_augustine_city",
+      "chunk_ndcg5": {
+        "dense": 0.8268,
+        "dense_text_dedup": 0.9675,
+        "dense_two_level": 0.8268,
+        "dense_mmr": 0.7602,
+        "hybrid": 0.8268,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9675,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the Didache say about baptism and the Eucharist in early Christianity?",
+      "type": "realistic_apostolic_fathers",
+      "chunk_ndcg5": {
+        "dense": 0.5013,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.6934,
+        "dense_mmr": 0.0,
+        "hybrid": 0.5013,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8529,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9469,
+        "hybrid": 0.8529,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Ignatius of Antioch describe the role of the bishop in the early church?",
+      "type": "realistic_apostolic_fathers",
+      "chunk_ndcg5": {
+        "dense": 0.8447,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.7716,
+        "hybrid": 0.8447,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.8999,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Clement of Rome say about church order and authority in 1 Clement?",
+      "type": "realistic_apostolic_fathers",
+      "chunk_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9829,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How do the Church Fathers interpret the Sermon on the Mount?",
+      "type": "realistic_cross_patristics",
+      "chunk_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.5,
+        "dense_mmr": 0.4307,
+        "hybrid": 0.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.6509,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What do Christian theologians say about the nature of evil and original sin?",
+      "type": "realistic_cross_theology",
+      "chunk_ndcg5": {
+        "dense": 0.992,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.896,
+        "hybrid": 0.992,
         "fts": 0.0
       },
       "source_ndcg5": {

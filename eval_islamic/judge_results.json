@@ -1,0 +1,516 @@
+{
+  "summary": [
+    {
+      "system": "dense",
+      "chunk_ndcg5": 0.849,
+      "source_ndcg5": 0.8142
+    },
+    {
+      "system": "dense_text_dedup",
+      "chunk_ndcg5": 0.8139,
+      "source_ndcg5": 0.8079
+    },
+    {
+      "system": "dense_two_level",
+      "chunk_ndcg5": 0.8086,
+      "source_ndcg5": 0.777
+    },
+    {
+      "system": "dense_mmr",
+      "chunk_ndcg5": 0.8382,
+      "source_ndcg5": 0.7945
+    },
+    {
+      "system": "hybrid",
+      "chunk_ndcg5": 0.849,
+      "source_ndcg5": 0.8142
+    },
+    {
+      "system": "fts",
+      "chunk_ndcg5": 0.0,
+      "source_ndcg5": 0.0
+    }
+  ],
+  "per_query": [
+    {
+      "query": "What does the Quran say about the oneness of God (tawhid) in Surah Al-Ikhlas?",
+      "type": "realistic_quran_tawhid",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9558,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8471,
+        "dense_text_dedup": 0.8734,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8375,
+        "hybrid": 0.8471,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Quran describe the Day of Judgment and accountability?",
+      "type": "realistic_quran_judgment",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.8447,
+        "dense_mmr": 0.8661,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.992,
+        "dense_text_dedup": 0.9795,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9864,
+        "hybrid": 0.992,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Surah Al-Fatiha say about guidance and worship?",
+      "type": "realistic_quran_fatiha",
+      "chunk_ndcg5": {
+        "dense": 0.906,
+        "dense_text_dedup": 0.906,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8772,
+        "hybrid": 0.906,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.906,
+        "dense_text_dedup": 0.906,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8772,
+        "hybrid": 0.906,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the Quran say about believers and their reward in paradise?",
+      "type": "realistic_quran_paradise",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9795,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Quran describe the creation of humans?",
+      "type": "realistic_quran_creation",
+      "chunk_ndcg5": {
+        "dense": 0.9519,
+        "dense_text_dedup": 0.9519,
+        "dense_two_level": 0.8999,
+        "dense_mmr": 1.0,
+        "hybrid": 0.9519,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9519,
+        "dense_text_dedup": 0.9519,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 0.9519,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What hadith does al-Bukhari report about the importance of intention in deeds?",
+      "type": "realistic_bukhari_niyyah",
+      "chunk_ndcg5": {
+        "dense": 0.8447,
+        "dense_text_dedup": 0.8399,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9558,
+        "hybrid": 0.8447,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8447,
+        "dense_text_dedup": 0.8399,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8399,
+        "hybrid": 0.8447,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Sahih al-Bukhari say about the five pillars of Islam?",
+      "type": "realistic_bukhari_pillars",
+      "chunk_ndcg5": {
+        "dense": 0.8734,
+        "dense_text_dedup": 0.8821,
+        "dense_two_level": 0.8558,
+        "dense_mmr": 0.7623,
+        "hybrid": 0.8734,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8734,
+        "dense_text_dedup": 0.8661,
+        "dense_two_level": 0.8224,
+        "dense_mmr": 0.8908,
+        "hybrid": 0.8734,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How is the Prophet Muhammad described performing the daily prayers in Bukhari?",
+      "type": "realistic_bukhari_prayer",
+      "chunk_ndcg5": {
+        "dense": 0.748,
+        "dense_text_dedup": 0.748,
+        "dense_two_level": 0.4744,
+        "dense_mmr": 0.5676,
+        "hybrid": 0.748,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8879,
+        "dense_text_dedup": 0.8879,
+        "dense_two_level": 0.8224,
+        "dense_mmr": 0.8224,
+        "hybrid": 0.8879,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does al-Bukhari report about the Prophet's advice on treating neighbors?",
+      "type": "realistic_bukhari_neighbors",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9675,
+        "dense_two_level": 0.9795,
+        "dense_mmr": 0.9852,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9864,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Sahih Muslim say about the definition and conditions of faith (iman)?",
+      "type": "realistic_muslim_iman",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9714,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9467,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Sahih Muslim describe the obligations of fasting during Ramadan?",
+      "type": "realistic_muslim_fasting",
+      "chunk_ndcg5": {
+        "dense": 0.8529,
+        "dense_text_dedup": 0.8772,
+        "dense_two_level": 0.8403,
+        "dense_mmr": 0.7716,
+        "hybrid": 0.8529,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8702,
+        "dense_text_dedup": 0.9502,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9383,
+        "hybrid": 0.8702,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What hadith in Muslim discusses the rights of Muslims over one another?",
+      "type": "realistic_muslim_rights",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8999,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9675,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Sunan Abu Dawood say about the etiquette of prayer and ablution?",
+      "type": "realistic_abudawud_prayer",
+      "chunk_ndcg5": {
+        "dense": 0.7606,
+        "dense_text_dedup": 0.7157,
+        "dense_two_level": 0.6024,
+        "dense_mmr": 0.6002,
+        "hybrid": 0.7606,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.7606,
+        "dense_text_dedup": 0.6934,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.6797,
+        "hybrid": 0.7606,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Abu Dawood report on the Prophet's conduct in times of conflict?",
+      "type": "realistic_abudawud_conduct",
+      "chunk_ndcg5": {
+        "dense": 0.5,
+        "dense_text_dedup": 0.5,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.5013,
+        "hybrid": 0.5,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.5,
+        "dense_text_dedup": 0.5,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.5013,
+        "hybrid": 0.5,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What hadiths in Abu Dawood discuss the treatment of women and family relations?",
+      "type": "realistic_abudawud_family",
+      "chunk_ndcg5": {
+        "dense": 0.9519,
+        "dense_text_dedup": 0.9519,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9907,
+        "hybrid": 0.9519,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9386,
+        "dense_text_dedup": 0.9386,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 0.9386,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Sunan Abu Dawood say about funeral rites and burial practices?",
+      "type": "realistic_abudawud_funeral",
+      "chunk_ndcg5": {
+        "dense": 0.9469,
+        "dense_text_dedup": 0.9072,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9558,
+        "hybrid": 0.9469,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9777,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9795,
+        "hybrid": 0.9777,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Abu Dawood describe the Prophet's dietary rules and food etiquette?",
+      "type": "realistic_abudawud_food",
+      "chunk_ndcg5": {
+        "dense": 0.796,
+        "dense_text_dedup": 0.8403,
+        "dense_two_level": 0.906,
+        "dense_mmr": 0.9197,
+        "hybrid": 0.796,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.4307,
+        "dense_text_dedup": 0.5271,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.4307,
+        "hybrid": 0.4307,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Rumi use the image of the reed flute to describe spiritual longing?",
+      "type": "realistic_rumi_reed",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.906,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Rumi say about the nature of divine love and union with God?",
+      "type": "realistic_rumi_love",
+      "chunk_ndcg5": {
+        "dense": 0.9518,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.922,
+        "hybrid": 0.9518,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8855,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Rumi describe the story of the merchant and the parrot in the Masnavi?",
+      "type": "realistic_rumi_story",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.8772,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.8772,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9047,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Rumi's teaching on the role of the spiritual master (shaykh) in Sufi practice?",
+      "type": "realistic_rumi_shaykh",
+      "chunk_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.3869,
+        "hybrid": 0.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Rumi describe the stages of the soul's journey toward God?",
+      "type": "realistic_rumi_soul",
+      "chunk_ndcg5": {
+        "dense": 0.668,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.6934,
+        "dense_mmr": 0.5438,
+        "hybrid": 0.668,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How do Hadith and Sufi poetry differ in their descriptions of divine love?",
+      "type": "realistic_cross_sufi_hadith",
+      "chunk_ndcg5": {
+        "dense": 0.8841,
+        "dense_text_dedup": 0.8503,
+        "dense_two_level": 0.8821,
+        "dense_mmr": 1.0,
+        "hybrid": 0.8841,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.8503,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is the Islamic concept of tawakkul (trust in God) across different text traditions?",
+      "type": "realistic_cross_tawakkul",
+      "chunk_ndcg5": {
+        "dense": 0.7387,
+        "dense_text_dedup": 0.718,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.6309,
+        "hybrid": 0.7387,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.7606,
+        "dense_text_dedup": 0.7606,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.674,
+        "hybrid": 0.7606,
+        "fts": 0.0
+      }
+    }
+  ]
+}

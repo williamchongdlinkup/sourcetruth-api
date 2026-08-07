@@ -2,28 +2,28 @@
   "summary": [
     {
       "system": "dense",
-      "chunk_ndcg5": 0.8702,
-      "source_ndcg5": 0.909
+      "chunk_ndcg5": 0.7809,
+      "source_ndcg5": 0.8222
     },
     {
       "system": "dense_text_dedup",
-      "chunk_ndcg5": 0.9178,
-      "source_ndcg5": 0.9451
+      "chunk_ndcg5": 0.8279,
+      "source_ndcg5": 0.8566
     },
     {
       "system": "dense_two_level",
-      "chunk_ndcg5": 0.8676,
-      "source_ndcg5": 0.9347
+      "chunk_ndcg5": 0.776,
+      "source_ndcg5": 0.8372
     },
     {
       "system": "dense_mmr",
-      "chunk_ndcg5": 0.853,
-      "source_ndcg5": 0.9332
+      "chunk_ndcg5": 0.7739,
+      "source_ndcg5": 0.8488
     },
     {
       "system": "hybrid",
-      "chunk_ndcg5": 0.8702,
-      "source_ndcg5": 0.909
+      "chunk_ndcg5": 0.7809,
+      "source_ndcg5": 0.8222
     },
     {
       "system": "fts",
@@ -36,11 +36,11 @@
       "query": "What does Marcus Aurelius say about the impermanence of life and accepting fate?",
       "type": "realistic_stoic_fate",
       "chunk_ndcg5": {
-        "dense": 0.9714,
+        "dense": 0.9583,
         "dense_text_dedup": 1.0,
-        "dense_two_level": 0.9714,
+        "dense_two_level": 0.9583,
         "dense_mmr": 0.9148,
-        "hybrid": 0.9714,
+        "hybrid": 0.9583,
         "fts": 0.0
       },
       "source_ndcg5": {
@@ -57,8 +57,8 @@
       "type": "realistic_stoic_anger",
       "chunk_ndcg5": {
         "dense": 0.8268,
-        "dense_text_dedup": 0.9197,
-        "dense_two_level": 0.8841,
+        "dense_text_dedup": 0.906,
+        "dense_two_level": 0.8821,
         "dense_mmr": 0.8772,
         "hybrid": 0.8268,
         "fts": 0.0
@@ -79,15 +79,15 @@
         "dense": 0.9313,
         "dense_text_dedup": 1.0,
         "dense_two_level": 0.9688,
-        "dense_mmr": 0.9072,
+        "dense_mmr": 0.9502,
         "hybrid": 0.9313,
         "fts": 0.0
       },
       "source_ndcg5": {
         "dense": 0.9469,
-        "dense_text_dedup": 1.0,
+        "dense_text_dedup": 0.9502,
         "dense_two_level": 1.0,
-        "dense_mmr": 1.0,
+        "dense_mmr": 0.9502,
         "hybrid": 0.9469,
         "fts": 0.0
       }
@@ -96,19 +96,19 @@
       "query": "What does the Meditations of Marcus Aurelius say about the nature of the rational soul?",
       "type": "realistic_stoic_soul",
       "chunk_ndcg5": {
-        "dense": 0.5706,
-        "dense_text_dedup": 0.6309,
-        "dense_two_level": 0.5013,
-        "dense_mmr": 0.6509,
-        "hybrid": 0.5706,
+        "dense": 0.0,
+        "dense_text_dedup": 0.4307,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.3869,
+        "hybrid": 0.0,
         "fts": 0.0
       },
       "source_ndcg5": {
-        "dense": 0.5706,
-        "dense_text_dedup": 0.6309,
-        "dense_two_level": 0.5013,
-        "dense_mmr": 0.6509,
-        "hybrid": 0.5706,
+        "dense": 0.0,
+        "dense_text_dedup": 0.4307,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.3869,
+        "hybrid": 0.0,
         "fts": 0.0
       }
     },
@@ -116,11 +116,11 @@
       "query": "What is Epictetus's doctrine about what is within our control and what is not?",
       "type": "realistic_epictetus_control",
       "chunk_ndcg5": {
-        "dense": 0.9557,
+        "dense": 1.0,
         "dense_text_dedup": 1.0,
-        "dense_two_level": 0.9606,
-        "dense_mmr": 0.9557,
-        "hybrid": 0.9557,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
         "fts": 0.0
       },
       "source_ndcg5": {
@@ -136,11 +136,11 @@
       "query": "How does Epictetus describe the path to freedom through philosophy?",
       "type": "realistic_epictetus_freedom",
       "chunk_ndcg5": {
-        "dense": 0.896,
-        "dense_text_dedup": 1.0,
-        "dense_two_level": 0.912,
-        "dense_mmr": 0.9239,
-        "hybrid": 0.896,
+        "dense": 0.9714,
+        "dense_text_dedup": 0.9779,
+        "dense_two_level": 0.9688,
+        "dense_mmr": 0.8999,
+        "hybrid": 0.9714,
         "fts": 0.0
       },
       "source_ndcg5": {
@@ -159,15 +159,15 @@
         "dense": 0.748,
         "dense_text_dedup": 0.6309,
         "dense_two_level": 0.6024,
-        "dense_mmr": 0.7328,
+        "dense_mmr": 0.6797,
         "hybrid": 0.748,
         "fts": 0.0
       },
       "source_ndcg5": {
         "dense": 0.8879,
-        "dense_text_dedup": 0.8597,
+        "dense_text_dedup": 0.8821,
         "dense_two_level": 0.8224,
-        "dense_mmr": 0.8879,
+        "dense_mmr": 0.8656,
         "hybrid": 0.8879,
         "fts": 0.0
       }
@@ -176,16 +176,16 @@
       "query": "How does Plato's Apology depict Socrates defending his philosophical mission?",
       "type": "realistic_plato_apology",
       "chunk_ndcg5": {
-        "dense": 0.7623,
-        "dense_text_dedup": 0.9197,
-        "dense_two_level": 0.7623,
-        "dense_mmr": 0.8787,
-        "hybrid": 0.7623,
+        "dense": 0.8855,
+        "dense_text_dedup": 0.8772,
+        "dense_two_level": 0.8855,
+        "dense_mmr": 0.8807,
+        "hybrid": 0.8855,
         "fts": 0.0
       },
       "source_ndcg5": {
         "dense": 1.0,
-        "dense_text_dedup": 1.0,
+        "dense_text_dedup": 0.9779,
         "dense_two_level": 1.0,
         "dense_mmr": 1.0,
         "hybrid": 1.0,
@@ -196,19 +196,19 @@
       "query": "What does the Phaedo say about the immortality of the soul and the afterlife?",
       "type": "realistic_plato_immortality",
       "chunk_ndcg5": {
-        "dense": 0.8558,
+        "dense": 0.7961,
         "dense_text_dedup": 0.9197,
         "dense_two_level": 1.0,
-        "dense_mmr": 0.8793,
-        "hybrid": 0.8558,
+        "dense_mmr": 0.8268,
+        "hybrid": 0.7961,
         "fts": 0.0
       },
       "source_ndcg5": {
-        "dense": 1.0,
-        "dense_text_dedup": 1.0,
+        "dense": 0.9558,
+        "dense_text_dedup": 0.9197,
         "dense_two_level": 1.0,
-        "dense_mmr": 1.0,
-        "hybrid": 1.0,
+        "dense_mmr": 0.9558,
+        "hybrid": 0.9558,
         "fts": 0.0
       }
     },
@@ -216,16 +216,16 @@
       "query": "How does Socrates argue that death should not be feared by a philosopher?",
       "type": "realistic_plato_death",
       "chunk_ndcg5": {
-        "dense": 0.9795,
-        "dense_text_dedup": 1.0,
+        "dense": 0.9864,
+        "dense_text_dedup": 0.9777,
         "dense_two_level": 0.9864,
-        "dense_mmr": 0.9864,
-        "hybrid": 0.9795,
+        "dense_mmr": 0.9563,
+        "hybrid": 0.9864,
         "fts": 0.0
       },
       "source_ndcg5": {
         "dense": 1.0,
-        "dense_text_dedup": 0.9816,
+        "dense_text_dedup": 1.0,
         "dense_two_level": 1.0,
         "dense_mmr": 1.0,
         "hybrid": 1.0,
@@ -236,19 +236,19 @@
       "query": "What is Plato's theory of the Forms and how does it relate to knowledge?",
       "type": "realistic_plato_forms",
       "chunk_ndcg5": {
-        "dense": 1.0,
-        "dense_text_dedup": 1.0,
-        "dense_two_level": 1.0,
-        "dense_mmr": 0.8935,
-        "hybrid": 1.0,
+        "dense": 0.8471,
+        "dense_text_dedup": 0.8807,
+        "dense_two_level": 0.8558,
+        "dense_mmr": 0.8471,
+        "hybrid": 0.8471,
         "fts": 0.0
       },
       "source_ndcg5": {
-        "dense": 1.0,
-        "dense_text_dedup": 1.0,
+        "dense": 0.8558,
+        "dense_text_dedup": 0.8596,
         "dense_two_level": 1.0,
-        "dense_mmr": 0.906,
-        "hybrid": 1.0,
+        "dense_mmr": 0.8558,
+        "hybrid": 0.8558,
         "fts": 0.0
       }
     },
@@ -276,19 +276,19 @@
       "query": "What does Aristotle say about the role of virtue in achieving the good life?",
       "type": "realistic_aristotle_virtue",
       "chunk_ndcg5": {
-        "dense": 0.8471,
-        "dense_text_dedup": 1.0,
+        "dense": 0.779,
+        "dense_text_dedup": 0.7623,
         "dense_two_level": 0.8403,
-        "dense_mmr": 0.8372,
-        "hybrid": 0.8471,
+        "dense_mmr": 0.8646,
+        "hybrid": 0.779,
         "fts": 0.0
       },
       "source_ndcg5": {
-        "dense": 1.0,
-        "dense_text_dedup": 1.0,
+        "dense": 0.7961,
+        "dense_text_dedup": 0.7602,
         "dense_two_level": 1.0,
-        "dense_mmr": 0.9558,
-        "hybrid": 1.0,
+        "dense_mmr": 0.768,
+        "hybrid": 0.7961,
         "fts": 0.0
       }
     },
@@ -296,18 +296,18 @@
       "query": "How does Aristotle describe the relationship between reason and moral character?",
       "type": "realistic_aristotle_reason",
       "chunk_ndcg5": {
-        "dense": 0.8887,
+        "dense": 0.8793,
         "dense_text_dedup": 1.0,
-        "dense_two_level": 0.8807,
-        "dense_mmr": 0.8661,
-        "hybrid": 0.8887,
+        "dense_two_level": 0.8671,
+        "dense_mmr": 0.8821,
+        "hybrid": 0.8793,
         "fts": 0.0
       },
       "source_ndcg5": {
         "dense": 1.0,
-        "dense_text_dedup": 1.0,
+        "dense_text_dedup": 0.8772,
         "dense_two_level": 1.0,
-        "dense_mmr": 0.9829,
+        "dense_mmr": 1.0,
         "hybrid": 1.0,
         "fts": 0.0
       }
@@ -316,11 +316,71 @@
       "query": "What is Aristotle's doctrine of the mean between virtues and vices?",
       "type": "realistic_aristotle_mean",
       "chunk_ndcg5": {
-        "dense": 0.8879,
+        "dense": 0.8887,
+        "dense_text_dedup": 0.8597,
+        "dense_two_level": 0.8787,
+        "dense_mmr": 0.8703,
+        "hybrid": 0.8887,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8734,
+        "dense_text_dedup": 0.8597,
+        "dense_two_level": 0.8224,
+        "dense_mmr": 0.9065,
+        "hybrid": 0.8734,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Plato's allegory of the cave and what does it represent about human knowledge?",
+      "type": "realistic_plato_republic",
+      "chunk_ndcg5": {
+        "dense": 0.9573,
+        "dense_text_dedup": 0.922,
+        "dense_two_level": 0.9652,
+        "dense_mmr": 0.8935,
+        "hybrid": 0.9573,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9502,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9047,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Plato describe the three parts of the soul in the Republic?",
+      "type": "realistic_plato_republic",
+      "chunk_ndcg5": {
+        "dense": 0.8908,
+        "dense_text_dedup": 0.8597,
+        "dense_two_level": 0.779,
+        "dense_mmr": 0.8879,
+        "hybrid": 0.8908,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8793,
+        "dense_text_dedup": 0.8597,
+        "dense_two_level": 0.8224,
+        "dense_mmr": 0.8793,
+        "hybrid": 0.8793,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is the philosopher-king ideal in Plato's Republic?",
+      "type": "realistic_plato_republic",
+      "chunk_ndcg5": {
+        "dense": 0.8793,
         "dense_text_dedup": 1.0,
         "dense_two_level": 0.8671,
-        "dense_mmr": 0.86,
-        "hybrid": 0.8879,
+        "dense_mmr": 0.8793,
+        "hybrid": 0.8793,
         "fts": 0.0
       },
       "source_ndcg5": {
@@ -333,19 +393,219 @@
       }
     },
     {
-      "query": "How do Stoic philosophers compare to Plato in their views on the soul?",
-      "type": "realistic_cross_soul",
+      "query": "How does Plato argue that justice in the city mirrors justice in the soul?",
+      "type": "realistic_plato_republic",
       "chunk_ndcg5": {
-        "dense": 0.7606,
-        "dense_text_dedup": 0.5,
-        "dense_two_level": 0.6934,
-        "dense_mmr": 0.7606,
-        "hybrid": 0.7606,
+        "dense": 0.9795,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.912,
+        "hybrid": 0.9795,
         "fts": 0.0
       },
       "source_ndcg5": {
         "dense": 1.0,
-        "dense_text_dedup": 0.9197,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Socrates say about the nature of love and its relation to the beautiful in the Symposium?",
+      "type": "realistic_plato_symposium",
+      "chunk_ndcg5": {
+        "dense": 0.9795,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9606,
+        "hybrid": 0.9795,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Diotima describe the ladder of love leading to the Form of Beauty in the Symposium?",
+      "type": "realistic_plato_symposium",
+      "chunk_ndcg5": {
+        "dense": 0.8908,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.8671,
+        "dense_mmr": 0.8084,
+        "hybrid": 0.8908,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Plato's doctrine of recollection (anamnesis) as described in the Meno?",
+      "type": "realistic_plato_meno",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9148,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9383,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9557,
+        "hybrid": 0.9383,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Plato describe the creation of the world by the Demiurge in the Timaeus?",
+      "type": "realistic_plato_timaeus",
+      "chunk_ndcg5": {
+        "dense": 0.6392,
+        "dense_text_dedup": 0.6309,
+        "dense_two_level": 0.6585,
+        "dense_mmr": 0.7157,
+        "hybrid": 0.6392,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Aristotle say about humans being political animals in the Politics?",
+      "type": "realistic_aristotle_politics",
+      "chunk_ndcg5": {
+        "dense": 0.7075,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.8597,
+        "dense_mmr": 1.0,
+        "hybrid": 0.7075,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8529,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 0.8529,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Aristotle classify different forms of government in the Politics?",
+      "type": "realistic_aristotle_politics",
+      "chunk_ndcg5": {
+        "dense": 0.8372,
+        "dense_text_dedup": 0.8671,
+        "dense_two_level": 0.7005,
+        "dense_mmr": 0.779,
+        "hybrid": 0.8372,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8656,
+        "dense_text_dedup": 0.8671,
+        "dense_two_level": 0.8224,
+        "dense_mmr": 0.8656,
+        "hybrid": 0.8656,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Aristotle's argument for why slavery is natural in the Politics?",
+      "type": "realistic_aristotle_politics",
+      "chunk_ndcg5": {
+        "dense": 0.8155,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 0.8155,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Aristotle define rhetoric and its three modes of persuasion in the Rhetoric?",
+      "type": "realistic_aristotle_rhetoric",
+      "chunk_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Aristotle's account of ethos, pathos, and logos as means of persuasion?",
+      "type": "realistic_aristotle_rhetoric",
+      "chunk_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How do Stoic philosophers compare to Plato in their views on the soul?",
+      "type": "realistic_cross_soul",
+      "chunk_ndcg5": {
+        "dense": 0.6183,
+        "dense_text_dedup": 0.5,
+        "dense_two_level": 0.6241,
+        "dense_mmr": 0.5013,
+        "hybrid": 0.6183,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
         "dense_two_level": 1.0,
         "dense_mmr": 1.0,
         "hybrid": 1.0,
@@ -357,17 +617,17 @@
       "type": "realistic_cross_self",
       "chunk_ndcg5": {
         "dense": 1.0,
-        "dense_text_dedup": 1.0,
+        "dense_text_dedup": 0.9469,
         "dense_two_level": 1.0,
-        "dense_mmr": 0.9047,
+        "dense_mmr": 0.8529,
         "hybrid": 1.0,
         "fts": 0.0
       },
       "source_ndcg5": {
         "dense": 0.0,
-        "dense_text_dedup": 0.7328,
+        "dense_text_dedup": 0.6797,
         "dense_two_level": 0.5013,
-        "dense_mmr": 0.6797,
+        "dense_mmr": 0.6309,
         "hybrid": 0.0,
         "fts": 0.0
       }
@@ -376,18 +636,38 @@
       "query": "How do Aristotle and the Stoics differ in their understanding of virtue?",
       "type": "realistic_cross_virtue",
       "chunk_ndcg5": {
-        "dense": 0.8855,
+        "dense": 0.4307,
+        "dense_text_dedup": 0.5438,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.4307,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.5013,
+        "dense_text_dedup": 0.6183,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.3869,
+        "hybrid": 0.5013,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What do Plato and Aristotle say about the best form of government?",
+      "type": "realistic_cross_politics",
+      "chunk_ndcg5": {
+        "dense": 0.9682,
         "dense_text_dedup": 1.0,
-        "dense_two_level": 0.9047,
-        "dense_mmr": 0.6742,
-        "hybrid": 0.8855,
+        "dense_two_level": 0.936,
+        "dense_mmr": 0.973,
+        "hybrid": 0.9682,
         "fts": 0.0
       },
       "source_ndcg5": {
         "dense": 1.0,
-        "dense_text_dedup": 0.9675,
+        "dense_text_dedup": 1.0,
         "dense_two_level": 1.0,
-        "dense_mmr": 0.8855,
+        "dense_mmr": 1.0,
         "hybrid": 1.0,
         "fts": 0.0
       }
