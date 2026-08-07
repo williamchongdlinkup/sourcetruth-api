@@ -50,7 +50,7 @@ TRADITION_RERANK: dict[str, Literal['mmr', 'text_dedup', 'none']] = {
     'hellenism':      'text_dedup',   # Greek philosophy — text_dedup wins judge 0.9178 vs dense 0.870 (2026-08-07)
     'classicism':     'none',          # Latin — dense wins judge 0.920 (2026-08-07)
     'east-asian':     'none',          # Classical Chinese — dense wins judge 0.782 (2026-08-07)
-    'sikhism':        'mmr',           # SGGS — Gurmukhi cross-lingual; MMR for diversity (eval pending)
+    'sikhism':        'none',           # SGGS — dense wins realistic judge 0.883 (2026-08-07); topical English queries work
     'zoroastrianism': 'none',          # Avesta — dense wins judge 0.804 (2026-08-07)
 }
 
@@ -69,7 +69,7 @@ CORPUS_RERANK: dict[str, Literal['mmr', 'text_dedup', 'none']] = {
     'classical-latin':    'none',          # dense wins judge 0.920; two_level best but not in prod (2026-08-07)
     'classical-chinese':  'none',          # dense wins judge 0.782 (2026-08-07)
     'sanskrit-classical': 'none',          # dense wins judge 0.803 (2026-08-07)
-    'sggs':               'mmr',           # Gurmukhi cross-lingual — MMR for diversity (eval pending Sikh ingestion)
+    'sggs':               'none',           # dense wins judge 0.883 (synthetic 0% — realistic 88%: topical queries work!) (2026-08-07)
     'avesta':             'none',          # dense wins judge 0.804 (2026-08-07)
 }
 

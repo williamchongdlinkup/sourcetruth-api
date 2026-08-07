@@ -1,0 +1,356 @@
+{
+  "summary": [
+    {
+      "system": "dense",
+      "chunk_ndcg5": 0.8829,
+      "source_ndcg5": 0.6685
+    },
+    {
+      "system": "dense_text_dedup",
+      "chunk_ndcg5": 0.8693,
+      "source_ndcg5": 0.6987
+    },
+    {
+      "system": "dense_two_level",
+      "chunk_ndcg5": 0.8904,
+      "source_ndcg5": 0.625
+    },
+    {
+      "system": "dense_mmr",
+      "chunk_ndcg5": 0.8517,
+      "source_ndcg5": 0.7323
+    },
+    {
+      "system": "hybrid",
+      "chunk_ndcg5": 0.8829,
+      "source_ndcg5": 0.6685
+    },
+    {
+      "system": "fts",
+      "chunk_ndcg5": 0.0,
+      "source_ndcg5": 0.0
+    }
+  ],
+  "per_query": [
+    {
+      "query": "What does the Guru Granth Sahib say about the Name of God (Nam Simran)?",
+      "type": "realistic_nam_simran",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.3869,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.5013,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the SGGS describe the nature of Waheguru (God)?",
+      "type": "realistic_waheguru",
+      "chunk_ndcg5": {
+        "dense": 0.894,
+        "dense_text_dedup": 0.894,
+        "dense_two_level": 0.9829,
+        "dense_mmr": 0.8812,
+        "hybrid": 0.894,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9558,
+        "dense_text_dedup": 0.9558,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 0.9558,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is the teaching of the SGGS about haumai (ego) as a barrier to spiritual growth?",
+      "type": "realistic_haumai",
+      "chunk_ndcg5": {
+        "dense": 0.9864,
+        "dense_text_dedup": 0.9519,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.922,
+        "hybrid": 0.9864,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9829,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9829,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Guru Granth Sahib describe the path of seva (selfless service)?",
+      "type": "realistic_seva",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9557,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9558,
+        "dense_text_dedup": 0.9558,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9558,
+        "hybrid": 0.9558,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the SGGS teach about maya (illusion) and attachment to the material world?",
+      "type": "realistic_maya",
+      "chunk_ndcg5": {
+        "dense": 0.9047,
+        "dense_text_dedup": 0.9047,
+        "dense_two_level": 0.9829,
+        "dense_mmr": 0.896,
+        "hybrid": 0.9047,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.3869,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How is the relationship between the Guru and the disciple (Sikh) described in the SGGS?",
+      "type": "realistic_guru_disciple",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the Guru Granth Sahib say about the importance of the Sangat (congregation)?",
+      "type": "realistic_sangat",
+      "chunk_ndcg5": {
+        "dense": 0.9386,
+        "dense_text_dedup": 0.9091,
+        "dense_two_level": 0.8518,
+        "dense_mmr": 0.8518,
+        "hybrid": 0.9386,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.8503,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the SGGS describe death and the soul's journey after death?",
+      "type": "realistic_death_soul",
+      "chunk_ndcg5": {
+        "dense": 0.5438,
+        "dense_text_dedup": 0.5271,
+        "dense_two_level": 0.7123,
+        "dense_mmr": 0.5,
+        "hybrid": 0.5438,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.5706,
+        "dense_text_dedup": 0.5,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.5,
+        "hybrid": 0.5706,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is the Sikh teaching on equality of all human beings regardless of caste?",
+      "type": "realistic_equality",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.8772,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.6309,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the Guru Granth Sahib describe the One God who pervades all creation?",
+      "type": "realistic_ik_onkar",
+      "chunk_ndcg5": {
+        "dense": 0.9864,
+        "dense_text_dedup": 0.9864,
+        "dense_two_level": 0.9558,
+        "dense_mmr": 0.9383,
+        "hybrid": 0.9864,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8529,
+        "dense_text_dedup": 0.8529,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 0.8529,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does the Japji Sahib teach about the stages of spiritual realization?",
+      "type": "realistic_japji",
+      "chunk_ndcg5": {
+        "dense": 0.9558,
+        "dense_text_dedup": 0.9675,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8503,
+        "hybrid": 0.9558,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.5,
+        "dense_text_dedup": 0.5,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.4307,
+        "hybrid": 0.5,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the SGGS describe the value of truth and honest living?",
+      "type": "realistic_truth",
+      "chunk_ndcg5": {
+        "dense": 0.9606,
+        "dense_text_dedup": 0.9519,
+        "dense_two_level": 0.9777,
+        "dense_mmr": 0.8935,
+        "hybrid": 0.9606,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.906,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What teachings about women's equality and dignity appear in the Guru Granth Sahib?",
+      "type": "realistic_women",
+      "chunk_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the SGGS describe the blessing of the Guru's grace (Nadar)?",
+      "type": "realistic_grace",
+      "chunk_ndcg5": {
+        "dense": 0.9557,
+        "dense_text_dedup": 0.9557,
+        "dense_two_level": 0.992,
+        "dense_mmr": 0.9557,
+        "hybrid": 0.9557,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9558,
+        "dense_text_dedup": 0.9558,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 0.9558,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Sikh scripture say about the futility of rituals without inner devotion?",
+      "type": "realistic_ritual",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9829,
+        "dense_two_level": 0.7911,
+        "dense_mmr": 0.9829,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9469,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8529,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does the SGGS describe the concept of Hukam (divine will/order)?",
+      "type": "realistic_hukam",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9047,
+        "dense_text_dedup": 0.9047,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9558,
+        "hybrid": 0.9047,
+        "fts": 0.0
+      }
+    }
+  ]
+}

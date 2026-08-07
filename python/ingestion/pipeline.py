@@ -37,7 +37,8 @@ def main():
         'quran', 'hadith', 'tanakh', 'mishnah', 'kjv',
         'bhagavad-gita', 'upanishads', 'greek-philosophy',
         'classical-latin', 'classical-chinese', 'sanskrit-classical',
-        'sikh', 'zoroastrian', 'all',
+        'sikh', 'zoroastrian',
+        'bible-web', 'bible-asv', 'bible-ylt', 'rigveda', 'all',
     ]
     parser.add_argument('--source', required=True, choices=SOURCES, help='Corpus to ingest')
     parser.add_argument('--nikayas', nargs='+', default=None,
@@ -126,6 +127,19 @@ def main():
     if args.source in ('zoroastrian', 'all'):
         from ingestion.zoroastrian import run as zoro_run
         zoro_run(force=args.force)
+
+    if args.source in ('bible-web', 'bible-asv', 'bible-ylt', 'all'):
+        trans = []
+        for t in ['web', 'asv', 'ylt']:
+            if args.source in (f'bible-{t}', 'all'):
+                trans.append(t)
+        if trans:
+            from ingestion.bible_multi import run as bible_run
+            bible_run(translations=trans, force=args.force)
+
+    if args.source in ('rigveda', 'all'):
+        from ingestion.rigveda import run as rigveda_run
+        rigveda_run(force=args.force)
 
 
 if __name__ == '__main__':

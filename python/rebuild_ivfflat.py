@@ -24,8 +24,9 @@ DRY_RUN = '--dry-run' in sys.argv
 
 
 def main():
-    conn = psycopg2.connect(os.environ["DATABASE_URL"])
-    cur = conn.cursor()
+    # Use two connections: one for counting, one autocommit for CONCURRENTLY
+    conn_count = psycopg2.connect(os.environ["DATABASE_URL"])
+    cur = conn_count.cursor()
 
     cur.execute("SELECT COUNT(*) FROM chunk_embeddings")
     n = cur.fetchone()[0]
@@ -35,18 +36,24 @@ def main():
 
     cur.execute("SELECT COUNT(*) FROM pg_indexes WHERE indexname = 'idx_chunk_embeddings_ivfflat'")
     has_index = cur.fetchone()[0] > 0
+    conn_count.close()
 
     if DRY_RUN:
         print("[DRY RUN] Would rebuild IVFFlat with lists=%d" % lists)
-        conn.close()
         return
+
+    # CONCURRENTLY requires autocommit — open a fresh connection with autocommit=True
+    conn = psycopg2.connect(os.environ["DATABASE_URL"])
+    conn.autocommit = True
+    cur = conn.cursor()
 
     if has_index:
         print("Dropping existing IVFFlat index ...")
         cur.execute("DROP INDEX CONCURRENTLY IF EXISTS idx_chunk_embeddings_ivfflat")
-        conn.commit()
         print("Dropped.")
 
+    # Raise maintenance_work_mem for this session so large index creation doesn't OOM
+    cur.execute("SET maintenance_work_mem = '256MB'")
     print(f"Creating IVFFlat index (lists={lists}) — this may take several minutes ...")
     cur.execute(f"""
         CREATE INDEX CONCURRENTLY idx_chunk_embeddings_ivfflat
@@ -54,7 +61,6 @@ def main():
         USING ivfflat (embedding vector_cosine_ops)
         WITH (lists = {lists})
     """)
-    conn.commit()
     print(f"IVFFlat index rebuilt with lists={lists}.")
     conn.close()
 
