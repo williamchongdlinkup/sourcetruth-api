@@ -1,0 +1,157 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SourceTruth — Terms of Service</title>
+<style>
+  :root { --brand:#1e293b; --accent:#3b82f6; --border:#e2e8f0; --text:#1e293b; --muted:#64748b; --bg:#f8fafc; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--bg); color:var(--text); line-height:1.7; padding:2rem 1rem; }
+  .wrapper { max-width:780px; margin:0 auto; }
+  .header { background:linear-gradient(135deg,#1e293b 0%,#334155 100%); color:#fff; border-radius:12px; padding:2rem 2.5rem; margin-bottom:2.5rem; }
+  .header .label { font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:#94a3b8; margin-bottom:0.3rem; }
+  .header h1 { font-size:1.75rem; font-weight:700; margin-bottom:0.3rem; }
+  .header .meta { color:#94a3b8; font-size:0.85rem; margin-top:0.5rem; }
+  h2 { font-size:1.1rem; font-weight:700; margin:2.5rem 0 0.75rem; padding-bottom:0.4rem; border-bottom:2px solid var(--border); color:var(--text); }
+  h3 { font-size:0.95rem; font-weight:700; margin:1.5rem 0 0.5rem; color:#374151; }
+  p { font-size:0.9rem; color:#374151; margin-bottom:0.75rem; }
+  ul,ol { padding-left:1.5rem; font-size:0.9rem; color:#374151; margin-bottom:0.75rem; }
+  li { margin-bottom:0.35rem; }
+  code { font-family:'SF Mono','Consolas',monospace; font-size:0.82em; background:#f1f5f9; padding:0.1em 0.35em; border-radius:3px; }
+  a { color:var(--accent); }
+  .callout { border-left:4px solid #eab308; background:#fefce8; border-radius:0 8px 8px 0; padding:0.85rem 1.2rem; margin:1rem 0; font-size:0.88rem; }
+  footer { margin-top:3rem; padding-top:1rem; border-top:1px solid var(--border); font-size:0.78rem; color:var(--muted); text-align:center; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+<div class="header">
+  <div class="label">SourceTruth · Legal</div>
+  <h1>Terms of Service</h1>
+  <div class="meta">Effective date: 2026-08-08 · Last updated: 2026-08-08 · Operator: D'Linkup (ABN: [INSERT ABN])</div>
+</div>
+
+<div class="callout">
+  <strong>NOTE: This is a draft for legal review.</strong>
+  Replace [INSERT ABN], [INSERT CONTACT EMAIL], and [INSERT REGISTERED ADDRESS] before publishing. Have a solicitor review before going live.
+</div>
+
+<h2>1. Agreement to Terms</h2>
+<p>These Terms of Service ("Terms") govern your access to and use of the SourceTruth API, developer documentation, and related services (collectively, the "Service") provided by D'Linkup ("we", "us", "our").</p>
+<p>By creating an API key or accessing the Service, you agree to be bound by these Terms. If you do not agree, do not use the Service. If you are using the Service on behalf of a company or other legal entity, you represent that you have the authority to bind that entity to these Terms.</p>
+
+<h2>2. The Service</h2>
+<p>SourceTruth provides a pre-indexed canonical text search API covering philosophical, religious, and classical texts. The Service includes:</p>
+<ul>
+  <li>Semantic and keyword search across indexed text corpora (<code>POST /v1/search</code>)</li>
+  <li>Grounded question-answering with citations (<code>POST /v1/answer</code>, paid tiers only)</li>
+  <li>Access to text and entity metadata</li>
+  <li>API key management and billing infrastructure</li>
+</ul>
+<p>All indexed content is sourced from texts that are Creative Commons licensed (CC BY or CC0) or in the public domain. We make no claim of copyright over the underlying canonical texts.</p>
+
+<h2>3. API Keys and Accounts</h2>
+<h3>3.1 Free Tier</h3>
+<p>You may self-issue a free API key without a credit card. Free keys are limited to 100 search requests per calendar day and do not include access to the <code>/v1/answer</code> endpoint.</p>
+
+<h3>3.2 Paid Tiers</h3>
+<p>Starter and Professional tiers provide higher daily quotas and access to the <code>/v1/answer</code> endpoint. Billing is processed by Stripe. By subscribing to a paid tier, you authorise us to charge your payment method on a monthly recurring basis until you cancel.</p>
+
+<h3>3.3 Key Security</h3>
+<p>You are responsible for keeping your API key confidential. API keys are hashed before storage and cannot be recovered. You must immediately notify us at [INSERT CONTACT EMAIL] if you believe your key has been compromised. We are not liable for unauthorised use of your API key prior to notification.</p>
+
+<h3>3.4 Accurate Information</h3>
+<p>You agree to provide accurate name and email address when creating an API key. We may use your email to contact you about your account, service changes, and billing matters.</p>
+
+<h2>4. Acceptable Use</h2>
+<p>You agree not to use the Service to:</p>
+<ul>
+  <li>Violate any applicable law or regulation, including Australian law and the laws of your jurisdiction</li>
+  <li>Circumvent rate limits or daily quotas through technical means (e.g. IP rotation, multiple keys for the same application)</li>
+  <li>Resell or sublicense API access without our written permission</li>
+  <li>Scrape, cache, or systematically reproduce the entire indexed corpus or substantial portions of it for purposes of creating a competing product</li>
+  <li>Use the Service to generate content that is defamatory, misleading, or that misrepresents the source texts</li>
+  <li>Interfere with or disrupt the Service infrastructure</li>
+  <li>Attempt to reverse-engineer the embedding model or retrieval system</li>
+  <li>Use the <code>/v1/answer</code> endpoint output as authoritative religious, legal, medical, or financial advice without independent verification</li>
+</ul>
+
+<h3>4.1 Attribution</h3>
+<p>When you display or publish content retrieved through the Service, you should attribute the source text and tradition as provided in the API response metadata. This is good practice even where the underlying licence does not strictly require it.</p>
+
+<h2>5. Intellectual Property</h2>
+<h3>5.1 Query Results</h3>
+<p>The passages returned by the Service are excerpts from texts that are in the public domain or licensed under Creative Commons. Your rights to those excerpts are governed by the original licence of each source text (available in the <code>license</code> field of <code>GET /v1/corpora</code> responses). We do not assert additional copyright over retrieved passages.</p>
+
+<h3>5.2 Service IP</h3>
+<p>The SourceTruth retrieval system, embeddings, index, reranking logic, <code>/v1/answer</code> generation pipeline, and all related software are our property or the property of our licensors. You may not copy, modify, or distribute these systems.</p>
+
+<h3>5.3 AI-Generated Answers</h3>
+<p>Answers generated by the <code>/v1/answer</code> endpoint are produced by a third-party AI model (Anthropic Claude) and synthesise retrieved text excerpts. We do not claim copyright over AI-generated outputs. You are responsible for ensuring that your use of such outputs complies with Anthropic's usage policies and applicable law.</p>
+
+<h2>6. Service Levels and Availability</h2>
+<p>We aim for high availability but do not guarantee any specific uptime. The Service is provided on a best-effort basis. We may:</p>
+<ul>
+  <li>Perform maintenance at any time, with or without advance notice</li>
+  <li>Modify rate limits, quotas, or pricing with 30 days' notice for paid tiers</li>
+  <li>Add, remove, or modify indexed corpora at any time (we will endeavour to notify users of significant removals)</li>
+  <li>Deprecate API endpoints with 90 days' notice</li>
+</ul>
+<p>There is no Service Level Agreement (SLA) at this time. SLAs for paid tiers are under consideration.</p>
+
+<h2>7. Billing and Payment</h2>
+<ul>
+  <li>Paid subscriptions are billed monthly in advance via Stripe.</li>
+  <li>Daily quotas reset at UTC midnight regardless of your local time zone.</li>
+  <li>No refunds are provided for partial months, unused quota, or mid-cycle cancellations. If you cancel, access continues until the end of the current billing period.</li>
+  <li>We may suspend access if payment fails and remains unresolved for 7 days.</li>
+  <li>Prices are in USD. We reserve the right to change pricing with 30 days' notice to your registered email.</li>
+</ul>
+
+<h2>8. Data and Privacy</h2>
+<p>Your use of the Service involves the collection of certain data, including your name, email address, and usage logs (query text, endpoint, timestamp, result count, latency). This data is processed in accordance with our <a href="/privacy">Privacy Policy</a>, which forms part of these Terms.</p>
+<p>By using the Service, you consent to your data being processed and stored on servers located in the United States and other jurisdictions where our infrastructure providers operate (Supabase, Railway, Stripe, Anthropic).</p>
+
+<h2>9. Disclaimers</h2>
+<p>THE SERVICE IS PROVIDED "AS IS" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.</p>
+<p>WE DO NOT WARRANT THAT:</p>
+<ul>
+  <li>The Service will be error-free, uninterrupted, or secure</li>
+  <li>Retrieved passages are complete, accurately transcribed, or free from OCR errors</li>
+  <li>AI-generated answers (<code>/v1/answer</code>) are accurate, complete, or appropriate for any particular purpose</li>
+  <li>The indexed corpus is comprehensive or representative of any tradition</li>
+</ul>
+<p>The Service is not a substitute for scholarly, religious, legal, medical, or financial advice. Always verify retrieved passages against authoritative primary sources.</p>
+
+<h2>10. Limitation of Liability</h2>
+<p>TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, D'LINKUP SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING LOSS OF PROFITS, DATA, OR GOODWILL, ARISING FROM YOUR USE OF OR INABILITY TO USE THE SERVICE, EVEN IF WE HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.</p>
+<p>OUR TOTAL CUMULATIVE LIABILITY FOR ALL CLAIMS ARISING FROM THESE TERMS OR YOUR USE OF THE SERVICE SHALL NOT EXCEED THE GREATER OF (A) THE AMOUNT YOU PAID TO US IN THE THREE MONTHS PRECEDING THE CLAIM OR (B) USD $100.</p>
+
+<h2>11. Indemnification</h2>
+<p>You agree to indemnify, defend, and hold harmless D'Linkup, its officers, directors, employees, and agents from any claims, damages, losses, and costs (including reasonable legal fees) arising from: (a) your use of the Service; (b) your violation of these Terms; (c) your violation of any third-party rights; or (d) any content you generate using the Service.</p>
+
+<h2>12. Termination</h2>
+<p>We may suspend or terminate your API key and access to the Service at any time, with or without cause, with or without notice. Grounds for immediate termination include violation of the Acceptable Use section or non-payment of fees. On termination, your right to use the Service ceases. Sections 5, 9, 10, 11, and 13 survive termination.</p>
+<p>You may cancel your account at any time by accessing the billing portal (<code>POST /v1/stripe/portal</code>) or contacting us at [INSERT CONTACT EMAIL].</p>
+
+<h2>13. Governing Law and Disputes</h2>
+<p>These Terms are governed by the laws of New South Wales, Australia, without regard to conflict of law principles. Any dispute arising under these Terms shall be resolved in the courts of New South Wales, Australia, and you consent to the jurisdiction of those courts.</p>
+
+<h2>14. Changes to These Terms</h2>
+<p>We may update these Terms from time to time. If we make material changes, we will notify you by email to the address on your API key record at least 14 days before the changes take effect. Continued use of the Service after that date constitutes acceptance of the updated Terms.</p>
+
+<h2>15. Contact</h2>
+<p>D'Linkup<br>
+[INSERT REGISTERED ADDRESS]<br>
+ABN: [INSERT ABN]<br>
+Email: [INSERT CONTACT EMAIL]</p>
+
+<footer>
+  SourceTruth · Terms of Service · Effective 2026-08-08 · <a href="/privacy">Privacy Policy</a> · <a href="/">API Docs</a>
+</footer>
+
+</div>
+</body>
+</html>

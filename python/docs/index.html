@@ -1,0 +1,815 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SourceTruth API — Developer Documentation</title>
+<style>
+  :root {
+    --brand:   #1e293b;
+    --accent:  #3b82f6;
+    --green:   #15803d;
+    --yellow:  #b45309;
+    --red:     #b91c1c;
+    --bg:      #f8fafc;
+    --surface: #ffffff;
+    --border:  #e2e8f0;
+    --text:    #1e293b;
+    --muted:   #64748b;
+    --code-bg: #0f172a;
+    --code-txt:#e2e8f0;
+    --sidebar: 260px;
+  }
+  * { box-sizing: border-box; margin: 0; padding: 0; }
+  body { font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif; background: var(--bg); color: var(--text); line-height: 1.65; }
+
+  /* ── Layout ── */
+  .layout { display: grid; grid-template-columns: var(--sidebar) 1fr; min-height: 100vh; }
+  @media (max-width: 768px) { .layout { grid-template-columns: 1fr; } .sidebar { display: none; } }
+
+  /* ── Sidebar ── */
+  .sidebar {
+    background: var(--brand);
+    color: #e2e8f0;
+    position: sticky;
+    top: 0;
+    height: 100vh;
+    overflow-y: auto;
+    padding: 1.5rem 0;
+  }
+  .sidebar .logo { padding: 0 1.5rem 1.5rem; border-bottom: 1px solid #334155; }
+  .sidebar .logo h1 { font-size: 1.15rem; font-weight: 800; color: #fff; }
+  .sidebar .logo span { font-size: 0.72rem; color: #94a3b8; letter-spacing: 0.08em; text-transform: uppercase; }
+  .sidebar nav { padding: 1rem 0; }
+  .sidebar .nav-section { font-size: 0.68rem; font-weight: 700; text-transform: uppercase; letter-spacing: 0.1em; color: #64748b; padding: 0.75rem 1.5rem 0.25rem; }
+  .sidebar a { display: block; padding: 0.35rem 1.5rem; font-size: 0.875rem; color: #94a3b8; text-decoration: none; border-left: 2px solid transparent; transition: all 0.15s; }
+  .sidebar a:hover, .sidebar a.active { color: #fff; border-left-color: var(--accent); background: rgba(255,255,255,0.04); }
+  .sidebar .version-badge { margin: 1rem 1.5rem 0; padding: 0.3rem 0.6rem; background: #334155; border-radius: 6px; font-size: 0.72rem; color: #94a3b8; display: inline-block; }
+
+  /* ── Content ── */
+  .content { padding: 3rem 4rem; max-width: 900px; }
+  @media (max-width: 1024px) { .content { padding: 2rem; } }
+
+  h1 { font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
+  h2 { font-size: 1.4rem; font-weight: 700; margin: 3rem 0 1rem; padding-bottom: 0.5rem; border-bottom: 2px solid var(--border); color: var(--text); }
+  h3 { font-size: 1rem; font-weight: 700; margin: 1.75rem 0 0.5rem; color: #374151; }
+  h4 { font-size: 0.9rem; font-weight: 700; margin: 1.2rem 0 0.4rem; color: var(--muted); text-transform: uppercase; letter-spacing: 0.06em; }
+  p { font-size: 0.925rem; color: #374151; margin-bottom: 0.75rem; }
+  ul, ol { padding-left: 1.5rem; font-size: 0.925rem; color: #374151; margin-bottom: 0.75rem; }
+  li { margin-bottom: 0.25rem; }
+  a { color: var(--accent); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ── Hero ── */
+  .hero { background: linear-gradient(135deg, #1e293b 0%, #0f172a 100%); color: #fff; border-radius: 14px; padding: 2.5rem; margin-bottom: 2rem; }
+  .hero .tag { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.12em; color: #64748b; margin-bottom: 0.5rem; }
+  .hero h1 { font-size: 1.9rem; color: #fff; margin-bottom: 0.5rem; }
+  .hero p { color: #94a3b8; font-size: 0.95rem; }
+  .hero .base-url { margin-top: 1.25rem; background: rgba(255,255,255,0.07); border-radius: 8px; padding: 0.6rem 1rem; font-family: 'SF Mono', 'Consolas', monospace; font-size: 0.85rem; color: #e2e8f0; }
+
+  /* ── Stat pills ── */
+  .stat-row { display: flex; gap: 0.75rem; flex-wrap: wrap; margin-bottom: 2rem; }
+  .stat { background: var(--surface); border: 1px solid var(--border); border-radius: 10px; padding: 0.75rem 1.25rem; text-align: center; min-width: 110px; }
+  .stat .num { font-size: 1.4rem; font-weight: 800; color: var(--text); }
+  .stat .lbl { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.06em; color: var(--muted); margin-top: 0.2rem; }
+
+  /* ── Code blocks ── */
+  pre { background: var(--code-bg); color: var(--code-txt); border-radius: 10px; padding: 1.25rem 1.5rem; overflow-x: auto; font-size: 0.82rem; line-height: 1.6; margin: 0.75rem 0 1.25rem; font-family: 'SF Mono', 'Consolas', monospace; }
+  code { font-family: 'SF Mono', 'Consolas', monospace; font-size: 0.85em; background: #f1f5f9; color: #0f172a; padding: 0.1em 0.4em; border-radius: 4px; }
+  pre code { background: none; color: inherit; padding: 0; font-size: inherit; }
+  .code-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); margin-bottom: 0.3rem; }
+
+  /* ── Endpoint cards ── */
+  .endpoint { border: 1px solid var(--border); border-radius: 12px; margin-bottom: 1.5rem; overflow: hidden; }
+  .endpoint-header { display: flex; align-items: center; gap: 0.75rem; padding: 0.9rem 1.25rem; background: var(--surface); border-bottom: 1px solid var(--border); }
+  .method { font-weight: 800; font-size: 0.78rem; padding: 0.2rem 0.6rem; border-radius: 5px; letter-spacing: 0.04em; }
+  .method-get  { background: #dcfce7; color: #15803d; }
+  .method-post { background: #dbeafe; color: #1d4ed8; }
+  .endpoint-path { font-family: 'SF Mono', 'Consolas', monospace; font-size: 0.9rem; font-weight: 600; color: var(--text); }
+  .endpoint-desc { color: var(--muted); font-size: 0.82rem; margin-left: auto; }
+  .endpoint-body { padding: 1.25rem; }
+
+  /* ── Parameter tables ── */
+  table { width: 100%; border-collapse: collapse; font-size: 0.85rem; margin: 0.75rem 0 1rem; }
+  th { background: #f1f5f9; text-align: left; padding: 0.5rem 0.75rem; font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.05em; color: var(--muted); }
+  td { padding: 0.5rem 0.75rem; border-bottom: 1px solid #f1f5f9; vertical-align: top; }
+  tr:last-child td { border-bottom: none; }
+  td:first-child { font-family: 'SF Mono', 'Consolas', monospace; font-size: 0.8rem; color: #1d4ed8; white-space: nowrap; }
+  td:nth-child(2) { color: var(--muted); font-size: 0.8rem; white-space: nowrap; }
+
+  /* ── Pills ── */
+  .pill { display: inline-block; border-radius: 99px; font-size: 0.68rem; font-weight: 700; letter-spacing: 0.04em; padding: 0.12rem 0.55rem; text-transform: uppercase; }
+  .pill-green  { background: #dcfce7; color: var(--green); }
+  .pill-yellow { background: #fef9c3; color: var(--yellow); }
+  .pill-red    { background: #fee2e2; color: var(--red); }
+  .pill-blue   { background: #dbeafe; color: #1d4ed8; }
+  .pill-gray   { background: #f1f5f9; color: #475569; }
+  .pill-opt    { background: #f3e8ff; color: #7c3aed; }
+
+  /* ── Callouts ── */
+  .callout { border-left: 4px solid; border-radius: 0 8px 8px 0; padding: 0.85rem 1.2rem; margin: 1rem 0; font-size: 0.88rem; }
+  .callout-blue   { border-color: #3b82f6; background: #eff6ff; }
+  .callout-yellow { border-color: #eab308; background: #fefce8; }
+  .callout-green  { border-color: #22c55e; background: #f0fdf4; }
+  .callout strong { display: block; margin-bottom: 0.2rem; font-size: 0.85rem; }
+
+  /* ── Tier table ── */
+  .tier-table td:first-child { font-weight: 700; color: var(--text); font-family: inherit; font-size: 0.875rem; }
+
+  /* ── Quickstart steps ── */
+  .steps { counter-reset: steps; list-style: none; padding: 0; }
+  .steps li { counter-increment: steps; display: grid; grid-template-columns: 2.2rem 1fr; gap: 0.75rem; padding: 0.75rem 0; border-bottom: 1px solid #f1f5f9; }
+  .steps li:last-child { border-bottom: none; }
+  .steps li::before { content: counter(steps); width: 2.2rem; height: 2.2rem; background: var(--accent); color: #fff; border-radius: 50%; font-weight: 800; font-size: 0.85rem; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+  .steps .step-head { font-weight: 700; font-size: 0.9rem; margin-bottom: 0.25rem; }
+  .steps .step-body { font-size: 0.85rem; color: var(--muted); }
+
+  /* ── Error table ── */
+  .error-code { font-weight: 700; }
+
+  /* ── Corpus table ── */
+  .score-high { color: var(--green); font-weight: 700; }
+  .score-mid  { color: var(--yellow); font-weight: 700; }
+  .score-low  { color: var(--red); font-weight: 700; }
+  .corpus-table td:nth-child(2) { font-family: 'SF Mono', 'Consolas', monospace; font-size: 0.8rem; color: #7c3aed; }
+  .corpus-table td:first-child { font-family: inherit; font-size: 0.875rem; color: var(--text); }
+
+  footer { margin-top: 4rem; padding: 2rem 0; border-top: 1px solid var(--border); font-size: 0.8rem; color: var(--muted); }
+  .inline-code-example { margin: 0; }
+</style>
+</head>
+<body>
+<div class="layout">
+
+<!-- ─── Sidebar ─────────────────────────────────────────────────────────── -->
+<nav class="sidebar">
+  <div class="logo">
+    <h1>SourceTruth</h1>
+    <span>API Documentation</span>
+    <div class="version-badge">v1.0 · 87,889 chunks</div>
+  </div>
+  <nav>
+    <div class="nav-section">Getting Started</div>
+    <a href="#overview">Overview</a>
+    <a href="#quickstart">Quickstart</a>
+    <a href="#authentication">Authentication</a>
+    <a href="#pricing">Tiers &amp; Pricing</a>
+    <a href="#rate-limits">Rate Limits</a>
+
+    <div class="nav-section">API Reference</div>
+    <a href="#search">POST /v1/search</a>
+    <a href="#answer">POST /v1/answer</a>
+    <a href="#corpora">GET /v1/corpora</a>
+    <a href="#text">GET /v1/text/{uid}</a>
+    <a href="#entity">GET /v1/entity/{id}</a>
+    <a href="#keys">POST /v1/keys</a>
+    <a href="#stripe-checkout">POST /v1/stripe/checkout</a>
+    <a href="#stripe-portal">POST /v1/stripe/portal</a>
+
+    <div class="nav-section">Guides</div>
+    <a href="#filtering">Filtering &amp; Scoping</a>
+    <a href="#corpus-coverage">Corpus Coverage</a>
+    <a href="#sdk">Python SDK</a>
+    <a href="#mcp">MCP / Claude Integration</a>
+    <a href="#errors">Error Reference</a>
+    <a href="#limitations">Known Limitations</a>
+  </nav>
+</nav>
+
+<!-- ─── Content ──────────────────────────────────────────────────────────── -->
+<div class="content">
+
+<!-- ─── Hero ── -->
+<div class="hero">
+  <div class="tag">SourceTruth &bull; API Documentation &bull; v1.0</div>
+  <h1>Canonical Text Search API</h1>
+  <p>Semantic + keyword search and grounded Q&amp;A across 87,889 indexed passages from 17 philosophical, religious, and classical traditions. All content is CC BY, CC0, or Public Domain.</p>
+  <div class="base-url">Base URL: https://api.sourcetruth.io</div>
+</div>
+
+<div class="stat-row">
+  <div class="stat"><div class="num">87,889</div><div class="lbl">Indexed Chunks</div></div>
+  <div class="stat"><div class="num">17</div><div class="lbl">Traditions</div></div>
+  <div class="stat"><div class="num">0.828</div><div class="lbl">Median nDCG@5</div></div>
+  <div class="stat"><div class="num">CC / PD</div><div class="lbl">All Licences</div></div>
+</div>
+
+<!-- ─── Overview ──────────────────────────────────────────────────────────── -->
+<h2 id="overview">Overview</h2>
+
+<p>SourceTruth is a pre-indexed, multi-tradition canonical text API. Instead of building and maintaining your own RAG pipeline over religious, philosophical, and classical texts, you query SourceTruth's production search infrastructure directly.</p>
+
+<p>Two primary endpoints:</p>
+<ul>
+  <li><strong>/v1/search</strong> — hybrid semantic + keyword retrieval. Returns ranked passage chunks with metadata. Available to all tiers including free.</li>
+  <li><strong>/v1/answer</strong> — grounded Q&amp;A: retrieves relevant passages then generates a cited answer via Claude. Paid tiers only.</li>
+</ul>
+
+<p>Search uses voyage-multilingual-2 embeddings with per-corpus tuned reranking (MMR, text deduplication, or dense RRF) derived from LLM-judged retrieval evaluation. Cross-lingual queries work: ask in English, retrieve Pali, Arabic, Sanskrit, Classical Chinese, and Gurmukhi texts.</p>
+
+<!-- ─── Quickstart ──────────────────────────────────────────────────────────── -->
+<h2 id="quickstart">Quickstart</h2>
+
+<ol class="steps">
+  <li>
+    <div>
+      <div class="step-head">Get a free API key</div>
+      <div class="step-body">Self-issue a free-tier key — 100 requests per day, no credit card required.</div>
+    </div>
+  </li>
+</ol>
+
+<div class="code-label">cURL</div>
+<pre>curl -X POST https://api.sourcetruth.io/v1/keys \
+  -H "Content-Type: application/json" \
+  -d '{"name": "My App", "email": "you@example.com"}'</pre>
+
+<div class="code-label">Response</div>
+<pre>{
+  "key": "st_a1b2c3d4e5f6...",
+  "tier": "free",
+  "daily_limit": 100,
+  "message": "Store this key safely — it will not be shown again."
+}</pre>
+
+<ol class="steps" start="2">
+  <li>
+    <div>
+      <div class="step-head">Search across all traditions</div>
+      <div class="step-body">Pass your API key in the <code>X-API-Key</code> header.</div>
+    </div>
+  </li>
+</ol>
+
+<div class="code-label">cURL</div>
+<pre>curl -X POST https://api.sourcetruth.io/v1/search \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: st_your_key_here" \
+  -d '{
+    "query": "What is the nature of consciousness?",
+    "traditions": ["hinduism"],
+    "top_k": 5
+  }'</pre>
+
+<div class="code-label">Response (abbreviated)</div>
+<pre>{
+  "query": "What is the nature of consciousness?",
+  "resolved_entities": [],
+  "passages": [
+    {
+      "chunk_id": 12345,
+      "text": "Consciousness is self-luminous. It is its own witness...",
+      "reference": "Ch. 2 v. 19",
+      "sutta_id": "bhagavad-gita-18",
+      "title_english": "Bhagavad Gita",
+      "tradition": "hinduism",
+      "language": "en",
+      "corpus": "bhagavad-gita",
+      "url": "https://...",
+      "score": 0.01234
+    }
+  ],
+  "latency_ms": 143
+}</pre>
+
+<ol class="steps" start="3">
+  <li>
+    <div>
+      <div class="step-head">Search a specific corpus</div>
+      <div class="step-body">Use <code>corpus_codes</code> for the most precise scoping.</div>
+    </div>
+  </li>
+</ol>
+
+<div class="code-label">cURL</div>
+<pre>curl -X POST https://api.sourcetruth.io/v1/search \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: st_your_key_here" \
+  -d '{
+    "query": "mercy and forgiveness",
+    "corpus_codes": ["quran", "sahih-bukhari"],
+    "top_k": 8
+  }'</pre>
+
+<ol class="steps" start="4">
+  <li>
+    <div>
+      <div class="step-head">Get a grounded answer (paid tiers)</div>
+      <div class="step-body">The /v1/answer endpoint retrieves relevant passages and generates a cited answer via Claude.</div>
+    </div>
+  </li>
+</ol>
+
+<div class="code-label">cURL</div>
+<pre>curl -X POST https://api.sourcetruth.io/v1/answer \
+  -H "Content-Type: application/json" \
+  -H "X-API-Key: st_your_starter_or_pro_key" \
+  -d '{
+    "question": "What does the Bhagavad Gita say about duty without attachment?",
+    "traditions": ["hinduism"],
+    "max_passages": 6
+  }'</pre>
+
+<div class="code-label">Response (abbreviated)</div>
+<pre>{
+  "question": "What does the Bhagavad Gita say about duty without attachment?",
+  "answer": "The Bhagavad Gita teaches nishkama karma — performing one's duty (dharma) without attachment to results. Krishna instructs Arjuna: 'You have a right to perform your prescribed duties, but you are not entitled to the fruits of your actions' [1]. This doctrine of action without ego-investment is elaborated...",
+  "citations": [
+    {
+      "index": 1,
+      "sutta_id": "bhagavad-gita-47",
+      "reference": "Ch. 2 v. 47",
+      "title_english": "Bhagavad Gita",
+      "corpus": "bhagavad-gita",
+      "url": "..."
+    }
+  ],
+  "latency_ms": 2841
+}</pre>
+
+<ol class="steps" start="5">
+  <li>
+    <div>
+      <div class="step-head">Discover all available corpora</div>
+      <div class="step-body">List all indexed corpora — no authentication required.</div>
+    </div>
+  </li>
+</ol>
+
+<div class="code-label">cURL</div>
+<pre>curl https://api.sourcetruth.io/v1/corpora</pre>
+
+<!-- ─── Authentication ──────────────────────────────────────────────────────── -->
+<h2 id="authentication">Authentication</h2>
+
+<p>All endpoints that require authentication accept an API key in the <code>X-API-Key</code> HTTP header. The <code>/v1/corpora</code>, <code>/health</code>, and <code>/v1/keys</code> endpoints are public and require no key.</p>
+
+<div class="code-label">Header format</div>
+<pre>X-API-Key: st_your_api_key_here</pre>
+
+<p>API keys are prefixed with <code>st_</code>. Keys are hashed with SHA-256 before storage — the raw key is never stored and cannot be recovered. Store it securely at the time of issuance.</p>
+
+<div class="callout callout-yellow">
+  <strong>Key management</strong>
+  There is currently no self-service key rotation endpoint. If you lose your key, issue a new one via POST /v1/keys. Contact support if you need to deactivate a compromised key.
+</div>
+
+<!-- ─── Pricing ──────────────────────────────────────────────────────────── -->
+<h2 id="pricing">Tiers &amp; Pricing</h2>
+
+<table>
+  <thead>
+    <tr><th>Tier</th><th>Price</th><th>Search requests / day</th><th>/v1/answer / day</th><th>Rate limit</th></tr>
+  </thead>
+  <tbody class="tier-table">
+    <tr>
+      <td>Free</td>
+      <td>$0</td>
+      <td>100</td>
+      <td><em>Not available</em></td>
+      <td>60 /min (search)</td>
+    </tr>
+    <tr>
+      <td>Starter</td>
+      <td>$29 / month</td>
+      <td>1,000</td>
+      <td>100</td>
+      <td>60 /min (search), 20 /min (answer)</td>
+    </tr>
+    <tr>
+      <td>Professional</td>
+      <td>$149 / month</td>
+      <td>10,000</td>
+      <td>300</td>
+      <td>60 /min (search), 20 /min (answer)</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>Upgrade via <a href="#stripe-checkout">POST /v1/stripe/checkout</a>. Downgrade or cancel via <a href="#stripe-portal">POST /v1/stripe/portal</a>. Billing is powered by Stripe.</p>
+
+<!-- ─── Rate Limits ──────────────────────────────────────────────────────── -->
+<h2 id="rate-limits">Rate Limits</h2>
+
+<ul>
+  <li><strong>Search:</strong> 60 requests per minute per IP address</li>
+  <li><strong>Answer:</strong> 20 requests per minute per IP address</li>
+  <li><strong>Key creation:</strong> 5 per hour per IP address</li>
+  <li><strong>Daily quotas:</strong> applied per API key (not per IP), reset at UTC midnight</li>
+</ul>
+
+<p>When a rate limit is hit the server returns <code>429 Too Many Requests</code> with a <code>Retry-After</code> header. When the daily quota is exhausted the server returns <code>429</code> with <code>"Daily request limit reached."</code></p>
+
+<!-- ─── Endpoints ──────────────────────────────────────────────────────────── -->
+<h2 id="endpoints">API Reference</h2>
+
+<!-- /v1/search -->
+<h3 id="search">Search</h3>
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-post">POST</span>
+    <span class="endpoint-path">/v1/search</span>
+    <span class="endpoint-desc">All tiers &bull; Auth: optional (anon allowed, unauthenticated calls share global quota)</span>
+  </div>
+  <div class="endpoint-body">
+    <p>Hybrid semantic + keyword search using voyage-multilingual-2 embeddings with per-corpus reranking. Returns up to <code>top_k</code> ranked passage chunks.</p>
+
+    <h4>Request body</h4>
+    <table>
+      <thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>query</td><td>string</td><td>required</td><td>Free-text search query. English queries work across all traditions including non-English corpora.</td></tr>
+        <tr><td>corpus_codes</td><td>string[]</td><td>null</td><td>Exact corpus codes to search. Most precise scoping. See <a href="#corpus-coverage">corpus table</a>.</td></tr>
+        <tr><td>traditions</td><td>string[]</td><td>null</td><td>Tradition names. Less precise than corpus_codes — searches all corpora in the tradition.</td></tr>
+        <tr><td>languages</td><td>string[]</td><td>null</td><td>ISO 639-1/3 language codes: <code>en</code>, <code>ar</code>, <code>pi</code> (Pali), <code>zh</code>, <code>sa</code>.</td></tr>
+        <tr><td>collections</td><td>string[]</td><td>null</td><td>Collection name filter (corpus-specific grouping).</td></tr>
+        <tr><td>top_k</td><td>integer</td><td>8</td><td>Maximum number of passages to return (1–50).</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-blue">
+      <strong>Scope precedence</strong>
+      Filters stack with AND logic. <code>corpus_codes</code> is the most specific filter and takes priority for rerank mode selection. You can combine scopes: e.g. <code>corpus_codes=["quran"]</code> + <code>languages=["ar"]</code>.
+    </div>
+
+    <h4>Response</h4>
+    <table>
+      <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>query</td><td>string</td><td>Echo of the input query.</td></tr>
+        <tr><td>resolved_entities</td><td>Entity[]</td><td>Buddhist entities recognised in the query (if any).</td></tr>
+        <tr><td>passages</td><td>Passage[]</td><td>Ranked passage chunks. See Passage schema below.</td></tr>
+        <tr><td>search_accounts</td><td>integer</td><td>Number of corpus database shards searched.</td></tr>
+        <tr><td>latency_ms</td><td>integer</td><td>Server-side search latency in milliseconds.</td></tr>
+      </tbody>
+    </table>
+
+    <h4>Passage schema</h4>
+    <table>
+      <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>chunk_id</td><td>integer</td><td>Internal database chunk ID.</td></tr>
+        <tr><td>text</td><td>string</td><td>The passage text.</td></tr>
+        <tr><td>reference</td><td>string</td><td>Human-readable reference (e.g. "Ch. 3 v. 5", "MN 10", "Surah 2:255").</td></tr>
+        <tr><td>sutta_id</td><td>string</td><td>External document ID within the corpus (use with <a href="#text">/v1/text/{uid}</a>).</td></tr>
+        <tr><td>title_english</td><td>string</td><td>English title of the source text.</td></tr>
+        <tr><td>title_pali</td><td>string</td><td>Pali title (Buddhist texts only).</td></tr>
+        <tr><td>tradition</td><td>string</td><td>Tradition code (e.g. "hinduism", "islam").</td></tr>
+        <tr><td>language</td><td>string</td><td>Language of the passage text.</td></tr>
+        <tr><td>collection</td><td>string</td><td>Collection grouping within corpus.</td></tr>
+        <tr><td>translator</td><td>string</td><td>Translator name, if applicable.</td></tr>
+        <tr><td>corpus</td><td>string</td><td>Corpus code (use this value in corpus_codes filter).</td></tr>
+        <tr><td>url</td><td>string</td><td>Source URL for the text, if available.</td></tr>
+        <tr><td>score</td><td>float</td><td>Retrieval score (RRF + entity boost). Higher = more relevant.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- /v1/answer -->
+<h3 id="answer">Answer</h3>
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-post">POST</span>
+    <span class="endpoint-path">/v1/answer</span>
+    <span class="endpoint-desc">Starter + Professional only &bull; Auth: required</span>
+  </div>
+  <div class="endpoint-body">
+    <p>Retrieves relevant passages then generates a cited, grounded answer via Claude Sonnet. Citations reference passage numbers in the response.</p>
+
+    <h4>Request body</h4>
+    <table>
+      <thead><tr><th>Field</th><th>Type</th><th>Default</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>question</td><td>string</td><td>required</td><td>Natural language question.</td></tr>
+        <tr><td>corpus_codes</td><td>string[]</td><td>null</td><td>Scope to specific corpora (same as /v1/search).</td></tr>
+        <tr><td>traditions</td><td>string[]</td><td>null</td><td>Scope to tradition(s).</td></tr>
+        <tr><td>languages</td><td>string[]</td><td>null</td><td>Language filter.</td></tr>
+        <tr><td>max_passages</td><td>integer</td><td>6</td><td>Max passages to retrieve for context (1–10).</td></tr>
+      </tbody>
+    </table>
+
+    <h4>Response</h4>
+    <table>
+      <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>question</td><td>string</td><td>Echo of the input question.</td></tr>
+        <tr><td>answer</td><td>string</td><td>Cited answer text. Citations appear as [1], [2], etc.</td></tr>
+        <tr><td>citations</td><td>Citation[]</td><td>Source metadata for each referenced passage.</td></tr>
+        <tr><td>passages_used</td><td>string[]</td><td>First 200 characters of each passage provided as context.</td></tr>
+        <tr><td>latency_ms</td><td>integer</td><td>Total latency including Claude generation.</td></tr>
+      </tbody>
+    </table>
+
+    <div class="callout callout-blue">
+      <strong>Answer quality note</strong>
+      The answer model (Claude Sonnet) is instructed to synthesise only from retrieved passages. It will explicitly state when the retrieved passages do not answer the question rather than hallucinating. For best results, scope the query to the relevant tradition(s).
+    </div>
+  </div>
+</div>
+
+<!-- /v1/corpora -->
+<h3 id="corpora">List Corpora</h3>
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-get">GET</span>
+    <span class="endpoint-path">/v1/corpora</span>
+    <span class="endpoint-desc">Public &bull; No auth required</span>
+  </div>
+  <div class="endpoint-body">
+    <p>Returns all indexed corpora with their codes, names, traditions, languages, and licences. Use the <code>code</code> field as <code>corpus_codes</code> filter values in search.</p>
+    <div class="code-label">Example response</div>
+<pre>{
+  "corpora": [
+    {
+      "code": "bhagavad-gita",
+      "name": "Bhagavad Gita",
+      "tradition": "hinduism",
+      "language": "en",
+      "license": "public-domain",
+      "base_url": "https://..."
+    },
+    ...
+  ]
+}</pre>
+  </div>
+</div>
+
+<!-- /v1/text/{uid} -->
+<h3 id="text">Get Text</h3>
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-get">GET</span>
+    <span class="endpoint-path">/v1/text/{uid}</span>
+    <span class="endpoint-desc">All tiers &bull; Auth: optional</span>
+  </div>
+  <div class="endpoint-body">
+    <p>Returns all chunks for a single document by its <code>sutta_id</code> / external ID. Use the <code>sutta_id</code> from search results as the <code>uid</code> path parameter.</p>
+    <h4>Query parameters</h4>
+    <table>
+      <thead><tr><th>Param</th><th>Default</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>lang</td><td>en</td><td>Language of the text to retrieve.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- /v1/entity/{id} -->
+<h3 id="entity">Get Entity</h3>
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-get">GET</span>
+    <span class="endpoint-path">/v1/entity/{id}</span>
+    <span class="endpoint-desc">All tiers &bull; Auth: optional</span>
+  </div>
+  <div class="endpoint-body">
+    <p>Returns metadata and multilingual name variants for a Buddhist entity. Entity IDs appear in the <code>resolved_entities</code> field of search responses.</p>
+    <div class="callout callout-yellow">
+      <strong>Buddhist entities only</strong>
+      The entity recognition layer currently covers Buddhist canonical entities (suttas, figures, concepts). Non-Buddhist queries return an empty <code>resolved_entities</code> array.
+    </div>
+  </div>
+</div>
+
+<!-- /v1/keys -->
+<h3 id="keys">Create API Key</h3>
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-post">POST</span>
+    <span class="endpoint-path">/v1/keys</span>
+    <span class="endpoint-desc">Public &bull; Rate limited: 5/hour per IP</span>
+  </div>
+  <div class="endpoint-body">
+    <p>Self-issue a free-tier API key. No credit card required. The raw key is returned once and never stored — save it immediately.</p>
+    <h4>Request body</h4>
+    <table>
+      <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>name</td><td>string</td><td>Your name or application name.</td></tr>
+        <tr><td>email</td><td>string</td><td>Your email address (used for billing and contact).</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- /v1/stripe/checkout -->
+<h3 id="stripe-checkout">Upgrade Plan</h3>
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-post">POST</span>
+    <span class="endpoint-path">/v1/stripe/checkout</span>
+    <span class="endpoint-desc">Authenticated &bull; Rate limited: 5/hour</span>
+  </div>
+  <div class="endpoint-body">
+    <p>Creates a Stripe Checkout session. Redirect the user to the returned <code>checkout_url</code> to complete payment.</p>
+    <h4>Request body</h4>
+    <table>
+      <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+      <tbody>
+        <tr><td>api_key</td><td>string</td><td>Your API key (to link the subscription to your key).</td></tr>
+        <tr><td>price_id</td><td>string</td><td>Stripe Price ID for the plan you want. Contact support for Price IDs.</td></tr>
+        <tr><td>success_url</td><td>string</td><td>Optional redirect URL after successful payment.</td></tr>
+        <tr><td>cancel_url</td><td>string</td><td>Optional redirect URL if payment is cancelled.</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<!-- /v1/stripe/portal -->
+<h3 id="stripe-portal">Manage Billing</h3>
+<div class="endpoint">
+  <div class="endpoint-header">
+    <span class="method method-post">POST</span>
+    <span class="endpoint-path">/v1/stripe/portal</span>
+    <span class="endpoint-desc">Authenticated &bull; Paid tiers</span>
+  </div>
+  <div class="endpoint-body">
+    <p>Creates a Stripe Customer Portal session. Redirect the user to <code>portal_url</code> to manage or cancel their subscription.</p>
+  </div>
+</div>
+
+<!-- ─── Filtering Guide ──────────────────────────────────────────────────── -->
+<h2 id="filtering">Filtering &amp; Scoping</h2>
+
+<p>Scope filters can be combined. They apply with AND logic — specifying both <code>traditions</code> and <code>languages</code> returns results that match both.</p>
+
+<h3>Priority order (most to least specific)</h3>
+<ol>
+  <li><strong>corpus_codes</strong> — exact corpus identifier. Use when you know exactly which text(s) to search.</li>
+  <li><strong>traditions</strong> — searches all corpora within a tradition. Use for cross-text queries within a tradition.</li>
+  <li><strong>languages</strong> — filter by text language. Useful for requesting original-language results.</li>
+  <li><em>No filter</em> — searches all traditions and corpora (excluding opt-in GRETIL).</li>
+</ol>
+
+<h3>Tradition codes</h3>
+<table>
+  <thead><tr><th>Tradition Code</th><th>Description</th></tr></thead>
+  <tbody>
+    <tr><td>hinduism</td><td>Bhagavad Gita, Upanishads, Yoga Sutras, Rigveda, Sanskrit Classical, Mahabharata</td></tr>
+    <tr><td>islam</td><td>Quran, Hadith (Bukhari, Muslim, Abu Dawood), Rumi Masnavi</td></tr>
+    <tr><td>christianity</td><td>Bible (KJV, WEB, ASV, YLT), Patristic theology</td></tr>
+    <tr><td>judaism</td><td>Tanakh (JPS 1917), Mishnah (Silverstein)</td></tr>
+    <tr><td>hellenism</td><td>Plato, Aristotle, Epictetus, Marcus Aurelius, and 7 more</td></tr>
+    <tr><td>classicism</td><td>Classical Latin texts</td></tr>
+    <tr><td>theravada</td><td>Theravada Buddhist suttas</td></tr>
+    <tr><td>early-buddhist</td><td>Early Buddhist texts</td></tr>
+    <tr><td>sikhism</td><td>Sri Guru Granth Sahib (SGGS)</td></tr>
+    <tr><td>zoroastrianism</td><td>Avesta</td></tr>
+    <tr><td>east-asian</td><td>Classical Chinese texts (Confucius, Mencius, Zhuangzi, etc.)</td></tr>
+    <tr><td>tibetan-buddhist</td><td>Tibetan Buddhist texts (Bardo Thodol)</td></tr>
+    <tr><td>western-philosophy</td><td>Descartes, Kant, Hume, Locke, Spinoza, Hegel, Nietzsche, etc.</td></tr>
+    <tr><td>political-philosophy</td><td>Hobbes, Locke, Rousseau, Mill, Burke, Paine, Tocqueville</td></tr>
+    <tr><td>pre-sectarian</td><td>Sanskrit Buddhist texts — GRETIL (opt-in only; add corpus_codes=["gretil"])</td></tr>
+  </tbody>
+</table>
+
+<!-- ─── Corpus Coverage ──────────────────────────────────────────────────── -->
+<h2 id="corpus-coverage">Corpus Coverage</h2>
+
+<p>All scores are LLM-judged nDCG@5 on realistic (not synthetic) query sets using claude-haiku-4-5 as judge. The ≥ 0.70 threshold is the quality bar for unscoped production use.</p>
+
+<div class="callout callout-green">
+  <strong>Licence guarantee</strong>
+  Every corpus in SourceTruth is CC BY, CC0, or Public Domain. No NC (non-commercial) content. This guarantee is enforced at ingestion and checked before each corpus addition.
+</div>
+
+<table>
+  <thead>
+    <tr>
+      <th>Vertical</th>
+      <th style="white-space:nowrap;">Corpus Code(s)</th>
+      <th>Chunks</th>
+      <th>nDCG@5</th>
+      <th>Status</th>
+    </tr>
+  </thead>
+  <tbody class="corpus-table">
+    <tr><td>Sanskrit Classical Texts</td><td>sanskrit-classical</td><td>1,425</td><td class="score-high">0.978</td><td><span class="pill pill-green">Excellent</span></td></tr>
+    <tr><td>Classical Latin</td><td>classical-latin</td><td>1,877</td><td class="score-high">0.920</td><td><span class="pill pill-green">Excellent</span></td></tr>
+    <tr><td>Sikh Scripture (SGGS)</td><td>sggs</td><td>5,549</td><td class="score-high">0.883</td><td><span class="pill pill-green">Strong</span></td></tr>
+    <tr><td>Hindu Core Texts (BG · Upanishads · Yoga Sutras)</td><td>bhagavad-gita, upanishads, yoga-sutras</td><td>376</td><td class="score-high">0.861</td><td><span class="pill pill-green">Strong</span></td></tr>
+    <tr><td>Islamic Texts (Quran · 3 Hadith · Rumi)</td><td>quran, sahih-bukhari, sahih-muslim, sunan-abu-dawood, rumi-masnavi</td><td>24,324</td><td class="score-high">0.849</td><td><span class="pill pill-green">Strong</span></td></tr>
+    <tr><td>Christian Bible (KJV · WEB · ASV · YLT)</td><td>kjv, bible-web, bible-asv, bible-ylt</td><td>4,846+</td><td class="score-high">0.846</td><td><span class="pill pill-green">Strong</span></td></tr>
+    <tr><td>Patristic Theology</td><td>christian-theology</td><td>~800</td><td class="score-high">0.813</td><td><span class="pill pill-green">Strong</span></td></tr>
+    <tr><td>Greek Philosophy (11 texts)</td><td>greek-philosophy</td><td>2,148</td><td class="score-high">0.828</td><td><span class="pill pill-green">Strong</span></td></tr>
+    <tr><td>Western Philosophy (17 texts)</td><td>western-philosophy</td><td>3,700</td><td class="score-high">0.828</td><td><span class="pill pill-green">Strong</span></td></tr>
+    <tr><td>Political Philosophy (7 texts)</td><td>political-philosophy</td><td>2,385</td><td class="score-high">0.828</td><td><span class="pill pill-green">Strong</span></td></tr>
+    <tr><td>Zoroastrian Avesta</td><td>avesta</td><td>547</td><td class="score-high">0.804</td><td><span class="pill pill-green">Good</span></td></tr>
+    <tr><td>Classical Chinese (8 texts)</td><td>classical-chinese</td><td>1,756</td><td class="score-mid">0.770</td><td><span class="pill pill-yellow">Adequate</span></td></tr>
+    <tr><td>Rigveda (all 10 mandalas)</td><td>rigveda</td><td>748</td><td class="score-mid">0.766</td><td><span class="pill pill-yellow">Adequate</span></td></tr>
+    <tr><td>Jewish Scripture (Tanakh · Mishnah)</td><td>tanakh-jps1917, mishnah-silverstein</td><td>2,964</td><td class="score-mid">0.741</td><td><span class="pill pill-yellow">Adequate</span></td></tr>
+    <tr><td>Theravada Buddhist Suttas</td><td>suttacentral (+ other Buddhist)</td><td>32,075</td><td class="score-mid">0.603</td><td><span class="pill pill-yellow">Mixed</span></td></tr>
+    <tr><td>Tibetan Buddhist (Bardo Thodol)</td><td>tibetan-buddhist</td><td>290</td><td class="score-mid">0.594</td><td><span class="pill pill-yellow">Marginal</span></td></tr>
+    <tr><td>Mahabharata (partial — Ganguli)</td><td>mahabharata</td><td>569</td><td>–</td><td><span class="pill pill-gray">Thin</span></td></tr>
+    <tr><td>GRETIL Sanskrit Buddhist</td><td>gretil</td><td>15,180</td><td class="score-low">~0.18</td><td><span class="pill pill-opt">Opt-in only</span></td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-yellow">
+  <strong>GRETIL opt-in</strong>
+  The GRETIL Sanskrit Buddhist corpus (~18% recall) is excluded from unscoped searches because voyage-multilingual-2 cannot align IAST transliteration with English queries. To access it explicitly: <code>"corpus_codes": ["gretil"]</code>. Intended for users who supply IAST Sanskrit query terms.
+</div>
+
+<!-- ─── Python SDK ──────────────────────────────────────────────────────────── -->
+<h2 id="sdk">Python SDK</h2>
+
+<div class="code-label">Install</div>
+<pre>pip install sourcetruth</pre>
+
+<div class="code-label">Basic usage</div>
+<pre>from sourcetruth import Client
+
+client = Client(api_key="st_your_key_here")
+
+# Search
+results = client.search(
+    "What does the Quran say about mercy?",
+    traditions=["islam"],
+    top_k=5,
+)
+for r in results:
+    print(f"[{r.corpus}] {r.reference}: {r.text[:120]}...")
+
+# Grounded answer (Starter/Professional)
+answer = client.answer(
+    "What is the Buddhist concept of non-self?",
+    traditions=["theravada"],
+)
+print(answer.answer)
+for cite in answer.citations:
+    print(f"  [{cite.index}] {cite.title_english} — {cite.reference}")
+
+# Discover corpora
+for corpus in client.corpora():
+    print(f"{corpus.code}: {corpus.name} ({corpus.tradition})")</pre>
+
+<p>Source and README: <a href="https://github.com/dlinkup/sourcetruth-python">github.com/dlinkup/sourcetruth-python</a></p>
+
+<!-- ─── MCP ──────────────────────────────────────────────────────────────── -->
+<h2 id="mcp">MCP / Claude Integration</h2>
+
+<p>SourceTruth is available as an MCP (Model Context Protocol) server on <a href="https://smithery.ai/server/sourcetruth">Smithery.ai</a>. This enables direct integration with Claude, Claude Code, and any MCP-compatible AI assistant.</p>
+
+<h3>Two available tools</h3>
+<ul>
+  <li><strong>search_canonical_texts(query, traditions?)</strong> — retrieve relevant passages</li>
+  <li><strong>answer_from_canonical_texts(question, traditions?)</strong> — grounded Q&amp;A with citations</li>
+</ul>
+
+<div class="code-label">claude_desktop_config.json</div>
+<pre>{
+  "mcpServers": {
+    "sourcetruth": {
+      "command": "uvx",
+      "args": ["sourcetruth-mcp"],
+      "env": {
+        "SOURCETRUTH_API_KEY": "st_your_key_here"
+      }
+    }
+  }
+}</pre>
+
+<!-- ─── Errors ──────────────────────────────────────────────────────────────── -->
+<h2 id="errors">Error Reference</h2>
+
+<table>
+  <thead><tr><th>HTTP Code</th><th>Meaning</th><th>Common cause</th></tr></thead>
+  <tbody>
+    <tr><td class="error-code">400</td><td>Bad Request</td><td>Missing required field, empty query, invalid email format.</td></tr>
+    <tr><td class="error-code">401</td><td>Unauthorized</td><td>API key missing, invalid, or deactivated.</td></tr>
+    <tr><td class="error-code">403</td><td>Forbidden</td><td>Endpoint requires a paid tier (e.g. /v1/answer on free tier).</td></tr>
+    <tr><td class="error-code">404</td><td>Not Found</td><td>Text UID not found, entity ID not found.</td></tr>
+    <tr><td class="error-code">429</td><td>Too Many Requests</td><td>Per-minute rate limit exceeded, or daily quota exhausted.</td></tr>
+    <tr><td class="error-code">500</td><td>Internal Server Error</td><td>Unexpected server error — retry with exponential backoff.</td></tr>
+    <tr><td class="error-code">503</td><td>Service Unavailable</td><td>Billing subsystem not configured (maintenance).</td></tr>
+  </tbody>
+</table>
+
+<div class="callout callout-blue">
+  <strong>Error response format</strong>
+  All errors return JSON: <code>{"detail": "Human-readable error message."}</code>
+</div>
+
+<!-- ─── Known Limitations ──────────────────────────────────────────────────── -->
+<h2 id="limitations">Known Limitations</h2>
+
+<ul>
+  <li><strong>Upanishads Part II</strong> (Brihadaranyaka, Chandogya, Mundaka Upanishads): currently stored as a single document block. Queries targeting these specific texts specifically by name return no results. Other Upanishad queries work normally.</li>
+  <li><strong>GRETIL corpus</strong>: IAST Sanskrit transliteration cannot be aligned with English queries under voyage-multilingual-2. Excluded from unscoped search. Use explicitly with <code>corpus_codes=["gretil"]</code> only if supplying Sanskrit query terms.</li>
+  <li><strong>Tibetan Buddhist</strong>: Only the Bardo Thodol (290 chunks) is indexed. Source-level retrieval scores 1.0 but chunk diversity is limited.</li>
+  <li><strong>Mahabharata</strong>: Only partial coverage (569 chunks of the Ganguli translation — 3 Parvas). Full Ganguli ingestion is planned.</li>
+  <li><strong>Entity recognition</strong>: Buddhist entities only. Searching for non-Buddhist named entities (e.g. Aristotle, Moses, Muhammad) does not trigger entity boost, but semantic search still retrieves relevant passages.</li>
+  <li><strong>FTS (keyword search)</strong>: Disabled for Arabic (Quran), Pali, Classical Chinese, IAST Sanskrit, and Gurmukhi corpora — vector search only for these languages.</li>
+  <li><strong>Daily quota</strong>: Resets at UTC midnight. The <code>429 "Daily request limit reached"</code> response persists until reset.</li>
+</ul>
+
+<footer>
+  <p>SourceTruth API Documentation · v1.0 · D'Linkup · <a href="/terms">Terms of Service</a> · <a href="/privacy">Privacy Policy</a></p>
+  <p style="margin-top:0.5rem;">Questions? Open an issue or email support@sourcetruth.io</p>
+</footer>
+
+</div><!-- /content -->
+</div><!-- /layout -->
+</body>
+</html>

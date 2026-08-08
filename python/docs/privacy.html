@@ -1,0 +1,173 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SourceTruth — Privacy Policy</title>
+<style>
+  :root { --brand:#1e293b; --accent:#3b82f6; --border:#e2e8f0; --text:#1e293b; --muted:#64748b; --bg:#f8fafc; }
+  * { box-sizing:border-box; margin:0; padding:0; }
+  body { font-family:-apple-system,BlinkMacSystemFont,'Segoe UI',sans-serif; background:var(--bg); color:var(--text); line-height:1.7; padding:2rem 1rem; }
+  .wrapper { max-width:780px; margin:0 auto; }
+  .header { background:linear-gradient(135deg,#1e293b 0%,#334155 100%); color:#fff; border-radius:12px; padding:2rem 2.5rem; margin-bottom:2.5rem; }
+  .header .label { font-size:0.72rem; letter-spacing:0.12em; text-transform:uppercase; color:#94a3b8; margin-bottom:0.3rem; }
+  .header h1 { font-size:1.75rem; font-weight:700; margin-bottom:0.3rem; }
+  .header .meta { color:#94a3b8; font-size:0.85rem; margin-top:0.5rem; }
+  h2 { font-size:1.1rem; font-weight:700; margin:2.5rem 0 0.75rem; padding-bottom:0.4rem; border-bottom:2px solid var(--border); }
+  h3 { font-size:0.95rem; font-weight:700; margin:1.5rem 0 0.5rem; color:#374151; }
+  p { font-size:0.9rem; color:#374151; margin-bottom:0.75rem; }
+  ul,ol { padding-left:1.5rem; font-size:0.9rem; color:#374151; margin-bottom:0.75rem; }
+  li { margin-bottom:0.35rem; }
+  table { width:100%; border-collapse:collapse; font-size:0.85rem; margin:0.75rem 0 1rem; }
+  th { background:#f1f5f9; text-align:left; padding:0.5rem 0.75rem; font-weight:600; font-size:0.78rem; text-transform:uppercase; letter-spacing:0.05em; color:var(--muted); }
+  td { padding:0.5rem 0.75rem; border-bottom:1px solid #f1f5f9; vertical-align:top; font-size:0.875rem; }
+  tr:last-child td { border-bottom:none; }
+  a { color:var(--accent); }
+  .callout { border-left:4px solid #eab308; background:#fefce8; border-radius:0 8px 8px 0; padding:0.85rem 1.2rem; margin:1rem 0; font-size:0.88rem; }
+  footer { margin-top:3rem; padding-top:1rem; border-top:1px solid var(--border); font-size:0.78rem; color:var(--muted); text-align:center; }
+</style>
+</head>
+<body>
+<div class="wrapper">
+
+<div class="header">
+  <div class="label">SourceTruth · Legal</div>
+  <h1>Privacy Policy</h1>
+  <div class="meta">Effective date: 2026-08-08 · Last updated: 2026-08-08 · Operator: D'Linkup (ABN: [INSERT ABN])</div>
+</div>
+
+<div class="callout">
+  <strong>NOTE: This is a draft for legal review.</strong>
+  Replace [INSERT ABN], [INSERT CONTACT EMAIL], [INSERT REGISTERED ADDRESS], and [INSERT DPO EMAIL if required] before publishing. Have a solicitor review before going live. If you have Australian Privacy Act (Privacy Act 1988) obligations, verify compliance with the Australian Privacy Principles (APPs).
+</div>
+
+<h2>1. Introduction</h2>
+<p>D'Linkup ("we", "us", "our") operates the SourceTruth API ("Service"). This Privacy Policy describes how we collect, use, store, and disclose information from and about you when you use the Service.</p>
+<p>By using the Service, you consent to the data practices described in this Policy. If you do not agree, please do not use the Service.</p>
+
+<h2>2. Information We Collect</h2>
+
+<h3>2.1 Information you provide</h3>
+<table>
+  <thead><tr><th>Data</th><th>When collected</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td>Name</td><td>API key creation (POST /v1/keys)</td><td>Account identification</td></tr>
+    <tr><td>Email address</td><td>API key creation</td><td>Account management, billing communication, service notices</td></tr>
+    <tr><td>Payment information</td><td>Paid plan subscription (via Stripe)</td><td>Billing. We do not store raw card details — Stripe handles all payment processing.</td></tr>
+  </tbody>
+</table>
+
+<h3>2.2 Usage data automatically collected</h3>
+<table>
+  <thead><tr><th>Data</th><th>Retention</th><th>Purpose</th></tr></thead>
+  <tbody>
+    <tr><td>Query text (first 500 characters)</td><td>90 days</td><td>Usage analytics, abuse prevention, product improvement</td></tr>
+    <tr><td>Endpoint called</td><td>90 days</td><td>Usage analytics</td></tr>
+    <tr><td>Traditions / languages requested</td><td>90 days</td><td>Usage analytics</td></tr>
+    <tr><td>Result count</td><td>90 days</td><td>Usage analytics</td></tr>
+    <tr><td>Latency (milliseconds)</td><td>90 days</td><td>Performance monitoring</td></tr>
+    <tr><td>Timestamp</td><td>90 days</td><td>Usage analytics, rate limiting</td></tr>
+    <tr><td>API key identifier (not the raw key)</td><td>90 days with usage; indefinitely in api_keys table while active</td><td>Quota tracking, billing</td></tr>
+    <tr><td>Daily request count per key</td><td>Rolling 2 days (daily_quota table)</td><td>Quota enforcement</td></tr>
+    <tr><td>IP address</td><td>Not stored persistently</td><td>Rate limiting (per-request only, not logged)</td></tr>
+    <tr><td>Stripe customer ID</td><td>Indefinitely while account active</td><td>Billing portal access</td></tr>
+  </tbody>
+</table>
+
+<h3>2.3 What we do NOT collect</h3>
+<ul>
+  <li>We do not store the raw API key — only its SHA-256 hash</li>
+  <li>We do not collect browser cookies, device fingerprints, or tracking pixels</li>
+  <li>We do not collect or store the full content of <code>/v1/answer</code> responses (the generated answer text is returned to you but not persistently logged)</li>
+</ul>
+
+<h2>3. How We Use Your Information</h2>
+<ul>
+  <li><strong>Service operation:</strong> Authenticate API keys, enforce rate limits and quotas, process billing</li>
+  <li><strong>Communication:</strong> Send transactional emails (billing receipts, account notices, service changes) to the email on your API key record</li>
+  <li><strong>Analytics:</strong> Understand usage patterns to improve the Service (aggregated, not sold to third parties)</li>
+  <li><strong>Security and abuse prevention:</strong> Detect and prevent misuse, fraud, or violations of our Terms of Service</li>
+  <li><strong>Legal compliance:</strong> Comply with applicable laws and respond to lawful requests from authorities</li>
+</ul>
+<p>We do not sell your personal data to third parties. We do not use your query text to train AI models.</p>
+
+<h2>4. Data Sharing</h2>
+<p>We share data with the following sub-processors as necessary to provide the Service:</p>
+<table>
+  <thead><tr><th>Sub-processor</th><th>Purpose</th><th>Data shared</th><th>Location</th></tr></thead>
+  <tbody>
+    <tr><td>Supabase Inc.</td><td>Database hosting (PostgreSQL)</td><td>All stored data: emails, query logs, quota counts, API key hashes</td><td>USA (AWS us-east-1)</td></tr>
+    <tr><td>Railway Corp.</td><td>API server hosting</td><td>In-flight request data (transient)</td><td>USA</td></tr>
+    <tr><td>Stripe, Inc.</td><td>Payment processing</td><td>Email, name, payment method (card processed by Stripe, not us)</td><td>USA</td></tr>
+    <tr><td>Anthropic, PBC</td><td>/v1/answer generation (Claude API)</td><td>Query text and retrieved passage text sent to Claude API for answer generation</td><td>USA</td></tr>
+    <tr><td>Cloudflare, Inc.</td><td>CDN and DNS proxy</td><td>In-flight HTTP requests (IP visible to Cloudflare, not stored by us)</td><td>Global</td></tr>
+  </tbody>
+</table>
+
+<p>We may disclose your information to law enforcement or regulators when required by law, or to protect the rights, property, or safety of D'Linkup, our users, or the public.</p>
+
+<h2>5. Data Retention</h2>
+<ul>
+  <li><strong>Query logs (api_usage table):</strong> 90 days, then deleted</li>
+  <li><strong>Daily quota counts:</strong> 2 days rolling</li>
+  <li><strong>API key records (api_keys table):</strong> Retained while the key is active. Deleted within 30 days of account termination on request.</li>
+  <li><strong>Email addresses:</strong> Retained while the account is active. On request to delete, we remove the email from the api_keys record within 30 days. Note that Stripe may retain email data subject to its own retention policies.</li>
+  <li><strong>Stripe billing data:</strong> Retained by Stripe per their data retention policy (typically 7 years for financial records).</li>
+</ul>
+
+<h2>6. Data Security</h2>
+<ul>
+  <li>API keys are stored only as SHA-256 hashes — the raw key is never stored and cannot be recovered</li>
+  <li>All API traffic is encrypted in transit via TLS (Cloudflare-managed SSL)</li>
+  <li>Database connections use TLS in transit</li>
+  <li>We use Supabase Row Level Security (RLS) policies to restrict data access</li>
+  <li>Access to production databases is restricted to authorised personnel and service accounts</li>
+</ul>
+<p>No system is perfectly secure. In the event of a data breach that affects your personal data, we will notify you and relevant regulators as required by applicable law.</p>
+
+<h2>7. Your Rights</h2>
+<p>Depending on your jurisdiction, you may have the following rights regarding your personal data:</p>
+<ul>
+  <li><strong>Access:</strong> Request a copy of the personal data we hold about you</li>
+  <li><strong>Correction:</strong> Request that inaccurate data be corrected</li>
+  <li><strong>Deletion:</strong> Request deletion of your personal data (subject to legal retention requirements)</li>
+  <li><strong>Portability:</strong> Request your data in a machine-readable format</li>
+  <li><strong>Objection / restriction:</strong> Object to certain processing activities</li>
+  <li><strong>Withdraw consent:</strong> Withdraw consent to non-essential processing at any time</li>
+</ul>
+<p>To exercise these rights, email us at [INSERT CONTACT EMAIL] with "Privacy Request" in the subject line. We will respond within 30 days. We may need to verify your identity before processing the request.</p>
+
+<h3>7.1 Australian Privacy Principles</h3>
+<p>If you are located in Australia, you also have rights under the Australian Privacy Act 1988 (Cth) and the Australian Privacy Principles (APPs). You may lodge a complaint with the Office of the Australian Information Commissioner (OAIC) at <a href="https://www.oaic.gov.au">www.oaic.gov.au</a> if you believe we have not handled your personal information appropriately.</p>
+
+<h3>7.2 GDPR (EEA/UK)</h3>
+<p>If you are located in the European Economic Area or the United Kingdom, you have additional rights under the General Data Protection Regulation (GDPR) / UK GDPR. Our legal basis for processing your data is:</p>
+<ul>
+  <li>Contract performance (providing the Service to you)</li>
+  <li>Legitimate interests (security, abuse prevention, analytics)</li>
+  <li>Consent (where specifically obtained)</li>
+</ul>
+<p>Data transfers to the United States rely on the EU-US Data Privacy Framework and Standard Contractual Clauses with our sub-processors. You may lodge a complaint with your local supervisory authority.</p>
+
+<h2>8. Children's Privacy</h2>
+<p>The Service is not directed at children under 16 years of age. We do not knowingly collect personal data from children. If you believe a child has provided us with personal data, contact us and we will delete it.</p>
+
+<h2>9. Cookies and Tracking</h2>
+<p>The SourceTruth API does not use cookies or tracking technologies. Our developer documentation pages (this site) do not use analytics scripts, tracking pixels, or third-party cookies.</p>
+
+<h2>10. Changes to This Policy</h2>
+<p>We may update this Privacy Policy from time to time. If we make material changes, we will notify you by email at least 14 days before the changes take effect. The "Last updated" date at the top of this page reflects the most recent revision. Continued use of the Service after the effective date constitutes acceptance of the updated Policy.</p>
+
+<h2>11. Contact</h2>
+<p>D'Linkup<br>
+[INSERT REGISTERED ADDRESS]<br>
+ABN: [INSERT ABN]<br>
+Privacy enquiries: [INSERT CONTACT EMAIL]</p>
+
+<footer>
+  SourceTruth · Privacy Policy · Effective 2026-08-08 · <a href="/terms">Terms of Service</a> · <a href="/">API Docs</a>
+</footer>
+
+</div>
+</body>
+</html>

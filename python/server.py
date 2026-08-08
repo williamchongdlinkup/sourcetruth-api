@@ -38,6 +38,7 @@ import stripe
 from dotenv import load_dotenv
 from fastapi import BackgroundTasks, Depends, FastAPI, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from pydantic import BaseModel
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
@@ -774,3 +775,11 @@ async def stripe_webhook(request: Request):
 @app.get('/health')
 def health():
     return {'status': 'ok', 'version': '1.0.0'}
+
+
+# Developer documentation — served at /docs-site/
+# Configure docs.sourcetruth.io as a CNAME to api.sourcetruth.io with a Cloudflare
+# Transform Rule rewriting docs.sourcetruth.io/* → api.sourcetruth.io/docs-site/$1
+_docs_dir = Path(__file__).parent / 'docs'
+if _docs_dir.exists():
+    app.mount('/docs-site', StaticFiles(directory=str(_docs_dir), html=True), name='docs-site')
