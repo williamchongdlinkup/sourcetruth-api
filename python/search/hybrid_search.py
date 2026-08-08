@@ -51,7 +51,9 @@ TRADITION_RERANK: dict[str, Literal['mmr', 'text_dedup', 'none']] = {
     'classicism':     'none',          # Latin — dense wins judge 0.920 (2026-08-07)
     'east-asian':     'none',          # Classical Chinese — dense wins 0.770 Phase A 8-text (was 0.782 4-text; confirmed 2026-08-09)
     'sikhism':        'none',           # SGGS — dense wins realistic judge 0.883 (2026-08-07); topical English queries work
-    'zoroastrianism': 'none',          # Avesta — dense wins judge 0.804 (2026-08-07)
+    'zoroastrianism':       'none',       # Avesta — dense wins judge 0.804 (2026-08-07)
+    'western-philosophy':   'text_dedup', # Phase B eval text_dedup wins 0.828 (2026-08-09)
+    'political-philosophy': 'text_dedup', # Phase B eval text_dedup wins 0.828 (2026-08-09)
 }
 
 # Corpus code → optimal rerank mode (more specific than tradition; takes priority)
@@ -82,6 +84,10 @@ CORPUS_RERANK: dict[str, Literal['mmr', 'text_dedup', 'none']] = {
     'sunan-abu-dawood':   'text_dedup',   # CONFIRMED: same pattern as Bukhari/Muslim; Islamic judge 2026-08-09
     'rumi-masnavi':       'none',          # CONFIRMED: dense wins for Islamic pool (0.849 nDCG@5); Rumi retrievable for love/journey topics
     'christian-theology': 'text_dedup',   # CONFIRMED: text_dedup wins 0.813 nDCG@5 Phase A (Bible+Patristics pool; 2026-08-09)
+    # Phase B (2026-08-09)
+    'western-philosophy':   'text_dedup', # text_dedup wins 0.828 nDCG@5 Phase B (2026-08-09)
+    'political-philosophy': 'text_dedup', # text_dedup wins 0.828 nDCG@5 Phase B (2026-08-09)
+    'mahabharata':          'text_dedup', # thin corpus (569 chunks); text_dedup prevents duplicate-parva results
 }
 
 
