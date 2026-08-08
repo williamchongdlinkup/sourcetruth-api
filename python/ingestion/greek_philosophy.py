@@ -104,8 +104,10 @@ TEXTS = [
         "title":        "The Republic",
         "author":       "Plato",
         "translator":   "Benjamin Jowett (1871)",
-        "gutenberg_id": 55201,
-        "url":          "https://www.gutenberg.org/cache/epub/55201/pg55201.txt",
+        "gutenberg_id": None,
+        "source_type":  "ia",
+        # PG #55201 CDN drops connection; use IA scan of Jowett 1871 Oxford edition
+        "url":          "https://archive.org/download/republicofplato00platuoft/republicofplato00platuoft_djvu.txt",
         "parse_mode":   "dialogue",
         "collection":   "Platonic Dialogues",
     },
@@ -154,9 +156,11 @@ TEXTS = [
         "title":        "Rhetoric",
         "author":       "Aristotle",
         "translator":   "W. Rhys Roberts (1924)",
-        "gutenberg_id": 1080,
-        "url":          "https://www.gutenberg.org/cache/epub/1080/pg1080.txt",
-        "parse_mode":   "politics",
+        "gutenberg_id": None,
+        "source_type":  "ia",
+        # PG #1080 is a different translator and only yielded 12 chunks; use Roberts 1924 via IA
+        "url":          "https://archive.org/download/artofrhetoric00arisuoft/artofrhetoric00arisuoft_djvu.txt",
+        "parse_mode":   "rhetoric_ia",
         "collection":   "Aristotelian Works",
     },
 ]
@@ -165,8 +169,27 @@ TARGET_WORDS = 350
 MIN_WORDS    = 80
 MAX_RETRIES  = 5
 RETRY_DELAY  = 30
+IA_HEADERS   = {'User-Agent': 'Mozilla/5.0 (compatible; academic-research/1.0)'}
 
 _WHITESPACE = re.compile(r'\s+')
+
+
+def _clean_djvu(text: str) -> str:
+    """Strip IA DjVu OCR artefacts."""
+    text = re.sub(r'(?:^|\n)\s*\d{1,4}\s*(?:\n|$)', '\n', text, flags=re.MULTILINE)
+    text = re.sub(r'\b([A-Z]) ([A-Z])( [A-Z])+\b',
+                  lambda m: m.group(0).replace(' ', ''), text)
+    for marker in ['This is a digital copy', 'Google Books', 'Digitized by']:
+        idx = text.find(marker)
+        if 0 <= idx < 8000:
+            for cm_str in ['BOOK I', 'CHAPTER I', 'RHETORIC']:
+                cm = text.find(cm_str, idx)
+                if cm > 0:
+                    text = text[cm:]
+                    break
+    text = re.sub(r'-\n\s+', '', text)
+    text = re.sub(r'\n{3,}', '\n\n', text)
+    return text.strip()
 
 
 def _strip_gutenberg(text: str) -> str:
@@ -489,6 +512,17 @@ def _parse_politics(text: str, title: str) -> list[dict]:
     return chunks
 
 
+# ── Rhetoric IA parser ─────────────────────────────────────────────────────────
+
+def _parse_rhetoric_ia(text: str) -> list[dict]:
+    """
+    Roberts 1924 Rhetoric from IA DjVu.
+    Aristotle's Rhetoric has 3 Books. The IA text uses "BOOK I/II/III" markers
+    with "CHAPTER" sub-sections. Falls through to paragraph chunking if not found.
+    """
+    return _parse_politics(text, "Rhetoric")
+
+
 # ── Generic paragraph chunker ──────────────────────────────────────────────────
 
 def _chunk_paragraphs(paras: list[str], ref_prefix: str) -> list[dict]:
@@ -531,7 +565,10 @@ def _upsert_corpus(conn) -> int:
 
 
 def _upsert_text(conn, corpus_id: int, text_def: dict) -> int:
-    url = f"https://www.gutenberg.org/ebooks/{text_def['gutenberg_id']}"
+    if text_def.get('source_type') == 'ia':
+        url = text_def['url'].replace('_djvu.txt', '').replace('/download/', '/details/')
+    else:
+        url = f"https://www.gutenberg.org/ebooks/{text_def['gutenberg_id']}"
     display = f"{text_def['title']} — {text_def['author']} (trans. {text_def['translator']})"
     row = execute_one(conn, """
         INSERT INTO canon_texts
@@ -560,15 +597,18 @@ def run(force: bool = False) -> None:
         print(f"Ingesting: {text_def['title']} by {text_def['author']}")
         print(f"  Source: Gutenberg #{text_def['gutenberg_id']} — {text_def['translator']}")
 
+        source_type = text_def.get('source_type', 'gutenberg')
+        dl_headers  = IA_HEADERS if source_type == 'ia' else {}
         raw = None
         for attempt in range(3):
             try:
-                resp = httpx.get(text_def['url'], timeout=120.0, follow_redirects=True)
+                resp = httpx.get(text_def['url'], timeout=180.0, follow_redirects=True,
+                                 headers=dl_headers)
                 if resp.status_code == 404:
                     print(f"  404 — skipping.")
                     break
                 resp.raise_for_status()
-                raw = resp.text
+                raw = resp.content.decode('utf-8', errors='replace')
                 break
             except Exception as e:
                 if attempt < 2:
@@ -580,8 +620,11 @@ def run(force: bool = False) -> None:
         if raw is None:
             continue
 
-        text = _strip_gutenberg(raw)
-        text = text.replace('\r\n', '\n').replace('\r', '\n')
+        if source_type == 'ia':
+            text = _clean_djvu(raw).replace('\r\n', '\n').replace('\r', '\n')
+        else:
+            text = _strip_gutenberg(raw).replace('\r\n', '\n').replace('\r', '\n')
+
         mode = text_def['parse_mode']
 
         if mode == "meditations":
@@ -594,6 +637,8 @@ def run(force: bool = False) -> None:
             chunks = _parse_ethics(text)
         elif mode == "politics":
             chunks = _parse_politics(text, text_def['title'])
+        elif mode == "rhetoric_ia":
+            chunks = _parse_rhetoric_ia(text)
         else:
             paras = [_clean(p) for p in re.split(r'\n{2,}', text) if p.strip() and len(p.split()) > 5]
             chunks = _chunk_paragraphs(paras, text_def['title'])

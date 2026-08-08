@@ -52,8 +52,9 @@ VOLUMES = [
     {
         "external_id":  "rumi-masnavi-vol1",
         "title":        "Masnavi Vol I — Rumi (Nicholson, 1925)",
-        "ia_id":        "in.ernet.dli.2015.325380",
-        "fallback_ia":  "in.gov.ignca.20682",
+        # IGNCA items have better OCR quality than ERNET DLI (14 chunks vs expected ~70)
+        "ia_id":        "in.gov.ignca.20682",
+        "fallback_ia":  "in.ernet.dli.2015.325380",
         "book_label":   "Book I",
         "year":         1925,
     },

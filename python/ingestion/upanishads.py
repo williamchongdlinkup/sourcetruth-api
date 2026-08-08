@@ -151,38 +151,91 @@ def _canonical_name(raw_header: str) -> str:
 
 
 _KNOWN_NAMES = (
-    r'Isa|Isha|Katha|Kena|Talavakara|Chandogya|Khanda|'
-    r'Mundaka|Taittiriya|Aitareya|Brihadaranyaka|Brihad|Prasna|'
-    r'Shvetashvatara|Svetasvatara|Maitrayani|Mandukya'
+    r'Isa|Isha|Katha|Kena|Talavak[aâ]ra|Chandogya|Kh[aâ]nd[ao]gya|Kh[aâ]nda|'
+    r'Mundaka|Mundak[oō]|Taittir[iî]ya|Aitareya|Briha[d]?[aâ]r[aâ]nyaka|Brihad|Pra[sś]na|'
+    r'[ŚS]vet[aâ][sś]vatara|Svetasvatara|Maitr[aâ]yan[iî]|Mandukya'
 )
+
+# Known raw header strings from Müller SBE texts (handles diacriticals directly)
+_KNOWN_RAW_HEADERS = [name.upper() for name in KNOWN_UPANISHADS] + [
+    "KHANDOGYA-UPANISHAD", "TAITTIRIYA-UPANISHAD", "BRIHADARANYAKA-UPANISHAD",
+    "PRASNA-UPANISHAD", "MUNDAKA-UPANISHAD", "KATHA-UPANISHAD",
+    "AITAREYA-UPANISHAD", "ISA-UPANISHAD", "ISA UPANISHAD",
+    "TALAVAKARA-UPANISHAD", "SVETASVATARA-UPANISHAD", "MAITRAYANI-UPANISHAD",
+]
+
 
 def _find_upanishad_sections(text: str) -> list[dict]:
     """
     Find each Upanishad in the combined text by scanning for header lines.
-    Only matches lines whose sole content is a known Upanishad name.
-    Deduplicates by name, keeping the largest (main content) section.
+    Pass 1: regex (handles normal forms).
+    Pass 2: direct scan for known raw headers if regex finds <2 sections.
+    Deduplicates by canonical name, keeping the largest (main content) section.
     """
+    # Pass 1: regex — optional "THE " prefix, no nested quantifiers to avoid catastrophic backtracking
     upan_pattern = re.compile(
-        r'^\s*((?:' + _KNOWN_NAMES + r')(?:[\-\s]\w+)*[\-\s][Uu]panishad)\s*$',
+        r'^\s*(?:THE\s+)?((?:' + _KNOWN_NAMES + r')[\w\-\s]{0,40}[Uu]panishad)\s*$',
         re.MULTILINE | re.IGNORECASE
     )
     matches = list(upan_pattern.finditer(text))
 
+    # Pass 2: if regex found fewer than 2 sections, scan for known raw header strings
+    if len(matches) < 2:
+        line_positions: list[tuple[int, str]] = []
+        text_upper = text.upper()
+        for raw_header in _KNOWN_RAW_HEADERS:
+            pos = 0
+            while True:
+                idx = text_upper.find(raw_header, pos)
+                if idx < 0:
+                    break
+                # Only accept if it's a standalone-ish header line
+                line_start = text.rfind('\n', 0, idx) + 1
+                line_end   = text.find('\n', idx)
+                if line_end < 0:
+                    line_end = len(text)
+                line_content = text[line_start:line_end].strip()
+                # Accept if the line is short and dominated by the header
+                if len(line_content) < len(raw_header) + 10:
+                    line_positions.append((line_start, line_content))
+                pos = idx + 1
+        # Deduplicate by position and sort
+        seen_pos: set[int] = set()
+        raw_matches: list[tuple[int, str]] = []
+        for pos, content in sorted(line_positions):
+            if pos not in seen_pos:
+                seen_pos.add(pos)
+                raw_matches.append((pos, content))
+        raw_matches.sort(key=lambda x: x[0])
+
+        if len(raw_matches) >= 2:
+            by_name: dict[str, dict] = {}
+            for i, (start, raw_header_str) in enumerate(raw_matches):
+                end  = raw_matches[i + 1][0] if i + 1 < len(raw_matches) else len(text)
+                body = text[start:end].strip()
+                name = _canonical_name(raw_header_str)
+                if len(body) > 500:
+                    if name not in by_name or len(body) > len(by_name[name]['body']):
+                        by_name[name] = {'name': name, 'body': body}
+            sections = list(by_name.values())
+            if sections:
+                return sections
+
     if not matches:
         return [{'name': 'Upanishads', 'body': text}]
 
-    by_name: dict[str, dict] = {}
+    by_name2: dict[str, dict] = {}
     for i, match in enumerate(matches):
         start = match.start()
-        end   = matches[i+1].start() if i+1 < len(matches) else len(text)
+        end   = matches[i + 1].start() if i + 1 < len(matches) else len(text)
         body  = text[start:end].strip()
         raw_name = match.group(1).strip()
         name = _canonical_name(raw_name)
         if len(body) > 1000:
-            if name not in by_name or len(body) > len(by_name[name]['body']):
-                by_name[name] = {'name': name, 'body': body}
+            if name not in by_name2 or len(body) > len(by_name2[name]['body']):
+                by_name2[name] = {'name': name, 'body': body}
 
-    sections = list(by_name.values())
+    sections = list(by_name2.values())
     return sections if sections else [{'name': 'Upanishads', 'body': text}]
 
 

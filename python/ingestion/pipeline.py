@@ -39,7 +39,8 @@ def main():
         'classical-latin', 'classical-chinese', 'sanskrit-classical',
         'sikh', 'zoroastrian',
         'bible-web', 'bible-asv', 'bible-ylt', 'rigveda',
-        'tibetan', 'chinese-expansion', 'rumi', 'christian-theology', 'all',
+        'tibetan', 'chinese-expansion', 'rumi', 'christian-theology',
+        'mahabharata', 'western-philosophy', 'political-philosophy', 'all',
     ]
     parser.add_argument('--source', required=True, choices=SOURCES, help='Corpus to ingest')
     parser.add_argument('--nikayas', nargs='+', default=None,
@@ -161,6 +162,18 @@ def main():
     if args.source in ('christian-theology', 'all'):
         from ingestion.christian_theology import run as ct_run
         ct_run(force=args.force)
+
+    if args.source in ('mahabharata', 'all'):
+        from ingestion.mahabharata import run as mbh_run
+        mbh_run(force=args.force)
+
+    if args.source in ('western-philosophy', 'all'):
+        from ingestion.western_philosophy import run as wphil_run
+        wphil_run(force=args.force)
+
+    if args.source in ('political-philosophy', 'all'):
+        from ingestion.political_philosophy import run as pphil_run
+        pphil_run(force=args.force)
 
 
 if __name__ == '__main__':

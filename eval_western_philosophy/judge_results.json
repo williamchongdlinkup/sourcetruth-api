@@ -1,0 +1,976 @@
+{
+  "summary": [
+    {
+      "system": "dense",
+      "chunk_ndcg5": 0.7743,
+      "source_ndcg5": 0.7494
+    },
+    {
+      "system": "dense_text_dedup",
+      "chunk_ndcg5": 0.8277,
+      "source_ndcg5": 0.7957
+    },
+    {
+      "system": "dense_two_level",
+      "chunk_ndcg5": 0.7828,
+      "source_ndcg5": 0.7372
+    },
+    {
+      "system": "dense_mmr",
+      "chunk_ndcg5": 0.7662,
+      "source_ndcg5": 0.7559
+    },
+    {
+      "system": "hybrid",
+      "chunk_ndcg5": 0.7743,
+      "source_ndcg5": 0.7494
+    },
+    {
+      "system": "fts",
+      "chunk_ndcg5": 0.0,
+      "source_ndcg5": 0.0
+    }
+  ],
+  "per_query": [
+    {
+      "query": "What is Descartes's method of radical doubt in the Meditations?",
+      "type": "realistic_descartes_doubt",
+      "chunk_ndcg5": {
+        "dense": 0.8372,
+        "dense_text_dedup": 0.86,
+        "dense_two_level": 0.7746,
+        "dense_mmr": 0.7262,
+        "hybrid": 0.8372,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8305,
+        "dense_text_dedup": 0.8597,
+        "dense_two_level": 0.8224,
+        "dense_mmr": 0.7746,
+        "hybrid": 0.8305,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Descartes argue for the existence of the cogito?",
+      "type": "realistic_descartes_cogito",
+      "chunk_ndcg5": {
+        "dense": 0.5174,
+        "dense_text_dedup": 0.5,
+        "dense_two_level": 0.5339,
+        "dense_mmr": 0.5438,
+        "hybrid": 0.5174,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.5,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Descartes say about the relationship between mind and body?",
+      "type": "realistic_descartes_mind_body",
+      "chunk_ndcg5": {
+        "dense": 0.8597,
+        "dense_text_dedup": 0.8597,
+        "dense_two_level": 0.7005,
+        "dense_mmr": 0.846,
+        "hybrid": 0.8597,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9065,
+        "dense_text_dedup": 0.846,
+        "dense_two_level": 0.8224,
+        "dense_mmr": 0.8661,
+        "hybrid": 0.9065,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Locke define natural rights and the state of nature?",
+      "type": "realistic_locke_natural_rights",
+      "chunk_ndcg5": {
+        "dense": 0.6934,
+        "dense_text_dedup": 0.6509,
+        "dense_two_level": 0.6509,
+        "dense_mmr": 0.7606,
+        "hybrid": 0.6934,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.4307,
+        "dense_text_dedup": 0.5438,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.5438,
+        "hybrid": 0.4307,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Locke's argument for government by consent in the Two Treatises?",
+      "type": "realistic_locke_consent",
+      "chunk_ndcg5": {
+        "dense": 0.4307,
+        "dense_text_dedup": 0.6309,
+        "dense_two_level": 0.4578,
+        "dense_mmr": 0.5438,
+        "hybrid": 0.4307,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.4307,
+        "dense_text_dedup": 0.6309,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.5438,
+        "hybrid": 0.4307,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Locke explain the origin of ideas in the Essay Concerning Human Understanding?",
+      "type": "realistic_locke_ideas",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9502,
+        "dense_two_level": 0.9907,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9072,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9239,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Hume's problem of induction and how does he formulate it?",
+      "type": "realistic_hume_induction",
+      "chunk_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.5,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.5,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Hume argue against miracles in the Enquiry?",
+      "type": "realistic_hume_miracles",
+      "chunk_ndcg5": {
+        "dense": 0.9795,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8812,
+        "hybrid": 0.9795,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Hume's fork between relations of ideas and matters of fact?",
+      "type": "realistic_hume_fork",
+      "chunk_ndcg5": {
+        "dense": 0.9239,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 0.9239,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8772,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 0.8772,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Spinoza mean by 'God or Nature' (Deus sive Natura) in the Ethics?",
+      "type": "realistic_spinoza_god",
+      "chunk_ndcg5": {
+        "dense": 0.7328,
+        "dense_text_dedup": 0.6309,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.0,
+        "hybrid": 0.7328,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Spinoza define substance, attributes, and modes in the Ethics?",
+      "type": "realistic_spinoza_substance",
+      "chunk_ndcg5": {
+        "dense": 0.9611,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9072,
+        "hybrid": 0.9611,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8503,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Kant's Copernican revolution in philosophy in the Critique of Pure Reason?",
+      "type": "realistic_kant_copernican",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8772,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Kant distinguish analytic from synthetic judgments?",
+      "type": "realistic_kant_analytic_synthetic",
+      "chunk_ndcg5": {
+        "dense": 0.9907,
+        "dense_text_dedup": 0.936,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9522,
+        "hybrid": 0.9907,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.936,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9852,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Kant's categorical imperative in the Groundwork?",
+      "type": "realistic_kant_categorical_imperative",
+      "chunk_ndcg5": {
+        "dense": 0.9795,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9557,
+        "hybrid": 0.9795,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Kant argue that time and space are forms of intuition?",
+      "type": "realistic_kant_intuition",
+      "chunk_ndcg5": {
+        "dense": 0.973,
+        "dense_text_dedup": 0.9502,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9682,
+        "hybrid": 0.973,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9518,
+        "dense_text_dedup": 0.9502,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9091,
+        "hybrid": 0.9518,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Schopenhauer's concept of the Will as the thing-in-itself?",
+      "type": "realistic_schopenhauer_will",
+      "chunk_ndcg5": {
+        "dense": 0.9557,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9573,
+        "hybrid": 0.9557,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9557,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9573,
+        "hybrid": 0.9557,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Schopenhauer describe the relationship between suffering and will in the World as Will and Idea?",
+      "type": "realistic_schopenhauer_suffering",
+      "chunk_ndcg5": {
+        "dense": 0.8793,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.8807,
+        "dense_mmr": 0.8224,
+        "hybrid": 0.8793,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Hegel's dialectical method of thesis, antithesis, and synthesis?",
+      "type": "realistic_hegel_dialectic",
+      "chunk_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Hegel describe the development of philosophy in his Lectures?",
+      "type": "realistic_hegel_lectures",
+      "chunk_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.4307,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.5,
+        "hybrid": 0.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.4307,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.6934,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Nietzsche mean by the will to power in Beyond Good and Evil?",
+      "type": "realistic_nietzsche_will_to_power",
+      "chunk_ndcg5": {
+        "dense": 0.8401,
+        "dense_text_dedup": 0.9829,
+        "dense_two_level": 0.8734,
+        "dense_mmr": 0.8401,
+        "hybrid": 0.8401,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9795,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9606,
+        "hybrid": 0.9795,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Nietzsche describe the death of God and its consequences in Zarathustra?",
+      "type": "realistic_nietzsche_god",
+      "chunk_ndcg5": {
+        "dense": 0.9682,
+        "dense_text_dedup": 0.9502,
+        "dense_two_level": 0.9639,
+        "dense_mmr": 0.9502,
+        "hybrid": 0.9682,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9502,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9047,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is the Nietzschean distinction between master morality and slave morality in the Genealogy?",
+      "type": "realistic_nietzsche_morality",
+      "chunk_ndcg5": {
+        "dense": 0.6557,
+        "dense_text_dedup": 0.6309,
+        "dense_two_level": 0.668,
+        "dense_mmr": 0.7242,
+        "hybrid": 0.6557,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.3869,
+        "dense_text_dedup": 0.6697,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.6934,
+        "hybrid": 0.3869,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Nietzsche characterize the Übermensch in Thus Spoke Zarathustra?",
+      "type": "realistic_nietzsche_ubermensch",
+      "chunk_ndcg5": {
+        "dense": 0.7716,
+        "dense_text_dedup": 0.9197,
+        "dense_two_level": 0.8503,
+        "dense_mmr": 0.8503,
+        "hybrid": 0.7716,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.8503,
+        "dense_text_dedup": 0.9197,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 0.8503,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Nietzsche's critique of Christian morality in the Genealogy of Morals?",
+      "type": "realistic_nietzsche_christian",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9675,
+        "dense_two_level": 0.8447,
+        "dense_mmr": 0.9047,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9675,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9047,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is the philosophical significance of the chariot allegory in Plato's Phaedrus?",
+      "type": "realistic_plato_phaedrus",
+      "chunk_ndcg5": {
+        "dense": 0.8964,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.8821,
+        "dense_mmr": 0.8661,
+        "hybrid": 0.8964,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Plato's Theaetetus define knowledge and criticize empiricist accounts?",
+      "type": "realistic_plato_theaetetus",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Aristotle define substance (ousia) in the Metaphysics?",
+      "type": "realistic_aristotle_metaphysics",
+      "chunk_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.5,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.3869,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Aristotle's concept of the unmoved mover in the Metaphysics?",
+      "type": "realistic_aristotle_unmoved",
+      "chunk_ndcg5": {
+        "dense": 0.9197,
+        "dense_text_dedup": 0.9197,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9197,
+        "hybrid": 0.9197,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.5,
+        "dense_text_dedup": 0.5,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.5,
+        "hybrid": 0.5,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Hobbes's description of the state of nature as 'nasty, brutish, and short' in Leviathan?",
+      "type": "realistic_hobbes_state_nature",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9558,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9558,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Hobbes argue for absolute sovereignty in the Leviathan?",
+      "type": "realistic_hobbes_sovereignty",
+      "chunk_ndcg5": {
+        "dense": 0.7606,
+        "dense_text_dedup": 0.6309,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.6267,
+        "hybrid": 0.7606,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.7606,
+        "dense_text_dedup": 0.6309,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.6241,
+        "hybrid": 0.7606,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Rousseau's concept of the general will in the Social Contract?",
+      "type": "realistic_rousseau_general_will",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Rousseau describe the social contract and the origin of legitimate authority?",
+      "type": "realistic_rousseau_contract",
+      "chunk_ndcg5": {
+        "dense": 0.9864,
+        "dense_text_dedup": 0.9502,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.973,
+        "hybrid": 0.9864,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9502,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9558,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Madison argue for the separation of powers in the Federalist Papers?",
+      "type": "realistic_federalist_separation",
+      "chunk_ndcg5": {
+        "dense": 0.5,
+        "dense_text_dedup": 0.6309,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.5,
+        "hybrid": 0.5,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.5,
+        "dense_text_dedup": 0.6509,
+        "dense_two_level": 0.5013,
+        "dense_mmr": 0.5438,
+        "hybrid": 0.5,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Federalist No. 51's argument about checks and balances?",
+      "type": "realistic_federalist_51",
+      "chunk_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.5,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.3869,
+        "hybrid": 0.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8772,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Hamilton argue for the importance of the executive branch in Federalist No. 70?",
+      "type": "realistic_federalist_70",
+      "chunk_ndcg5": {
+        "dense": 0.3869,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.3869,
+        "dense_mmr": 0.0,
+        "hybrid": 0.3869,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Mill's harm principle in On Liberty?",
+      "type": "realistic_mill_harm",
+      "chunk_ndcg5": {
+        "dense": 0.9583,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.922,
+        "hybrid": 0.9583,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9519,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9467,
+        "hybrid": 0.9519,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Mill defend freedom of speech and expression in On Liberty?",
+      "type": "realistic_mill_free_speech",
+      "chunk_ndcg5": {
+        "dense": 0.8558,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8471,
+        "hybrid": 0.8558,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What is Mill's argument for utilitarianism as the greatest happiness principle?",
+      "type": "realistic_mill_utilitarianism",
+      "chunk_ndcg5": {
+        "dense": 0.9563,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.922,
+        "hybrid": 0.9563,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.9072,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9829,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Wollstonecraft argue for women's rational nature and equal education in the Vindication?",
+      "type": "realistic_wollstonecraft_reason",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9558,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Wollstonecraft say about the social construction of femininity?",
+      "type": "realistic_wollstonecraft_femininity",
+      "chunk_ndcg5": {
+        "dense": 0.8399,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.8403,
+        "dense_mmr": 0.8879,
+        "hybrid": 0.8399,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Burke criticize the French Revolution in the Reflections?",
+      "type": "realistic_burke_revolution",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9003,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What does Machiavelli say about whether it is better to be feared than loved in The Prince?",
+      "type": "realistic_machiavelli_fear",
+      "chunk_ndcg5": {
+        "dense": 0.9907,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.9907,
+        "hybrid": 0.9907,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.992,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.992,
+        "hybrid": 0.992,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Machiavelli advise a prince to deal with fortune and virtue?",
+      "type": "realistic_machiavelli_virtue",
+      "chunk_ndcg5": {
+        "dense": 0.7643,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.7602,
+        "dense_mmr": 0.8656,
+        "hybrid": 0.7643,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How does Paine defend the rights of man against Burke's conservatism?",
+      "type": "realistic_paine_rights",
+      "chunk_ndcg5": {
+        "dense": 0.7606,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.8671,
+        "dense_mmr": 1.0,
+        "hybrid": 0.7606,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.0,
+        "dense_text_dedup": 0.0,
+        "dense_two_level": 0.0,
+        "dense_mmr": 0.0,
+        "hybrid": 0.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How do Kant and Mill differ in their approaches to moral philosophy?",
+      "type": "realistic_cross_kant_mill",
+      "chunk_ndcg5": {
+        "dense": 0.8855,
+        "dense_text_dedup": 0.9197,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.906,
+        "hybrid": 0.8855,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 0.9197,
+        "dense_text_dedup": 0.9197,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.906,
+        "hybrid": 0.9197,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "What do Locke, Rousseau, and Hobbes say about the social contract?",
+      "type": "realistic_cross_contract",
+      "chunk_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 1.0,
+        "dense_mmr": 1.0,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    },
+    {
+      "query": "How do Plato and Aristotle differ in their accounts of reality and knowledge?",
+      "type": "realistic_cross_plato_aristotle",
+      "chunk_ndcg5": {
+        "dense": 0.9829,
+        "dense_text_dedup": 1.0,
+        "dense_two_level": 0.9047,
+        "dense_mmr": 0.906,
+        "hybrid": 0.9829,
+        "fts": 0.0
+      },
+      "source_ndcg5": {
+        "dense": 1.0,
+        "dense_text_dedup": 0.8401,
+        "dense_two_level": 1.0,
+        "dense_mmr": 0.8558,
+        "hybrid": 1.0,
+        "fts": 0.0
+      }
+    }
+  ]
+}
