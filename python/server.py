@@ -690,6 +690,16 @@ def stripe_checkout(req: CheckoutRequest, request: Request):
     if not email:
         raise HTTPException(status_code=400, detail='API key has no email — cannot create billing account.')
 
+    # Paid subscribers must use the portal to change plans, not checkout.
+    if key_record.get('tier') != 'free':
+        raise HTTPException(
+            status_code=400,
+            detail=(
+                'Your key is already on a paid plan. '
+                'Use POST /v1/stripe/portal to upgrade, downgrade, or cancel.'
+            ),
+        )
+
     # Find or create Stripe customer, then persist the customer ID on the key
     customer_id = key_record.get('stripe_customer_id')
     if not customer_id:
