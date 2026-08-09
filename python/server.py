@@ -753,6 +753,50 @@ def stripe_checkout(req: CheckoutRequest, request: Request):
     return {'checkout_url': session.url}
 
 
+_TIER_RANK = {'free': 0, 'starter': 1, 'professional': 2}
+
+class UpgradeRequest(BaseModel):
+    target_price_id: str
+
+
+@app.post('/v1/stripe/upgrade')
+@limiter.limit('5/hour')
+def stripe_upgrade(req: UpgradeRequest, request: Request, key_record: dict | None = Depends(get_key_record)):
+    """Upgrade an existing paid subscription to a higher tier with immediate prorated charge."""
+    if not stripe.api_key:
+        raise HTTPException(status_code=503, detail='Billing not configured.')
+    if not key_record:
+        raise HTTPException(status_code=401, detail='An API key is required.')
+
+    current_tier = key_record.get('tier', 'free')
+    if current_tier == 'free':
+        raise HTTPException(status_code=400, detail='Free-tier keys must use POST /v1/stripe/checkout to subscribe.')
+
+    target_tier = _PRICE_TO_TIER.get(req.target_price_id)
+    if not target_tier:
+        raise HTTPException(status_code=400, detail='Invalid target_price_id.')
+    if _TIER_RANK.get(target_tier, 0) <= _TIER_RANK.get(current_tier, 0):
+        raise HTTPException(status_code=400, detail='target_price_id must be a higher tier than your current plan. Use POST /v1/stripe/portal to downgrade.')
+
+    customer_id = key_record.get('stripe_customer_id')
+    if not customer_id:
+        raise HTTPException(status_code=400, detail='No billing account linked to this key.')
+
+    # Find the active subscription for this customer
+    subs = stripe.Subscription.list(customer=customer_id, status='active', limit=1)
+    if not subs.data:
+        raise HTTPException(status_code=400, detail='No active subscription found.')
+    sub = subs.data[0]
+
+    # Upgrade immediately with prorated charge for the remainder of the billing cycle
+    stripe.Subscription.modify(
+        sub.id,
+        items=[{'id': sub['items'].data[0].id, 'price': req.target_price_id}],
+        proration_behavior='always_invoice',
+    )
+    return {'status': 'upgraded', 'tier': target_tier}
+
+
 @app.post('/v1/stripe/portal')
 @limiter.limit('10/hour')
 def stripe_portal(request: Request, key_record: dict | None = Depends(get_key_record)):
