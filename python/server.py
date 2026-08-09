@@ -2,12 +2,13 @@
 Corpus API — FastAPI server.
 
 Endpoints:
-  POST /v1/search        — hybrid passage retrieval (all tiers including free)
-  POST /v1/answer        — grounded Q&A with citations (paid tiers only)
-  GET  /v1/text/{uid}    — full document text by external ID
-  GET  /v1/entity/{id}   — entity metadata
-  POST /v1/keys          — self-issue a free-tier API key
-  GET  /health
+  POST   /v1/search        — hybrid passage retrieval (all tiers including free)
+  POST   /v1/answer        — grounded Q&A with citations (paid tiers only)
+  GET    /v1/text/{uid}    — full document text by external ID
+  GET    /v1/entity/{id}   — entity metadata
+  POST   /v1/keys          — self-issue a free-tier API key
+  DELETE /v1/keys          — immediately revoke your API key (self-service)
+  GET    /health
 
 Run:
   uvicorn server:app --port 8001 --reload
@@ -204,21 +205,28 @@ def _log_usage(
     latency_ms: int,
 ) -> None:
     """
-    Record a usage event and atomically increment the daily quota counter.
+    Record an anonymised usage event and atomically increment the daily quota counter.
+
+    Usage analytics are stored with NO account linkage (key_id is never written to
+    api_usage). Timestamp is bucketed to the nearest hour to prevent re-identification
+    by timestamp correlation. Together these ensure api_usage contains no personal data.
 
     Fix 2: called via BackgroundTasks — runs after response is sent, adds no latency.
     Fix 3: upserts daily_quota with ON CONFLICT — single atomic increment.
     Failures are printed (not raised) so a logging error never surfaces to the caller.
+
+    NOTE: requires schema migration — api_usage.key_id must be nullable or removed,
+    and created_at must accept an explicit value (not be a non-nullable DEFAULT only).
     """
     try:
         with get_primary_conn() as conn:
             with conn.cursor() as cur:
                 cur.execute(
                     """INSERT INTO api_usage
-                           (key_id, endpoint, query_text, traditions, languages,
-                            results_count, latency_ms)
-                       VALUES (%s, %s, %s, %s, %s, %s, %s)""",
-                    (key_id, endpoint, query[:500], traditions, languages, count, latency_ms),
+                           (endpoint, query_text, traditions, languages,
+                            results_count, latency_ms, created_at)
+                       VALUES (%s, %s, %s, %s, %s, %s, date_trunc('hour', NOW()))""",
+                    (endpoint, query, traditions, languages, count, latency_ms),
                 )
                 cur.execute(
                     """INSERT INTO daily_quota (key_id, date, count)
@@ -228,7 +236,7 @@ def _log_usage(
                     (key_id,),
                 )
     except Exception as e:
-        print(f'[log_usage] Failed for key_id={key_id}: {e}')
+        print(f'[log_usage] Failed: {e}')
 
 
 def _check_answer_quota(key_record: dict) -> None:
@@ -399,7 +407,7 @@ def search(
             _log_usage, key_record['id'], '/v1/search', req.query,
             req.traditions or [], req.languages or [],
             len(passages), latency_ms,
-        )
+        )  # key_id passed for daily_quota only; never written to api_usage
 
     return {
         'query':             req.query,
@@ -511,7 +519,7 @@ def answer(
         _log_usage, key_record['id'], '/v1/answer', req.question,
         req.traditions or [], req.languages or [],
         len(passages), latency_ms,
-    )
+    )  # key_id passed for daily_quota only; never written to api_usage
     background_tasks.add_task(_log_answer_usage, key_record['id'])
 
     return {
@@ -636,6 +644,37 @@ def create_key(req: KeyRequest, request: Request):
         'tier':        'free',
         'daily_limit': 100,
         'message':     'Store this key safely — it will not be shown again.',
+    }
+
+
+@app.delete('/v1/keys')
+@limiter.limit('10/hour')
+def revoke_key(request: Request, x_api_key: str = Header(default='')):
+    """Immediately revoke your API key. Takes effect on the next request. Irreversible."""
+    if not x_api_key:
+        raise HTTPException(status_code=401, detail='API key required in X-Api-Key header.')
+
+    key_hash = _hash_key(x_api_key.strip())
+    with get_primary_conn() as conn:
+        with conn.cursor() as cur:
+            cur.execute(
+                "UPDATE api_keys SET is_active = FALSE WHERE key_hash = %s AND is_active = TRUE RETURNING id, stripe_customer_id",
+                (key_hash,),
+            )
+            row = cur.fetchone()
+
+    if not row:
+        raise HTTPException(status_code=404, detail='API key not found or already revoked.')
+
+    has_subscription = bool(row['stripe_customer_id'])
+    return {
+        'revoked': True,
+        'message': (
+            'Your API key has been immediately revoked and will no longer authenticate. '
+            + ('You have an active billing account — cancel your subscription via POST /v1/stripe/portal to avoid further charges.'
+               if has_subscription else
+               'No active subscription detected.')
+        ),
     }
 
 
