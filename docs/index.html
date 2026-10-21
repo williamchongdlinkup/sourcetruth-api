@@ -125,9 +125,22 @@
   .alert-info { background: rgba(130,170,255,0.08); border: 1px solid rgba(130,170,255,0.25); color: #a8c0f0; }
   .alert-warn { background: rgba(255,200,80,0.08); border: 1px solid rgba(255,200,80,0.25); color: #f5c842; }
 
+  /* ── Copy button ─────────────────────────────────────────────── */
+  .copy-btn { background: none; border: 1px solid var(--border); color: var(--muted); font-size: 0.72rem; padding: 0.2rem 0.6rem; border-radius: 4px; cursor: pointer; font-family: 'Inter', sans-serif; transition: all 0.15s; }
+  .copy-btn:hover { color: var(--white); border-color: var(--muted); }
+  .copy-btn.copied { color: #82d282; border-color: #82d282; }
+
+  /* ── Mobile nav ──────────────────────────────────────────────── */
+  .hamburger { display: none; background: none; border: 1px solid var(--border); color: var(--muted); padding: 0.35rem 0.65rem; border-radius: 5px; cursor: pointer; font-size: 1rem; margin-left: auto; }
+  .sidebar-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.55); z-index: 140; }
   @media (max-width: 800px) {
-    .sidebar { display: none; }
+    .hamburger { display: block; }
+    .topnav-links { display: none; }
+    .sidebar { transform: translateX(-100%); transition: transform 0.25s ease; display: block !important; z-index: 150; }
+    .sidebar.open { transform: translateX(0); }
+    .sidebar-overlay.open { display: block; }
     .content { margin-left: 0; padding: 2rem 1.25rem; max-width: 100%; }
+    footer { margin-left: 0 !important; }
   }
 </style>
 </head>
@@ -137,16 +150,17 @@
   <a class="topnav-logo" href="https://sourcetruth.io">Source<span>Truth</span></a>
   <span class="topnav-sep">/</span>
   <span class="topnav-title">API Docs</span>
+  <button class="hamburger" id="hamburger" aria-label="Open navigation">&#9776;</button>
   <div class="topnav-links">
     <a href="https://sourcetruth.io#corpora">Corpora</a>
     <a href="https://sourcetruth.io#pricing">Pricing</a>
-    <a href="https://rapidapi.com/SourceTruth/api/sourcetruth" target="_blank">RapidAPI</a>
-    <a class="topnav-cta" href="https://api.sourcetruth.io/v1/keys">Get API Key</a>
+    <a class="topnav-cta" href="#keys-create">Get API Key</a>
   </div>
 </div>
 
 <div class="layout">
-  <nav class="sidebar">
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+  <nav class="sidebar" id="sidebar">
     <div class="nav-group">
       <div class="nav-group-label">Getting Started</div>
       <a class="nav-item active" href="#introduction">Introduction</a>
@@ -171,7 +185,7 @@
       <a class="nav-item" href="#errors">Error codes</a>
     </div>
     <div class="nav-group">
-      <div class="nav-group-label">SDKs</div>
+      <div class="nav-group-label">Examples</div>
       <a class="nav-item" href="#sdk-python">Python</a>
       <a class="nav-item" href="#sdk-js">JavaScript</a>
     </div>
@@ -256,9 +270,9 @@ r = requests.<span class="t-fn">post</span>(
         <tbody>
           <tr><td>query <span class="req-badge">required</span></td><td>string</td><td>Natural language query in any supported language.</td></tr>
           <tr><td>corpus_codes <span class="opt-badge">optional</span></td><td>string[]</td><td>Scope to specific corpora — e.g. <code>["quran","sahih-bukhari"]</code>. Takes priority over <code>traditions</code> for reranking. See <a href="#corpus-list">corpus codes</a>.</td></tr>
-          <tr><td>traditions <span class="opt-badge">optional</span></td><td>string[]</td><td>Filter by tradition — e.g. <code>["islam"]</code>, <code>["theravada"]</code>.</td></tr>
+          <tr><td>traditions <span class="opt-badge">optional</span></td><td>string[]</td><td>Filter by tradition — e.g. <code>["islam"]</code>, <code>["judaism"]</code>.</td></tr>
           <tr><td>languages <span class="opt-badge">optional</span></td><td>string[]</td><td>Filter by ISO language code — e.g. <code>["en"]</code>, <code>["ara"]</code>.</td></tr>
-          <tr><td>collections <span class="opt-badge">optional</span></td><td>string[]</td><td>Filter by collection within a corpus — e.g. <code>["MN","DN"]</code> for SuttaCentral.</td></tr>
+          <tr><td>collections <span class="opt-badge">optional</span></td><td>string[]</td><td>Filter by collection within a corpus — e.g. <code>["hadith"]</code> to scope within a multi-collection corpus.</td></tr>
           <tr><td>top_k <span class="opt-badge">optional</span></td><td>integer</td><td>Passages to return. Default <code>8</code>, max <code>20</code>.</td></tr>
         </tbody>
       </table>
@@ -313,7 +327,7 @@ Citations:
   <span class="t-key">"latency_ms"</span>: <span class="t-number">1840</span>
 }</pre>
       </div>
-      <div class="alert alert-info">The answer model (<code>claude-sonnet-4-6</code>) is instructed never to invent references from memory. If passages don't answer the question, it says so explicitly.</div>
+      <div class="alert alert-info">The answer model is instructed never to invent references from memory. If the retrieved passages don't support an answer, it says so explicitly rather than hallucinating citations.</div>
     </section>
 
     <section>
@@ -329,7 +343,7 @@ Citations:
     <section>
       <span class="section-anchor" id="text"></span>
       <h2>GET /v1/text/{uid}</h2>
-      <p>Returns the full chunked text of a document by its canonical external ID (e.g. <code>sn56.11</code>, <code>mn10</code>). UIDs are returned as <code>sutta_id</code> in search results.</p>
+      <p>Returns the full chunked text of a document by its canonical UID. UID format is corpus-specific — pass the value of <code>chunk_id</code> from a search result, or use corpus reference notation (e.g. <code>2:153</code> for Quran, <code>gen-1</code> for Genesis KJV).</p>
       <table>
         <thead><tr><th>Param</th><th>In</th><th>Description</th></tr></thead>
         <tbody>
@@ -456,8 +470,7 @@ Citations:
 
     <section>
       <span class="section-anchor" id="sdk-python"></span>
-      <h2>Python SDK</h2>
-      <div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span></div><pre>pip install sourcetruth</pre></div>
+      <h2>Python</h2>
       <div class="code-block">
         <div class="code-block-header"><span class="code-lang">Python</span></div>
         <pre><span class="t-keyword">import</span> requests
@@ -473,8 +486,7 @@ r = requests.<span class="t-fn">post</span>(<span class="t-string">"https://api.
 
     <section>
       <span class="section-anchor" id="sdk-js"></span>
-      <h2>JavaScript SDK</h2>
-      <div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span></div><pre>npm install sourcetruth</pre></div>
+      <h2>JavaScript</h2>
       <div class="code-block">
         <div class="code-block-header"><span class="code-lang">JavaScript</span></div>
         <pre><span class="t-keyword">const</span> res = <span class="t-keyword">await</span> <span class="t-fn">fetch</span>(<span class="t-string">"https://api.sourcetruth.io/v1/search"</span>, {
@@ -489,8 +501,17 @@ passages.<span class="t-fn">forEach</span>(p => <span class="t-fn">console.log</
 
   </main>
 </div>
+<footer style="border-top:1px solid var(--border);padding:1.25rem 3.5rem;display:flex;align-items:center;justify-content:space-between;font-size:0.82rem;color:var(--muted);background:var(--navy-mid);margin-left:var(--sidebar-w);">
+  <span>© 2026 D'Linkup Pte. Ltd.</span>
+  <span style="display:flex;gap:1.5rem;">
+    <a href="privacy.html" style="color:var(--muted);text-decoration:none;">Privacy</a>
+    <a href="terms.html" style="color:var(--muted);text-decoration:none;">Terms</a>
+    <a href="https://sourcetruth.io" style="color:var(--muted);text-decoration:none;">sourcetruth.io</a>
+  </span>
+</footer>
 
 <script>
+// Scroll-spy
 const anchors = document.querySelectorAll('.section-anchor');
 const navItems = document.querySelectorAll('.nav-item');
 const observer = new IntersectionObserver(entries => {
@@ -504,6 +525,35 @@ const observer = new IntersectionObserver(entries => {
   });
 }, { rootMargin: '-60px 0px -60% 0px' });
 anchors.forEach(a => observer.observe(a));
+
+// Copy-to-clipboard
+document.querySelectorAll('.code-block').forEach(block => {
+  const header = block.querySelector('.code-block-header');
+  const pre = block.querySelector('pre');
+  if (!header || !pre) return;
+  const btn = document.createElement('button');
+  btn.className = 'copy-btn';
+  btn.textContent = 'Copy';
+  btn.addEventListener('click', () => {
+    navigator.clipboard.writeText(pre.innerText).then(() => {
+      btn.textContent = 'Copied!';
+      btn.classList.add('copied');
+      setTimeout(() => { btn.textContent = 'Copy'; btn.classList.remove('copied'); }, 2000);
+    });
+  });
+  header.appendChild(btn);
+});
+
+// Mobile nav
+const hamburger = document.getElementById('hamburger');
+const sidebar = document.getElementById('sidebar');
+const overlay = document.getElementById('sidebarOverlay');
+if (hamburger) {
+  const close = () => { sidebar.classList.remove('open'); overlay.classList.remove('open'); };
+  hamburger.addEventListener('click', () => { sidebar.classList.toggle('open'); overlay.classList.toggle('open'); });
+  overlay.addEventListener('click', close);
+  document.querySelectorAll('.nav-item').forEach(item => item.addEventListener('click', close));
+}
 </script>
 </body>
 </html>
