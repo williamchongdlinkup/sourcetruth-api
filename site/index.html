@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SourceTruth — The Canonical Text API</title>
+<meta name="description" content="Semantic search and AI-powered Q&A over 30 pre-indexed corpora — Quran, Bible, Plato, and more. No ingestion pipeline. One API.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:      #0d1b2e;
+    --navy-mid:  #122540;
+    --navy-card: #1a3050;
+    --gold:      #c9a84c;
+    --gold-light:#e2c97e;
+    --white:     #f0f4f8;
+    --muted:     #8fa3b8;
+    --border:    #1e3a5f;
+    --code-bg:   #0a1525;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    line-height: 1.6;
+    font-size: 16px;
+  }
+
+  /* ── Nav ─────────────────────────────────────────────────────── */
+  nav {
+    position: sticky; top: 0; z-index: 100;
+    background: rgba(13, 27, 46, 0.92);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    padding: 0 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    height: 60px;
+  }
+  .nav-logo {
+    font-size: 1.15rem; font-weight: 700; letter-spacing: -0.02em;
+    color: var(--white); text-decoration: none;
+  }
+  .nav-logo span { color: var(--gold); }
+  .nav-links { display: flex; gap: 2rem; align-items: center; }
+  .nav-links a {
+    color: var(--muted); text-decoration: none; font-size: 0.9rem;
+    transition: color 0.2s;
+  }
+  .nav-links a:hover { color: var(--white); }
+  .nav-cta {
+    background: var(--gold); color: var(--navy) !important;
+    padding: 0.45rem 1.1rem; border-radius: 6px;
+    font-weight: 600; font-size: 0.85rem !important;
+    transition: background 0.2s !important;
+  }
+  .nav-cta:hover { background: var(--gold-light) !important; color: var(--navy) !important; }
+
+  /* ── Hero ────────────────────────────────────────────────────── */
+  .hero {
+    max-width: 1200px; margin: 0 auto;
+    padding: 5rem 2rem 4rem;
+    display: grid; grid-template-columns: 1fr 1fr; gap: 4rem; align-items: center;
+  }
+  .hero-badge {
+    display: inline-flex; align-items: center; gap: 0.5rem;
+    background: rgba(201, 168, 76, 0.12); border: 1px solid rgba(201, 168, 76, 0.3);
+    padding: 0.3rem 0.8rem; border-radius: 100px; margin-bottom: 1.5rem;
+    font-size: 0.8rem; color: var(--gold); font-weight: 500;
+  }
+  .hero-badge::before { content: "●"; font-size: 0.55rem; }
+  h1 {
+    font-size: 3rem; font-weight: 700; line-height: 1.15;
+    letter-spacing: -0.03em; margin-bottom: 1.25rem;
+  }
+  h1 em { font-style: normal; color: var(--gold); }
+  .hero p {
+    font-size: 1.1rem; color: var(--muted); line-height: 1.7;
+    margin-bottom: 2rem; max-width: 500px;
+  }
+  .hero-actions { display: flex; gap: 1rem; flex-wrap: wrap; }
+  .btn-primary {
+    background: var(--gold); color: var(--navy);
+    padding: 0.75rem 1.5rem; border-radius: 8px;
+    font-weight: 600; text-decoration: none; font-size: 0.95rem;
+    transition: background 0.2s, transform 0.15s;
+  }
+  .btn-primary:hover { background: var(--gold-light); transform: translateY(-1px); }
+  .btn-secondary {
+    border: 1px solid var(--border); color: var(--white);
+    padding: 0.75rem 1.5rem; border-radius: 8px;
+    font-weight: 500; text-decoration: none; font-size: 0.95rem;
+    transition: border-color 0.2s, background 0.2s;
+  }
+  .btn-secondary:hover { border-color: var(--muted); background: rgba(255,255,255,0.04); }
+
+  /* ── Code block ──────────────────────────────────────────────── */
+  .code-card {
+    background: var(--code-bg); border: 1px solid var(--border);
+    border-radius: 12px; overflow: hidden;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.4);
+  }
+  .code-tabs {
+    display: flex; border-bottom: 1px solid var(--border);
+    background: rgba(255,255,255,0.03);
+  }
+  .code-tab {
+    padding: 0.6rem 1.2rem; font-size: 0.8rem; font-weight: 500;
+    color: var(--muted); cursor: pointer; border: none; background: none;
+    border-bottom: 2px solid transparent; transition: all 0.2s;
+  }
+  .code-tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .code-pane { display: none; padding: 1.5rem; }
+  .code-pane.active { display: block; }
+  pre {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.82rem; line-height: 1.7;
+    overflow-x: auto; white-space: pre;
+  }
+  .t-comment  { color: #4e6580; }
+  .t-keyword  { color: #c792ea; }
+  .t-string   { color: #c3e88d; }
+  .t-number   { color: #f78c6c; }
+  .t-fn       { color: #82aaff; }
+  .t-key      { color: #89ddff; }
+  .t-value    { color: #c3e88d; }
+  .t-gold     { color: var(--gold); }
+
+  /* ── Stats bar ───────────────────────────────────────────────── */
+  .stats-bar {
+    border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+    background: var(--navy-mid);
+    padding: 1.5rem 2rem;
+  }
+  .stats-bar-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; justify-content: space-around; flex-wrap: wrap; gap: 1rem;
+  }
+  .stat { text-align: center; }
+  .stat-value { font-size: 2rem; font-weight: 700; color: var(--gold); letter-spacing: -0.02em; }
+  .stat-label { font-size: 0.8rem; color: var(--muted); margin-top: 0.2rem; }
+
+  /* ── Sections ────────────────────────────────────────────────── */
+  section { padding: 5rem 2rem; }
+  .section-inner { max-width: 1200px; margin: 0 auto; }
+  .section-label {
+    font-size: 0.75rem; font-weight: 600; letter-spacing: 0.1em;
+    text-transform: uppercase; color: var(--gold); margin-bottom: 0.75rem;
+  }
+  h2 {
+    font-size: 2.2rem; font-weight: 700; letter-spacing: -0.02em;
+    margin-bottom: 1rem; line-height: 1.2;
+  }
+  .section-sub {
+    font-size: 1.05rem; color: var(--muted); max-width: 600px; margin-bottom: 3rem;
+  }
+
+  /* ── Features ────────────────────────────────────────────────── */
+  .features-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+  }
+  .feature-card {
+    background: var(--navy-card); border: 1px solid var(--border);
+    border-radius: 12px; padding: 1.75rem;
+    transition: border-color 0.2s, transform 0.2s;
+  }
+  .feature-card:hover { border-color: rgba(201,168,76,0.4); transform: translateY(-2px); }
+  .feature-icon {
+    width: 44px; height: 44px; border-radius: 10px;
+    background: rgba(201,168,76,0.12); border: 1px solid rgba(201,168,76,0.25);
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.3rem; margin-bottom: 1.1rem;
+  }
+  .feature-card h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .feature-card p { font-size: 0.9rem; color: var(--muted); line-height: 1.6; }
+
+  /* ── Corpora ─────────────────────────────────────────────────── */
+  .corpora-grid {
+    display: grid; grid-template-columns: repeat(auto-fill, minmax(280px, 1fr)); gap: 1rem;
+  }
+  .corpus-card {
+    background: var(--navy-card); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1.25rem 1.5rem;
+    display: flex; align-items: flex-start; gap: 1rem;
+  }
+  .corpus-icon { font-size: 1.6rem; flex-shrink: 0; margin-top: 0.1rem; }
+  .corpus-name { font-size: 0.9rem; font-weight: 600; margin-bottom: 0.2rem; }
+  .corpus-meta { font-size: 0.78rem; color: var(--muted); }
+  .corpus-codes {
+    display: flex; flex-wrap: wrap; gap: 0.3rem; margin-top: 0.5rem;
+  }
+  .corpus-code {
+    font-family: 'JetBrains Mono', monospace;
+    font-size: 0.7rem; background: rgba(255,255,255,0.06);
+    border: 1px solid var(--border); border-radius: 4px;
+    padding: 0.1rem 0.4rem; color: var(--muted);
+  }
+
+  /* ── How it works ────────────────────────────────────────────── */
+  .steps { display: grid; grid-template-columns: repeat(3, 1fr); gap: 2rem; }
+  .step { position: relative; }
+  .step-num {
+    width: 36px; height: 36px; border-radius: 50%;
+    background: rgba(201,168,76,0.15); border: 1px solid rgba(201,168,76,0.4);
+    color: var(--gold); font-weight: 700; font-size: 0.85rem;
+    display: flex; align-items: center; justify-content: center;
+    margin-bottom: 1rem;
+  }
+  .step h3 { font-size: 1rem; font-weight: 600; margin-bottom: 0.5rem; }
+  .step p { font-size: 0.88rem; color: var(--muted); line-height: 1.6; }
+  .step code {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.8rem;
+    background: rgba(255,255,255,0.07); padding: 0.15rem 0.4rem;
+    border-radius: 4px; color: var(--gold-light);
+  }
+
+  /* ── Pricing ─────────────────────────────────────────────────── */
+  .pricing-grid {
+    display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem;
+    max-width: 900px; margin: 0 auto;
+  }
+  .pricing-card {
+    background: var(--navy-card); border: 1px solid var(--border);
+    border-radius: 14px; padding: 2rem;
+    position: relative; transition: border-color 0.2s;
+  }
+  .pricing-card.featured {
+    border-color: var(--gold);
+    box-shadow: 0 0 40px rgba(201,168,76,0.12);
+  }
+  .pricing-badge {
+    position: absolute; top: -12px; left: 50%; transform: translateX(-50%);
+    background: var(--gold); color: var(--navy);
+    font-size: 0.7rem; font-weight: 700; padding: 0.2rem 0.8rem;
+    border-radius: 100px; white-space: nowrap;
+  }
+  .pricing-tier { font-size: 0.8rem; font-weight: 600; color: var(--muted); text-transform: uppercase; letter-spacing: 0.08em; margin-bottom: 0.75rem; }
+  .pricing-price { font-size: 2.5rem; font-weight: 700; letter-spacing: -0.03em; margin-bottom: 0.2rem; }
+  .pricing-price span { font-size: 1rem; font-weight: 400; color: var(--muted); }
+  .pricing-sub { font-size: 0.82rem; color: var(--muted); margin-bottom: 1.5rem; }
+  .pricing-features { list-style: none; }
+  .pricing-features li {
+    font-size: 0.88rem; padding: 0.45rem 0;
+    border-bottom: 1px solid rgba(255,255,255,0.05);
+    display: flex; align-items: center; gap: 0.6rem; color: var(--muted);
+  }
+  .pricing-features li:last-child { border-bottom: none; }
+  .pricing-features li::before { content: "✓"; color: var(--gold); font-weight: 700; flex-shrink: 0; }
+  .pricing-features li.no::before { content: "–"; color: var(--border); }
+  .pricing-features li.no { color: #4e6580; }
+  .pricing-cta {
+    display: block; text-align: center; margin-top: 1.75rem;
+    padding: 0.7rem; border-radius: 8px; font-weight: 600; font-size: 0.9rem;
+    text-decoration: none; transition: all 0.2s;
+  }
+  .pricing-cta-primary { background: var(--gold); color: var(--navy); }
+  .pricing-cta-primary:hover { background: var(--gold-light); }
+  .pricing-cta-secondary {
+    border: 1px solid var(--border); color: var(--white);
+  }
+  .pricing-cta-secondary:hover { border-color: var(--muted); background: rgba(255,255,255,0.04); }
+
+  /* ── Licence note ────────────────────────────────────────────── */
+  .licence-note {
+    background: var(--navy-mid); border: 1px solid var(--border);
+    border-radius: 10px; padding: 1.25rem 1.5rem;
+    font-size: 0.85rem; color: var(--muted); max-width: 900px; margin: 3rem auto 0;
+    text-align: center; line-height: 1.6;
+  }
+  .licence-note strong { color: var(--white); }
+
+  /* ── Footer ──────────────────────────────────────────────────── */
+  footer {
+    border-top: 1px solid var(--border); background: var(--navy-mid);
+    padding: 3rem 2rem;
+  }
+  .footer-inner {
+    max-width: 1200px; margin: 0 auto;
+    display: flex; justify-content: space-between; align-items: center;
+    flex-wrap: wrap; gap: 1.5rem;
+  }
+  .footer-logo { font-size: 1rem; font-weight: 700; color: var(--white); }
+  .footer-logo span { color: var(--gold); }
+  .footer-links { display: flex; gap: 2rem; flex-wrap: wrap; }
+  .footer-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+  .footer-links a:hover { color: var(--white); }
+  .footer-copy { font-size: 0.78rem; color: #4e6580; }
+
+  /* ── Responsive ──────────────────────────────────────────────── */
+  @media (max-width: 900px) {
+    .hero { grid-template-columns: 1fr; gap: 2.5rem; padding: 3rem 1.5rem; }
+    h1 { font-size: 2.2rem; }
+    .features-grid { grid-template-columns: 1fr 1fr; }
+    .steps { grid-template-columns: 1fr; }
+    .pricing-grid { grid-template-columns: 1fr; max-width: 420px; }
+  }
+  @media (max-width: 600px) {
+    .features-grid { grid-template-columns: 1fr; }
+    .nav-links { display: none; }
+    h2 { font-size: 1.7rem; }
+  }
+</style>
+</head>
+<body>
+
+<!-- ── Nav ─────────────────────────────────────────────────────── -->
+<nav>
+  <a class="nav-logo" href="/">Source<span>Truth</span></a>
+  <div class="nav-links">
+    <a href="https://docs.sourcetruth.io">Docs</a>
+    <a href="#corpora">Corpora</a>
+    <a href="#pricing">Pricing</a>
+    <a href="https://rapidapi.com/SourceTruth/api/sourcetruth" target="_blank">RapidAPI</a>
+    <a class="nav-cta" href="https://api.sourcetruth.io/v1/keys">Get API Key</a>
+  </div>
+</nav>
+
+<!-- ── Hero ────────────────────────────────────────────────────── -->
+<div class="hero">
+  <div class="hero-text">
+    <div class="hero-badge">30 corpora · Live in production</div>
+    <h1>The <em>canonical text</em> API</h1>
+    <p>Semantic search and AI-powered Q&amp;A over pre-indexed scripture, philosophy, and classical literature. Quran, Bible, Plato, Confucius, and 26 more — no ingestion pipeline, no fine-tuning. One API call.</p>
+    <div class="hero-actions">
+      <a class="btn-primary" href="https://api.sourcetruth.io/v1/keys">Get free API key</a>
+      <a class="btn-secondary" href="https://docs.sourcetruth.io">Read the docs →</a>
+    </div>
+  </div>
+
+  <div class="code-card">
+    <div class="code-tabs">
+      <button class="code-tab active" onclick="showTab('py')">Python</button>
+      <button class="code-tab" onclick="showTab('js')">JavaScript</button>
+      <button class="code-tab" onclick="showTab('curl')">curl</button>
+    </div>
+
+    <div id="tab-py" class="code-pane active">
+<pre><span class="t-keyword">import</span> requests
+
+<span class="t-fn">r</span> = requests.<span class="t-fn">post</span>(
+    <span class="t-string">"https://api.sourcetruth.io/v1/answer"</span>,
+    headers={<span class="t-string">"X-API-Key"</span>: <span class="t-string">"st_..."</span>},
+    json={
+        <span class="t-string">"question"</span>: <span class="t-string">"What does the Quran</span>
+<span class="t-string">                   say about patience?"</span>,
+        <span class="t-string">"corpus_codes"</span>: [<span class="t-string">"quran"</span>,
+                           <span class="t-string">"sahih-bukhari"</span>],
+    },
+)
+<span class="t-fn">print</span>(r.json()[<span class="t-string">"answer"</span>])
+<span class="t-comment"># → Grounded answer with Quran citations</span></pre>
+    </div>
+
+    <div id="tab-js" class="code-pane">
+<pre><span class="t-keyword">const</span> res = <span class="t-keyword">await</span> <span class="t-fn">fetch</span>(
+  <span class="t-string">"https://api.sourcetruth.io/v1/answer"</span>,
+  {
+    method: <span class="t-string">"POST"</span>,
+    headers: {
+      <span class="t-string">"X-API-Key"</span>: <span class="t-string">"st_..."</span>,
+      <span class="t-string">"Content-Type"</span>: <span class="t-string">"application/json"</span>,
+    },
+    body: <span class="t-fn">JSON.stringify</span>({
+      question: <span class="t-string">"What does the Quran</span>
+<span class="t-string">                say about patience?"</span>,
+      corpus_codes: [<span class="t-string">"quran"</span>, <span class="t-string">"sahih-bukhari"</span>],
+    }),
+  }
+);
+<span class="t-keyword">const</span> { answer } = <span class="t-keyword">await</span> res.<span class="t-fn">json</span>();</pre>
+    </div>
+
+    <div id="tab-curl" class="code-pane">
+<pre><span class="t-fn">curl</span> -X POST \
+  https://api.sourcetruth.io/v1/answer \
+  -H <span class="t-string">"X-API-Key: st_..."</span> \
+  -H <span class="t-string">"Content-Type: application/json"</span> \
+  -d <span class="t-string">'{
+    "question": "What does the Quran
+                 say about patience?",
+    "corpus_codes": ["quran",
+                     "sahih-bukhari"]
+  }'</span></pre>
+    </div>
+  </div>
+</div>
+
+<!-- ── Stats ────────────────────────────────────────────────────── -->
+<div class="stats-bar">
+  <div class="stats-bar-inner">
+    <div class="stat">
+      <div class="stat-value">30</div>
+      <div class="stat-label">Indexed corpora</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">13</div>
+      <div class="stat-label">Traditions covered</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">87k+</div>
+      <div class="stat-label">Searchable chunks</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">&lt;100ms</div>
+      <div class="stat-label">Median search latency</div>
+    </div>
+    <div class="stat">
+      <div class="stat-value">$0</div>
+      <div class="stat-label">To start</div>
+    </div>
+  </div>
+</div>
+
+<!-- ── Features ─────────────────────────────────────────────────── -->
+<section id="features">
+  <div class="section-inner">
+    <div class="section-label">Why SourceTruth</div>
+    <h2>Everything your app needs.<br>Nothing you don't.</h2>
+    <p class="section-sub">We did the hard part — sourcing, cleaning, chunking, and embedding 30 canonical corpora so you don't have to.</p>
+
+    <div class="features-grid">
+      <div class="feature-card">
+        <div class="feature-icon">🔍</div>
+        <h3>Hybrid semantic search</h3>
+        <p>Vector + full-text search with reciprocal rank fusion. Returns ranked passages with tradition, language, and citation metadata. Free on all tiers.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">💬</div>
+        <h3>Grounded Q&amp;A</h3>
+        <p>Retrieval-augmented generation via Claude. Every factual claim is tied to a specific retrieved passage — no hallucinated scripture references, ever.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">📚</div>
+        <h3>30 pre-indexed corpora</h3>
+        <p>Islam, Buddhism, Christianity, Judaism, Hinduism, Sikhism, and more. Arabic Quran, Sanskrit epics, classical Greek philosophy — ready now.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">⚡</div>
+        <h3>No ingestion pipeline</h3>
+        <p>Skip the ETL, chunking, embedding, and vector DB setup. One API key and you're querying 87,000+ chunks across 13 traditions in under a minute.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🌐</div>
+        <h3>Multilingual</h3>
+        <p>Query in English and retrieve Arabic Quran text, Classical Chinese, Tibetan, Punjabi/Gurmukhi, and Sanskrit. Cross-lingual retrieval built in.</p>
+      </div>
+      <div class="feature-card">
+        <div class="feature-icon">🔑</div>
+        <h3>Self-serve keys</h3>
+        <p>Issue a free API key in one POST call — no credit card, no dashboard signup. Upgrade to paid tiers in-app via Stripe when you need more volume.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Corpora ───────────────────────────────────────────────────── -->
+<section id="corpora" style="background: var(--navy-mid);">
+  <div class="section-inner">
+    <div class="section-label">Coverage</div>
+    <h2>30 corpora across 13 traditions</h2>
+    <p class="section-sub">Every corpus is sourced from authoritative open-access editions and verified for commercial use. Pass <code style="font-family:'JetBrains Mono',monospace;font-size:0.85em;background:rgba(255,255,255,0.08);padding:0.1rem 0.4rem;border-radius:4px;">corpus_codes</code> to scope any query.</p>
+
+    <div class="corpora-grid">
+      <div class="corpus-card">
+        <div class="corpus-icon">☪️</div>
+        <div>
+          <div class="corpus-name">Islamic Texts</div>
+          <div class="corpus-meta">Arabic · English · 5 corpora</div>
+          <div class="corpus-codes">
+            <span class="corpus-code">quran</span>
+            <span class="corpus-code">sahih-bukhari</span>
+            <span class="corpus-code">sahih-muslim</span>
+            <span class="corpus-code">sunan-abu-dawood</span>
+            <span class="corpus-code">rumi-masnavi</span>
+          </div>
+        </div>
+      </div>
+      <div class="corpus-card">
+        <div class="corpus-icon">✝️</div>
+        <div>
+          <div class="corpus-name">Christian Texts</div>
+          <div class="corpus-meta">English · 5 corpora</div>
+          <div class="corpus-codes">
+            <span class="corpus-code">kjv</span>
+            <span class="corpus-code">bible-web</span>
+            <span class="corpus-code">bible-asv</span>
+            <span class="corpus-code">bible-ylt</span>
+            <span class="corpus-code">christian-theology</span>
+          </div>
+        </div>
+      </div>
+      <div class="corpus-card">
+        <div class="corpus-icon">🕉️</div>
+        <div>
+          <div class="corpus-name">Hindu Scriptures</div>
+          <div class="corpus-meta">English · Sanskrit · 6 corpora</div>
+          <div class="corpus-codes">
+            <span class="corpus-code">bhagavad-gita</span>
+            <span class="corpus-code">upanishads</span>
+            <span class="corpus-code">mahabharata</span>
+            <span class="corpus-code">rigveda</span>
+            <span class="corpus-code">yoga-sutras</span>
+            <span class="corpus-code">sanskrit-classical</span>
+          </div>
+        </div>
+      </div>
+      <div class="corpus-card">
+        <div class="corpus-icon">✡️</div>
+        <div>
+          <div class="corpus-name">Jewish Texts</div>
+          <div class="corpus-meta">English · 2 corpora</div>
+          <div class="corpus-codes">
+            <span class="corpus-code">tanakh-jps1917</span>
+            <span class="corpus-code">mishnah-silverstein</span>
+          </div>
+        </div>
+      </div>
+      <div class="corpus-card">
+        <div class="corpus-icon">🔱</div>
+        <div>
+          <div class="corpus-name">Tibetan Buddhist</div>
+          <div class="corpus-meta">English · Tibetan · 3 corpora</div>
+          <div class="corpus-codes">
+            <span class="corpus-code">tibetan-buddhist</span>
+            <span class="corpus-code">84000</span>
+            <span class="corpus-code">bdrc</span>
+          </div>
+        </div>
+      </div>
+      <div class="corpus-card">
+        <div class="corpus-icon">🏛️</div>
+        <div>
+          <div class="corpus-name">Greek &amp; Latin Classics</div>
+          <div class="corpus-meta">English · 2 corpora</div>
+          <div class="corpus-codes">
+            <span class="corpus-code">greek-philosophy</span>
+            <span class="corpus-code">classical-latin</span>
+          </div>
+        </div>
+      </div>
+      <div class="corpus-card">
+        <div class="corpus-icon">🪯</div>
+        <div>
+          <div class="corpus-name">Sikh Scriptures</div>
+          <div class="corpus-meta">Punjabi · Gurmukhi · 1 corpus</div>
+          <div class="corpus-codes">
+            <span class="corpus-code">sggs</span>
+          </div>
+        </div>
+      </div>
+      <div class="corpus-card">
+        <div class="corpus-icon">☯️</div>
+        <div>
+          <div class="corpus-name">Classical Chinese</div>
+          <div class="corpus-meta">English · Mahayana · 2 corpora</div>
+          <div class="corpus-codes">
+            <span class="corpus-code">classical-chinese</span>
+            <span class="corpus-code">cbeta</span>
+          </div>
+        </div>
+      </div>
+      <div class="corpus-card">
+        <div class="corpus-icon">📖</div>
+        <div>
+          <div class="corpus-name">Western Philosophy</div>
+          <div class="corpus-meta">English · 2 corpora</div>
+          <div class="corpus-codes">
+            <span class="corpus-code">political-philosophy</span>
+            <span class="corpus-code">western-philosophy</span>
+          </div>
+        </div>
+      </div>
+      <div class="corpus-card">
+        <div class="corpus-icon">🔥</div>
+        <div>
+          <div class="corpus-name">Zoroastrian Texts</div>
+          <div class="corpus-meta">English · 1 corpus</div>
+          <div class="corpus-codes">
+            <span class="corpus-code">avesta</span>
+          </div>
+        </div>
+      </div>
+      <div class="corpus-card">
+        <div class="corpus-icon">📜</div>
+        <div>
+          <div class="corpus-name">Sanskrit (GRETIL)</div>
+          <div class="corpus-meta">Sanskrit · 1 corpus · opt-in only</div>
+          <div class="corpus-codes">
+            <span class="corpus-code">gretil</span>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <p style="text-align:center;margin-top:2rem;font-size:0.85rem;color:var(--muted);">
+      Full corpus list with licence details at
+      <a href="https://api.sourcetruth.io/v1/corpora" style="color:var(--gold);text-decoration:none;">GET /v1/corpora</a>
+    </p>
+  </div>
+</section>
+
+<!-- ── How it works ──────────────────────────────────────────────── -->
+<section id="how-it-works">
+  <div class="section-inner">
+    <div class="section-label">Integration</div>
+    <h2>Live in three steps</h2>
+    <p class="section-sub">No infrastructure to provision. No data to prepare. Works with any HTTP client.</p>
+
+    <div class="steps">
+      <div class="step">
+        <div class="step-num">1</div>
+        <h3>Get a free API key</h3>
+        <p>One <code>POST /v1/keys</code> call with your name and email. No credit card. Your key arrives in the response — prefix <code>st_</code>.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">2</div>
+        <h3>POST your query</h3>
+        <p>Call <code>/v1/search</code> with a natural language query. Optionally scope to a tradition, language, or specific corpus code. Results in under 100ms.</p>
+      </div>
+      <div class="step">
+        <div class="step-num">3</div>
+        <h3>Receive ranked passages</h3>
+        <p>Every result includes the passage text, canonical citation (e.g. <code>2:255</code>, <code>SN 56.11</code>), tradition, language, and relevance score.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- ── Pricing ───────────────────────────────────────────────────── -->
+<section id="pricing" style="background: var(--navy-mid);">
+  <div class="section-inner">
+    <div class="section-label">Pricing</div>
+    <h2 style="text-align:center;">Simple, usage-based pricing</h2>
+    <p class="section-sub" style="text-align:center;margin-left:auto;margin-right:auto;">Start free. Scale when you need to. Upgrade or cancel in one API call.</p>
+
+    <div class="pricing-grid">
+      <div class="pricing-card">
+        <div class="pricing-tier">Free</div>
+        <div class="pricing-price">$0</div>
+        <div class="pricing-sub">No credit card required</div>
+        <ul class="pricing-features">
+          <li>100 <code style="font-size:0.78rem;font-family:'JetBrains Mono',monospace;background:rgba(255,255,255,0.07);padding:0.1rem 0.35rem;border-radius:3px;">/search</code> requests/day</li>
+          <li>All 30 corpora accessible</li>
+          <li>Self-issue key via API</li>
+          <li class="no">/answer endpoint</li>
+          <li class="no">Priority support</li>
+        </ul>
+        <a class="pricing-cta pricing-cta-secondary" href="https://api.sourcetruth.io/v1/keys">Get free key</a>
+      </div>
+
+      <div class="pricing-card featured">
+        <div class="pricing-badge">Most popular</div>
+        <div class="pricing-tier">Starter</div>
+        <div class="pricing-price">$29<span>/mo</span></div>
+        <div class="pricing-sub">For apps and side projects</div>
+        <ul class="pricing-features">
+          <li>1,000 /search requests/day</li>
+          <li>100 /answer requests/day</li>
+          <li>All 30 corpora accessible</li>
+          <li>Grounded Q&amp;A with citations</li>
+          <li>Email support</li>
+        </ul>
+        <a class="pricing-cta pricing-cta-primary" href="https://api.sourcetruth.io/v1/keys">Start with Starter</a>
+      </div>
+
+      <div class="pricing-card">
+        <div class="pricing-tier">Professional</div>
+        <div class="pricing-price">$149<span>/mo</span></div>
+        <div class="pricing-sub">For production applications</div>
+        <ul class="pricing-features">
+          <li>10,000 /search requests/day</li>
+          <li>300 /answer requests/day</li>
+          <li>All 30 corpora accessible</li>
+          <li>Grounded Q&amp;A with citations</li>
+          <li>Priority support</li>
+        </ul>
+        <a class="pricing-cta pricing-cta-secondary" href="https://api.sourcetruth.io/v1/keys">Go Professional</a>
+      </div>
+    </div>
+
+    <div class="licence-note">
+      <strong>Open licensing, commercially usable.</strong> All corpora are public domain, CC0, or CC BY — no viral or non-commercial restrictions except CBETA (CC BY-NC) and 84000 (CC BY-NC). The Quran corpus (Tanzil, CC BY 3.0) requires attribution. Full licence details at <a href="https://api.sourcetruth.io/v1/corpora" style="color:var(--gold);text-decoration:none;">GET /v1/corpora</a>.
+    </div>
+  </div>
+</section>
+
+<!-- ── Footer ───────────────────────────────────────────────────── -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-logo">Source<span>Truth</span></div>
+      <div class="footer-copy" style="margin-top:0.4rem;">© 2026 D'Linkup Pte. Ltd. · Singapore</div>
+    </div>
+    <div class="footer-links">
+      <a href="https://docs.sourcetruth.io">Docs</a>
+      <a href="https://api.sourcetruth.io/docs">API Reference</a>
+      <a href="https://api.sourcetruth.io/v1/corpora">Corpora</a>
+      <a href="https://rapidapi.com/SourceTruth/api/sourcetruth" target="_blank">RapidAPI</a>
+      <a href="mailto:api@sourcetruth.io">Contact</a>
+    </div>
+  </div>
+</footer>
+
+<script>
+function showTab(lang) {
+  document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.code-pane').forEach(p => p.classList.remove('active'));
+  document.getElementById('tab-' + lang).classList.add('active');
+  event.target.classList.add('active');
+}
+</script>
+</body>
+</html>
