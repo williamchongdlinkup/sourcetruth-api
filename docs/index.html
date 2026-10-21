@@ -1,0 +1,509 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>SourceTruth API Docs</title>
+<meta name="description" content="SourceTruth API reference — semantic search and grounded Q&A over 30 canonical corpora.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --navy:      #0d1b2e;
+    --navy-mid:  #122540;
+    --navy-card: #1a3050;
+    --gold:      #c9a84c;
+    --gold-light:#e2c97e;
+    --white:     #f0f4f8;
+    --muted:     #8fa3b8;
+    --border:    #1e3a5f;
+    --code-bg:   #0a1525;
+    --sidebar-w: 260px;
+  }
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  html { scroll-behavior: smooth; }
+  body {
+    font-family: 'Inter', sans-serif;
+    background: var(--navy);
+    color: var(--white);
+    line-height: 1.6;
+    font-size: 15px;
+    display: flex; flex-direction: column; min-height: 100vh;
+  }
+
+  /* ── Top nav ─────────────────────────────────────────────────── */
+  .topnav {
+    position: fixed; top: 0; left: 0; right: 0; z-index: 200;
+    height: 56px; background: rgba(13,27,46,0.95);
+    backdrop-filter: blur(12px);
+    border-bottom: 1px solid var(--border);
+    display: flex; align-items: center; padding: 0 1.5rem;
+    gap: 1.5rem;
+  }
+  .topnav-logo { font-size: 1rem; font-weight: 700; color: var(--white); text-decoration: none; white-space: nowrap; }
+  .topnav-logo span { color: var(--gold); }
+  .topnav-sep { color: var(--border); }
+  .topnav-title { font-size: 0.85rem; color: var(--muted); font-weight: 500; }
+  .topnav-links { margin-left: auto; display: flex; gap: 1.5rem; align-items: center; }
+  .topnav-links a { color: var(--muted); text-decoration: none; font-size: 0.85rem; transition: color 0.2s; }
+  .topnav-links a:hover { color: var(--white); }
+  .topnav-cta { background: var(--gold); color: var(--navy) !important; padding: 0.4rem 1rem; border-radius: 6px; font-weight: 600; font-size: 0.82rem !important; }
+
+  /* ── Layout ──────────────────────────────────────────────────── */
+  .layout { display: flex; flex: 1; margin-top: 56px; }
+
+  /* ── Sidebar ─────────────────────────────────────────────────── */
+  .sidebar {
+    width: var(--sidebar-w); flex-shrink: 0;
+    position: fixed; top: 56px; bottom: 0; left: 0;
+    overflow-y: auto; overflow-x: hidden;
+    background: var(--navy-mid); border-right: 1px solid var(--border);
+    padding: 1.5rem 0;
+  }
+  .sidebar::-webkit-scrollbar { width: 4px; }
+  .sidebar::-webkit-scrollbar-thumb { background: var(--border); border-radius: 2px; }
+  .nav-group { margin-bottom: 1.5rem; }
+  .nav-group-label { font-size: 0.7rem; font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase; color: var(--muted); padding: 0 1.25rem; margin-bottom: 0.4rem; }
+  .nav-item { display: block; padding: 0.45rem 1.25rem; color: var(--muted); text-decoration: none; font-size: 0.85rem; transition: all 0.15s; border-left: 2px solid transparent; }
+  .nav-item:hover { color: var(--white); background: rgba(255,255,255,0.04); }
+  .nav-item.active { color: var(--gold); border-left-color: var(--gold); background: rgba(201,168,76,0.06); }
+  .nav-method { float: right; font-size: 0.65rem; padding: 0.1rem 0.4rem; border-radius: 3px; font-weight: 700; font-family: 'JetBrains Mono', monospace; }
+  .method-get  { background: rgba(130,210,130,0.15); color: #82d282; }
+  .method-post { background: rgba(130,170,255,0.15); color: #82aaff; }
+  .method-del  { background: rgba(255,130,130,0.15); color: #ff8282; }
+
+  /* ── Content ─────────────────────────────────────────────────── */
+  .content { margin-left: var(--sidebar-w); flex: 1; padding: 3rem 3.5rem; max-width: 860px; }
+  .content section { margin-bottom: 4rem; }
+  .section-anchor { display: block; position: relative; top: -80px; visibility: hidden; }
+
+  h1 { font-size: 2rem; font-weight: 700; letter-spacing: -0.02em; margin-bottom: 0.75rem; }
+  h2 { font-size: 1.4rem; font-weight: 700; letter-spacing: -0.01em; margin-bottom: 0.75rem; margin-top: 2.5rem; padding-top: 2.5rem; border-top: 1px solid var(--border); }
+  h2:first-of-type { margin-top: 0; padding-top: 0; border-top: none; }
+  h3 { font-size: 1rem; font-weight: 600; margin: 1.5rem 0 0.5rem; }
+  p { color: var(--muted); line-height: 1.7; margin-bottom: 1rem; }
+  p strong { color: var(--white); }
+  a { color: var(--gold); text-decoration: none; }
+  a:hover { text-decoration: underline; }
+
+  /* ── Inline code ─────────────────────────────────────────────── */
+  code { font-family: 'JetBrains Mono', monospace; font-size: 0.82em; background: rgba(255,255,255,0.08); border: 1px solid rgba(255,255,255,0.1); padding: 0.15rem 0.4rem; border-radius: 4px; color: var(--gold-light); }
+
+  /* ── Code blocks ─────────────────────────────────────────────── */
+  .code-block { background: var(--code-bg); border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin: 1.25rem 0; }
+  .code-block-header { display: flex; align-items: center; justify-content: space-between; padding: 0.6rem 1rem; border-bottom: 1px solid var(--border); background: rgba(255,255,255,0.03); }
+  .code-lang { font-size: 0.75rem; color: var(--muted); font-weight: 500; }
+  .code-block pre { padding: 1.25rem; overflow-x: auto; font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; line-height: 1.7; }
+  .t-comment { color: #4e6580; }
+  .t-keyword { color: #c792ea; }
+  .t-string  { color: #c3e88d; }
+  .t-number  { color: #f78c6c; }
+  .t-fn      { color: #82aaff; }
+  .t-key     { color: #89ddff; }
+
+  /* ── Endpoint cards ──────────────────────────────────────────── */
+  .endpoint-card { border: 1px solid var(--border); border-radius: 10px; overflow: hidden; margin: 1.5rem 0; }
+  .endpoint-header { display: flex; align-items: center; gap: 0.75rem; padding: 1rem 1.25rem; background: var(--navy-card); border-bottom: 1px solid var(--border); }
+  .method-pill { font-family: 'JetBrains Mono', monospace; font-size: 0.75rem; font-weight: 700; padding: 0.25rem 0.6rem; border-radius: 5px; }
+  .pill-post { background: rgba(130,170,255,0.2); color: #82aaff; }
+  .pill-get  { background: rgba(130,210,130,0.2); color: #82d282; }
+  .pill-del  { background: rgba(255,130,130,0.2); color: #ff8282; }
+  .endpoint-path { font-family: 'JetBrains Mono', monospace; font-size: 0.9rem; font-weight: 500; }
+  .endpoint-body { padding: 1.25rem; }
+
+  /* ── Tables ──────────────────────────────────────────────────── */
+  table { width: 100%; border-collapse: collapse; margin: 1rem 0; font-size: 0.85rem; }
+  th { text-align: left; padding: 0.6rem 0.75rem; border-bottom: 1px solid var(--border); font-size: 0.75rem; font-weight: 600; letter-spacing: 0.05em; text-transform: uppercase; color: var(--muted); }
+  td { padding: 0.6rem 0.75rem; border-bottom: 1px solid rgba(255,255,255,0.04); color: var(--muted); vertical-align: top; }
+  td:first-child { color: var(--white); font-family: 'JetBrains Mono', monospace; font-size: 0.8rem; }
+  tr:last-child td { border-bottom: none; }
+  .req-badge { font-size: 0.65rem; font-weight: 700; padding: 0.1rem 0.4rem; border-radius: 3px; background: rgba(255,130,80,0.2); color: #ff8250; margin-left: 0.4rem; vertical-align: middle; }
+  .opt-badge { font-size: 0.65rem; font-weight: 700; padding: 0.1rem 0.4rem; border-radius: 3px; background: rgba(130,170,255,0.15); color: #82aaff; margin-left: 0.4rem; vertical-align: middle; }
+
+  /* ── Alerts ──────────────────────────────────────────────────── */
+  .alert { padding: 0.9rem 1.1rem; border-radius: 8px; margin: 1rem 0; font-size: 0.88rem; line-height: 1.6; }
+  .alert-info { background: rgba(130,170,255,0.08); border: 1px solid rgba(130,170,255,0.25); color: #a8c0f0; }
+  .alert-warn { background: rgba(255,200,80,0.08); border: 1px solid rgba(255,200,80,0.25); color: #f5c842; }
+
+  @media (max-width: 800px) {
+    .sidebar { display: none; }
+    .content { margin-left: 0; padding: 2rem 1.25rem; max-width: 100%; }
+  }
+</style>
+</head>
+<body>
+
+<div class="topnav">
+  <a class="topnav-logo" href="https://sourcetruth.io">Source<span>Truth</span></a>
+  <span class="topnav-sep">/</span>
+  <span class="topnav-title">API Docs</span>
+  <div class="topnav-links">
+    <a href="https://sourcetruth.io#corpora">Corpora</a>
+    <a href="https://sourcetruth.io#pricing">Pricing</a>
+    <a href="https://rapidapi.com/SourceTruth/api/sourcetruth" target="_blank">RapidAPI</a>
+    <a class="topnav-cta" href="https://api.sourcetruth.io/v1/keys">Get API Key</a>
+  </div>
+</div>
+
+<div class="layout">
+  <nav class="sidebar">
+    <div class="nav-group">
+      <div class="nav-group-label">Getting Started</div>
+      <a class="nav-item active" href="#introduction">Introduction</a>
+      <a class="nav-item" href="#quickstart">Quick start</a>
+      <a class="nav-item" href="#authentication">Authentication</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Endpoints</div>
+      <a class="nav-item" href="#search">/v1/search <span class="nav-method method-post">POST</span></a>
+      <a class="nav-item" href="#answer">/v1/answer <span class="nav-method method-post">POST</span></a>
+      <a class="nav-item" href="#corpora">/v1/corpora <span class="nav-method method-get">GET</span></a>
+      <a class="nav-item" href="#text">/v1/text/{uid} <span class="nav-method method-get">GET</span></a>
+      <a class="nav-item" href="#entity">/v1/entity/{id} <span class="nav-method method-get">GET</span></a>
+      <a class="nav-item" href="#keys-create">/v1/keys <span class="nav-method method-post">POST</span></a>
+      <a class="nav-item" href="#keys-revoke">/v1/keys <span class="nav-method method-del">DEL</span></a>
+      <a class="nav-item" href="#health">/health <span class="nav-method method-get">GET</span></a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">Reference</div>
+      <a class="nav-item" href="#corpus-list">Corpus codes</a>
+      <a class="nav-item" href="#rate-limits">Rate limits</a>
+      <a class="nav-item" href="#errors">Error codes</a>
+    </div>
+    <div class="nav-group">
+      <div class="nav-group-label">SDKs</div>
+      <a class="nav-item" href="#sdk-python">Python</a>
+      <a class="nav-item" href="#sdk-js">JavaScript</a>
+    </div>
+  </nav>
+
+  <main class="content">
+
+    <section>
+      <span class="section-anchor" id="introduction"></span>
+      <h1>SourceTruth API</h1>
+      <p>Semantic search and AI-powered Q&amp;A over 30 pre-indexed canonical corpora — Quran, Bible, Plato, Confucius, and more. No ingestion pipeline. One API key.</p>
+      <p><strong>Base URL:</strong> <code>https://api.sourcetruth.io</code> &nbsp;·&nbsp; <strong>Version:</strong> <code>1.0.0</code></p>
+      <div class="alert alert-info"><strong>New here?</strong> Jump to <a href="#quickstart">Quick start</a> to make your first call in under two minutes, or <a href="https://api.sourcetruth.io/v1/keys">issue a free key</a> now.</div>
+    </section>
+
+    <section>
+      <span class="section-anchor" id="quickstart"></span>
+      <h2>Quick start</h2>
+      <h3>1. Get a free API key</h3>
+      <div class="code-block">
+        <div class="code-block-header"><span class="code-lang">curl</span></div>
+        <pre>curl -X POST https://api.sourcetruth.io/v1/keys \
+  -H <span class="t-string">"Content-Type: application/json"</span> \
+  -d <span class="t-string">'{"name": "My App", "email": "you@example.com"}'</span>
+
+<span class="t-comment"># → {"key": "st_a1b2c3...", "tier": "free", "daily_limit": 100}</span></pre>
+      </div>
+      <p>Store the key — it is shown only once.</p>
+
+      <h3>2. Search a corpus</h3>
+      <div class="code-block">
+        <div class="code-block-header"><span class="code-lang">Python</span></div>
+        <pre><span class="t-keyword">import</span> requests
+
+r = requests.<span class="t-fn">post</span>(
+    <span class="t-string">"https://api.sourcetruth.io/v1/search"</span>,
+    headers={<span class="t-string">"X-API-Key"</span>: <span class="t-string">"st_..."</span>},
+    json={
+        <span class="t-string">"query"</span>: <span class="t-string">"What does the Quran say about patience?"</span>,
+        <span class="t-string">"corpus_codes"</span>: [<span class="t-string">"quran"</span>, <span class="t-string">"sahih-bukhari"</span>],
+        <span class="t-string">"top_k"</span>: <span class="t-number">5</span>,
+    },
+)
+<span class="t-keyword">for</span> p <span class="t-keyword">in</span> r.json()[<span class="t-string">"passages"</span>]:
+    <span class="t-fn">print</span>(p[<span class="t-string">"reference"</span>], p[<span class="t-string">"text"</span>][:<span class="t-number">100</span>])</pre>
+      </div>
+
+      <h3>3. Get a grounded answer <span style="font-size:0.8rem;color:var(--muted);font-weight:400;">(paid tiers)</span></h3>
+      <div class="code-block">
+        <div class="code-block-header"><span class="code-lang">Python</span></div>
+        <pre>r = requests.<span class="t-fn">post</span>(
+    <span class="t-string">"https://api.sourcetruth.io/v1/answer"</span>,
+    headers={<span class="t-string">"X-API-Key"</span>: <span class="t-string">"st_..."</span>},
+    json={
+        <span class="t-string">"question"</span>: <span class="t-string">"What does the Quran say about patience?"</span>,
+        <span class="t-string">"corpus_codes"</span>: [<span class="t-string">"quran"</span>, <span class="t-string">"sahih-bukhari"</span>],
+    },
+)
+<span class="t-fn">print</span>(r.json()[<span class="t-string">"answer"</span>])   <span class="t-comment"># grounded prose with numbered citations</span>
+<span class="t-fn">print</span>(r.json()[<span class="t-string">"citations"</span>]) <span class="t-comment"># [{"index":1,"reference":"2:153","corpus":"quran",...}]</span></pre>
+      </div>
+    </section>
+
+    <section>
+      <span class="section-anchor" id="authentication"></span>
+      <h2>Authentication</h2>
+      <p>Pass your API key in the <code>X-API-Key</code> request header. Keys are prefixed <code>st_</code>.</p>
+      <div class="code-block">
+        <div class="code-block-header"><span class="code-lang">Header</span></div>
+        <pre>X-API-Key: st_a1b2c3d4e5f6...</pre>
+      </div>
+      <p><code>/v1/search</code> and <code>/v1/corpora</code> accept anonymous requests (rate-limited). <code>/v1/answer</code> requires a paid key.</p>
+    </section>
+
+    <section>
+      <span class="section-anchor" id="search"></span>
+      <h2>POST /v1/search</h2>
+      <p>Hybrid semantic + keyword retrieval over indexed corpora. Returns ranked passages with citation metadata. <strong>Available to all tiers including free.</strong></p>
+      <h3>Request body</h3>
+      <table>
+        <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>query <span class="req-badge">required</span></td><td>string</td><td>Natural language query in any supported language.</td></tr>
+          <tr><td>corpus_codes <span class="opt-badge">optional</span></td><td>string[]</td><td>Scope to specific corpora — e.g. <code>["quran","sahih-bukhari"]</code>. Takes priority over <code>traditions</code> for reranking. See <a href="#corpus-list">corpus codes</a>.</td></tr>
+          <tr><td>traditions <span class="opt-badge">optional</span></td><td>string[]</td><td>Filter by tradition — e.g. <code>["islam"]</code>, <code>["theravada"]</code>.</td></tr>
+          <tr><td>languages <span class="opt-badge">optional</span></td><td>string[]</td><td>Filter by ISO language code — e.g. <code>["en"]</code>, <code>["ara"]</code>.</td></tr>
+          <tr><td>collections <span class="opt-badge">optional</span></td><td>string[]</td><td>Filter by collection within a corpus — e.g. <code>["MN","DN"]</code> for SuttaCentral.</td></tr>
+          <tr><td>top_k <span class="opt-badge">optional</span></td><td>integer</td><td>Passages to return. Default <code>8</code>, max <code>20</code>.</td></tr>
+        </tbody>
+      </table>
+      <div class="alert alert-warn"><strong>Cross-corpus tip:</strong> For balanced results across two corpora (e.g. Quran + Hadith, Tanakh + Mishnah), make two scoped calls and merge. A single unscoped call may be dominated by whichever corpus has stronger semantic overlap.</div>
+      <h3>Response</h3>
+      <div class="code-block">
+        <div class="code-block-header"><span class="code-lang">JSON</span></div>
+        <pre>{
+  <span class="t-key">"query"</span>: <span class="t-string">"What does the Quran say about patience?"</span>,
+  <span class="t-key">"passages"</span>: [{
+    <span class="t-key">"chunk_id"</span>: <span class="t-number">18432</span>,
+    <span class="t-key">"text"</span>: <span class="t-string">"O you who have believed, seek help through..."</span>,
+    <span class="t-key">"reference"</span>: <span class="t-string">"2:153"</span>,
+    <span class="t-key">"tradition"</span>: <span class="t-string">"islam"</span>,
+    <span class="t-key">"language"</span>: <span class="t-string">"en"</span>,
+    <span class="t-key">"corpus"</span>: <span class="t-string">"quran"</span>,
+    <span class="t-key">"score"</span>: <span class="t-number">0.912</span>
+  }],
+  <span class="t-key">"resolved_entities"</span>: [],
+  <span class="t-key">"latency_ms"</span>: <span class="t-number">84</span>
+}</pre>
+      </div>
+    </section>
+
+    <section>
+      <span class="section-anchor" id="answer"></span>
+      <h2>POST /v1/answer</h2>
+      <p>Retrieval-augmented generation. Retrieves relevant passages then generates a grounded answer via Claude with numbered inline citations. <strong>Requires Starter or Professional.</strong></p>
+      <h3>Request body</h3>
+      <table>
+        <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>question <span class="req-badge">required</span></td><td>string</td><td>The question to answer from the corpus.</td></tr>
+          <tr><td>corpus_codes <span class="opt-badge">optional</span></td><td>string[]</td><td>Scope retrieval to specific corpora.</td></tr>
+          <tr><td>traditions <span class="opt-badge">optional</span></td><td>string[]</td><td>Filter retrieval by tradition.</td></tr>
+          <tr><td>languages <span class="opt-badge">optional</span></td><td>string[]</td><td>Filter retrieval by language.</td></tr>
+          <tr><td>max_passages <span class="opt-badge">optional</span></td><td>integer</td><td>Passages to retrieve as context. Default <code>6</code>, max <code>10</code>.</td></tr>
+        </tbody>
+      </table>
+      <h3>Response</h3>
+      <div class="code-block">
+        <div class="code-block-header"><span class="code-lang">JSON</span></div>
+        <pre>{
+  <span class="t-key">"question"</span>: <span class="t-string">"What does the Quran say about patience?"</span>,
+  <span class="t-key">"answer"</span>: <span class="t-string">"The Quran emphasises patience (sabr) repeatedly.
+In 2:153 believers are instructed to seek help
+through patience and prayer [1]...
+
+Citations:
+[1] 2:153 — Surah Al-Baqarah"</span>,
+  <span class="t-key">"citations"</span>: [{ <span class="t-key">"index"</span>: <span class="t-number">1</span>, <span class="t-key">"reference"</span>: <span class="t-string">"2:153"</span>, <span class="t-key">"corpus"</span>: <span class="t-string">"quran"</span> }],
+  <span class="t-key">"latency_ms"</span>: <span class="t-number">1840</span>
+}</pre>
+      </div>
+      <div class="alert alert-info">The answer model (<code>claude-sonnet-4-6</code>) is instructed never to invent references from memory. If passages don't answer the question, it says so explicitly.</div>
+    </section>
+
+    <section>
+      <span class="section-anchor" id="corpora"></span>
+      <h2>GET /v1/corpora</h2>
+      <p>Returns all indexed corpora with codes, traditions, languages, and licence metadata. No authentication required. Use returned <code>code</code> values as <code>corpus_codes</code> filter values.</p>
+      <div class="code-block">
+        <div class="code-block-header"><span class="code-lang">curl</span></div>
+        <pre>curl https://api.sourcetruth.io/v1/corpora</pre>
+      </div>
+    </section>
+
+    <section>
+      <span class="section-anchor" id="text"></span>
+      <h2>GET /v1/text/{uid}</h2>
+      <p>Returns the full chunked text of a document by its canonical external ID (e.g. <code>sn56.11</code>, <code>mn10</code>). UIDs are returned as <code>sutta_id</code> in search results.</p>
+      <table>
+        <thead><tr><th>Param</th><th>In</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>uid <span class="req-badge">required</span></td><td>path</td><td>Canonical document ID.</td></tr>
+          <tr><td>lang <span class="opt-badge">optional</span></td><td>query</td><td>Language code. Default <code>en</code>.</td></tr>
+        </tbody>
+      </table>
+    </section>
+
+    <section>
+      <span class="section-anchor" id="entity"></span>
+      <h2>GET /v1/entity/{entity_id}</h2>
+      <p>Returns entity metadata and name variants (Sanskrit, Chinese, Tibetan, English). Entity IDs appear in the <code>resolved_entities</code> array of search results when named entities are detected in the query.</p>
+    </section>
+
+    <section>
+      <span class="section-anchor" id="keys-create"></span>
+      <h2>POST /v1/keys</h2>
+      <p>Self-issue a free-tier API key. No authentication required. Rate-limited to 5 per hour per IP.</p>
+      <table>
+        <thead><tr><th>Field</th><th>Type</th><th>Description</th></tr></thead>
+        <tbody>
+          <tr><td>name <span class="req-badge">required</span></td><td>string</td><td>Your name or application name.</td></tr>
+          <tr><td>email <span class="req-badge">required</span></td><td>string</td><td>Valid email address.</td></tr>
+        </tbody>
+      </table>
+      <div class="code-block">
+        <div class="code-block-header"><span class="code-lang">JSON response</span></div>
+        <pre>{ <span class="t-key">"key"</span>: <span class="t-string">"st_a1b2c3..."</span>, <span class="t-key">"tier"</span>: <span class="t-string">"free"</span>, <span class="t-key">"daily_limit"</span>: <span class="t-number">100</span>,
+  <span class="t-key">"message"</span>: <span class="t-string">"Store this key safely — it will not be shown again."</span> }</pre>
+      </div>
+    </section>
+
+    <section>
+      <span class="section-anchor" id="keys-revoke"></span>
+      <h2>DELETE /v1/keys</h2>
+      <p>Immediately revoke your API key. Pass the key in <code>X-API-Key</code>. <strong>Irreversible.</strong></p>
+    </section>
+
+    <section>
+      <span class="section-anchor" id="health"></span>
+      <h2>GET /health</h2>
+      <p>Health check. No authentication required.</p>
+      <div class="code-block">
+        <div class="code-block-header"><span class="code-lang">JSON</span></div>
+        <pre>{ <span class="t-key">"status"</span>: <span class="t-string">"ok"</span>, <span class="t-key">"version"</span>: <span class="t-string">"1.0.0"</span> }</pre>
+      </div>
+    </section>
+
+    <section>
+      <span class="section-anchor" id="corpus-list"></span>
+      <h2>Corpus codes</h2>
+      <p>Pass these values in <code>corpus_codes</code> to scope any request. Live list always available at <code>GET /v1/corpora</code>.</p>
+      <div style="overflow-x:auto;">
+        <table>
+          <thead><tr><th>Code</th><th>Name</th><th>Tradition</th><th>Lang</th><th>Licence</th></tr></thead>
+          <tbody>
+            <tr><td>quran</td><td>Tanzil Quran Corpus</td><td>Islam</td><td>ara</td><td>CC BY 3.0 ‡</td></tr>
+            <tr><td>sahih-bukhari</td><td>Sahih al-Bukhari</td><td>Islam</td><td>en</td><td>Unlicense</td></tr>
+            <tr><td>sahih-muslim</td><td>Sahih Muslim</td><td>Islam</td><td>en</td><td>Unlicense</td></tr>
+            <tr><td>sunan-abu-dawood</td><td>Sunan Abu Dawood</td><td>Islam</td><td>en</td><td>Unlicense</td></tr>
+            <tr><td>rumi-masnavi</td><td>Masnavi (Nicholson)</td><td>Islam</td><td>en</td><td>Public Domain</td></tr>
+            <tr><td>cbeta</td><td>CBETA Chinese Canon</td><td>Mahayana</td><td>lzh</td><td>CC BY-NC †</td></tr>
+            <tr><td>84000</td><td>84000 Translations</td><td>Vajrayana</td><td>en</td><td>CC BY-NC †</td></tr>
+            <tr><td>tibetan-buddhist</td><td>Evans-Wentz Tibetan</td><td>Vajrayana</td><td>en</td><td>Public Domain</td></tr>
+            <tr><td>bdrc</td><td>Buddhist Digital Resource Center</td><td>Vajrayana</td><td>bo</td><td>Open (varies)</td></tr>
+            <tr><td>kjv</td><td>King James Bible</td><td>Christianity</td><td>en</td><td>Public Domain</td></tr>
+            <tr><td>bible-web</td><td>World English Bible</td><td>Christianity</td><td>en</td><td>CC0</td></tr>
+            <tr><td>bible-asv</td><td>American Standard Version</td><td>Christianity</td><td>en</td><td>Public Domain</td></tr>
+            <tr><td>bible-ylt</td><td>Young's Literal Translation</td><td>Christianity</td><td>en</td><td>Public Domain</td></tr>
+            <tr><td>christian-theology</td><td>Patristics (Augustine, Apostolic Fathers)</td><td>Christianity</td><td>en</td><td>Public Domain</td></tr>
+            <tr><td>tanakh-jps1917</td><td>Tanakh (JPS 1917)</td><td>Judaism</td><td>en</td><td>Public Domain</td></tr>
+            <tr><td>mishnah-silverstein</td><td>Mishnah (Silverstein)</td><td>Judaism</td><td>en</td><td>CC BY ‡</td></tr>
+            <tr><td>bhagavad-gita</td><td>Bhagavad Gita (Arnold)</td><td>Hinduism</td><td>en</td><td>Public Domain</td></tr>
+            <tr><td>upanishads</td><td>Principal Upanishads (Müller)</td><td>Hinduism</td><td>en</td><td>Public Domain</td></tr>
+            <tr><td>yoga-sutras</td><td>Yoga Sutras (Johnston)</td><td>Hinduism</td><td>en</td><td>Public Domain</td></tr>
+            <tr><td>mahabharata</td><td>Mahabharata (Ganguli)</td><td>Hinduism</td><td>en</td><td>Public Domain</td></tr>
+            <tr><td>rigveda</td><td>Rigveda (Griffith)</td><td>Hinduism</td><td>en</td><td>Public Domain</td></tr>
+            <tr><td>sanskrit-classical</td><td>Ramayana + Kalidasa</td><td>Hinduism</td><td>en</td><td>Public Domain</td></tr>
+            <tr><td>sggs</td><td>Sri Guru Granth Sahib Ji</td><td>Sikhism</td><td>pa</td><td>Public Domain</td></tr>
+            <tr><td>classical-chinese</td><td>Analects, Tao Te Ching, Art of War</td><td>East Asian</td><td>en</td><td>Public Domain</td></tr>
+            <tr><td>greek-philosophy</td><td>Plato, Aristotle, Stoics</td><td>Hellenism</td><td>en</td><td>Public Domain</td></tr>
+            <tr><td>classical-latin</td><td>Caesar, Virgil, Cicero, Seneca</td><td>Classicism</td><td>en</td><td>Public Domain</td></tr>
+            <tr><td>political-philosophy</td><td>Hobbes, Locke, Rousseau, Mill</td><td>Western Phil.</td><td>en</td><td>Public Domain</td></tr>
+            <tr><td>western-philosophy</td><td>Descartes to Nietzsche</td><td>Western Phil.</td><td>en</td><td>Public Domain</td></tr>
+            <tr><td>avesta</td><td>Zend-Avesta (Darmesteter/Mills)</td><td>Zoroastrianism</td><td>en</td><td>Public Domain</td></tr>
+            <tr><td>gretil</td><td>GRETIL Sanskrit *</td><td>Sanskrit</td><td>san</td><td>Open (varies)</td></tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="font-size:0.8rem;margin-top:0.75rem;"><strong>‡</strong> Attribution required. <strong>†</strong> Non-commercial only. <strong>*</strong> Always pass <code>corpus_codes: ["gretil"]</code> — excluded from unscoped searches.</p>
+    </section>
+
+    <section>
+      <span class="section-anchor" id="rate-limits"></span>
+      <h2>Rate limits &amp; tiers</h2>
+      <table>
+        <thead><tr><th>Tier</th><th>/search /day</th><th>/answer /day</th><th>Price</th></tr></thead>
+        <tbody>
+          <tr><td>Free</td><td>100</td><td>—</td><td>$0</td></tr>
+          <tr><td>Starter</td><td>1,000</td><td>100</td><td>$29/mo</td></tr>
+          <tr><td>Professional</td><td>10,000</td><td>300</td><td>$149/mo</td></tr>
+        </tbody>
+      </table>
+      <p>Hard per-minute limits: 60 req/min on <code>/v1/search</code>, 20 req/min on <code>/v1/answer</code>. Exceeded limits return HTTP 429. Upgrade at <a href="https://sourcetruth.io#pricing">sourcetruth.io/pricing</a>.</p>
+    </section>
+
+    <section>
+      <span class="section-anchor" id="errors"></span>
+      <h2>Error codes</h2>
+      <table>
+        <thead><tr><th>Status</th><th>Meaning</th></tr></thead>
+        <tbody>
+          <tr><td>400</td><td>Invalid request — check required fields.</td></tr>
+          <tr><td>401</td><td>Missing or invalid API key.</td></tr>
+          <tr><td>403</td><td>Endpoint requires a paid plan.</td></tr>
+          <tr><td>404</td><td>Resource not found.</td></tr>
+          <tr><td>429</td><td>Daily quota or per-minute rate limit exceeded.</td></tr>
+          <tr><td>503</td><td>Billing not configured.</td></tr>
+        </tbody>
+      </table>
+      <p>All errors: <code>{"detail": "..."}</code></p>
+    </section>
+
+    <section>
+      <span class="section-anchor" id="sdk-python"></span>
+      <h2>Python SDK</h2>
+      <div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span></div><pre>pip install sourcetruth</pre></div>
+      <div class="code-block">
+        <div class="code-block-header"><span class="code-lang">Python</span></div>
+        <pre><span class="t-keyword">import</span> requests
+API_KEY = <span class="t-string">"st_..."</span>
+
+r = requests.<span class="t-fn">post</span>(<span class="t-string">"https://api.sourcetruth.io/v1/search"</span>,
+    headers={<span class="t-string">"X-API-Key"</span>: API_KEY},
+    json={<span class="t-string">"query"</span>: <span class="t-string">"nature of suffering"</span>, <span class="t-string">"top_k"</span>: <span class="t-number">5</span>})
+<span class="t-keyword">for</span> p <span class="t-keyword">in</span> r.json()[<span class="t-string">"passages"</span>]:
+    <span class="t-fn">print</span>(p[<span class="t-string">"reference"</span>], p[<span class="t-string">"text"</span>][:<span class="t-number">120</span>])</pre>
+      </div>
+    </section>
+
+    <section>
+      <span class="section-anchor" id="sdk-js"></span>
+      <h2>JavaScript SDK</h2>
+      <div class="code-block"><div class="code-block-header"><span class="code-lang">bash</span></div><pre>npm install sourcetruth</pre></div>
+      <div class="code-block">
+        <div class="code-block-header"><span class="code-lang">JavaScript</span></div>
+        <pre><span class="t-keyword">const</span> res = <span class="t-keyword">await</span> <span class="t-fn">fetch</span>(<span class="t-string">"https://api.sourcetruth.io/v1/search"</span>, {
+  method: <span class="t-string">"POST"</span>,
+  headers: { <span class="t-string">"X-API-Key"</span>: <span class="t-string">"st_..."</span>, <span class="t-string">"Content-Type"</span>: <span class="t-string">"application/json"</span> },
+  body: <span class="t-fn">JSON.stringify</span>({ query: <span class="t-string">"nature of suffering"</span>, top_k: <span class="t-number">5</span> }),
+});
+<span class="t-keyword">const</span> { passages } = <span class="t-keyword">await</span> res.<span class="t-fn">json</span>();
+passages.<span class="t-fn">forEach</span>(p => <span class="t-fn">console.log</span>(p.reference, p.text.<span class="t-fn">slice</span>(<span class="t-number">0</span>, <span class="t-number">120</span>)));</pre>
+      </div>
+    </section>
+
+  </main>
+</div>
+
+<script>
+const anchors = document.querySelectorAll('.section-anchor');
+const navItems = document.querySelectorAll('.nav-item');
+const observer = new IntersectionObserver(entries => {
+  entries.forEach(e => {
+    if (e.isIntersecting) {
+      const id = e.target.id;
+      navItems.forEach(n => n.classList.remove('active'));
+      const a = document.querySelector('.nav-item[href="#' + id + '"]');
+      if (a) a.classList.add('active');
+    }
+  });
+}, { rootMargin: '-60px 0px -60% 0px' });
+anchors.forEach(a => observer.observe(a));
+</script>
+</body>
+</html>
