@@ -1,0 +1,1254 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Verse Source — Ask anything. We'll show you what the sources actually say.</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    :root {
+      --navy: #0d1b3e;
+      --navy-mid: #142a5e;
+      --gold: #c9a84c;
+      --gold-light: #e4cc87;
+      --gold-bg: #fffbf2;
+      --gold-border: #e8d4a0;
+      --white: #ffffff;
+      --gray-50: #f9fafb;
+      --gray-100: #f3f4f6;
+      --gray-200: #e5e7eb;
+      --gray-400: #9ca3af;
+      --gray-500: #6b7280;
+      --gray-600: #4b5563;
+      --gray-800: #1f2937;
+      --red: #dc2626;
+      --font: 'Inter', system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+      font-family: var(--font);
+      background: var(--white);
+      color: var(--gray-800);
+      line-height: 1.6;
+      min-height: 100vh;
+    }
+
+    /* ── Navigation ── */
+    nav {
+      background: var(--navy);
+      padding: 0 24px;
+      height: 64px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      position: sticky;
+      top: 0;
+      z-index: 100;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.3);
+    }
+
+    .nav-logo {
+      color: var(--white);
+      font-size: 1.25rem;
+      font-weight: 700;
+      letter-spacing: -0.02em;
+      cursor: pointer;
+      user-select: none;
+    }
+    .nav-logo span { color: var(--gold); }
+
+    .nav-right {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .nav-username {
+      color: rgba(255,255,255,0.6);
+      font-size: 0.8125rem;
+      margin-right: 4px;
+    }
+
+    .btn {
+      padding: 8px 18px;
+      border-radius: 6px;
+      font-family: var(--font);
+      font-size: 0.875rem;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all 0.15s ease;
+      border: none;
+      line-height: 1;
+    }
+    .btn-ghost {
+      background: transparent;
+      border: 1.5px solid rgba(255,255,255,0.35);
+      color: var(--white);
+    }
+    .btn-ghost:hover { border-color: var(--gold); color: var(--gold); }
+    .btn-gold { background: var(--gold); color: var(--navy); font-weight: 600; }
+    .btn-gold:hover { background: var(--gold-light); }
+    .btn-navy { background: var(--navy); color: var(--white); font-weight: 600; }
+    .btn-navy:hover { background: var(--navy-mid); }
+
+    /* ── Hero / Search ── */
+    .hero {
+      background: var(--navy);
+      padding: 72px 24px 88px;
+      text-align: center;
+    }
+
+    .hero-eyebrow {
+      color: rgba(255,255,255,0.5);
+      font-size: 0.8125rem;
+      font-weight: 500;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 18px;
+    }
+
+    .hero h1 {
+      color: var(--white);
+      font-size: clamp(2rem, 5vw, 3rem);
+      font-weight: 700;
+      letter-spacing: -0.03em;
+      margin-bottom: 10px;
+    }
+    .hero h1 span { color: var(--gold); }
+
+    .hero-tagline {
+      color: rgba(255,255,255,0.55);
+      font-size: 1.0625rem;
+      margin-bottom: 40px;
+    }
+
+    .search-wrap {
+      max-width: 680px;
+      margin: 0 auto;
+      display: flex;
+      background: var(--white);
+      border-radius: 10px;
+      overflow: hidden;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.25);
+    }
+
+    .search-input {
+      flex: 1;
+      padding: 18px 22px;
+      font-family: var(--font);
+      font-size: 1rem;
+      border: none;
+      outline: none;
+      color: var(--gray-800);
+      min-width: 0;
+    }
+    .search-input::placeholder { color: var(--gray-400); }
+
+    .search-submit {
+      flex-shrink: 0;
+      padding: 0 28px;
+      background: var(--gold);
+      color: var(--navy);
+      border: none;
+      font-family: var(--font);
+      font-size: 0.9375rem;
+      font-weight: 700;
+      cursor: pointer;
+      transition: background 0.15s;
+      white-space: nowrap;
+    }
+    .search-submit:hover { background: var(--gold-light); }
+    .search-submit:disabled { opacity: 0.55; cursor: not-allowed; }
+
+    .search-context {
+      max-width: 680px;
+      margin: 14px auto 0;
+      color: rgba(255,255,255,0.4);
+      font-size: 0.875rem;
+      text-align: center;
+    }
+    .search-context strong { color: rgba(255,255,255,0.75); }
+
+    /* ── Main content ── */
+    #main {
+      max-width: 760px;
+      margin: 0 auto;
+      padding: 52px 24px 80px;
+    }
+
+    /* ── Loading ── */
+    .loading {
+      text-align: center;
+      padding: 56px 24px;
+      color: var(--gray-400);
+    }
+    .spinner {
+      width: 36px;
+      height: 36px;
+      border: 3px solid var(--gray-200);
+      border-top-color: var(--gold);
+      border-radius: 50%;
+      animation: spin 0.75s linear infinite;
+      margin: 0 auto 16px;
+    }
+    @keyframes spin { to { transform: rotate(360deg); } }
+    .loading p { font-size: 0.9375rem; }
+
+    /* ── Shared section header ── */
+    .section-header {
+      font-size: 1.3125rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin-bottom: 24px;
+      padding-bottom: 14px;
+      border-bottom: 2px solid var(--gold);
+    }
+
+    /* ── Passage cards ── */
+    .passage-count {
+      font-size: 0.875rem;
+      color: var(--gray-400);
+      margin-bottom: 20px;
+    }
+
+    .passage-card {
+      background: var(--gray-50);
+      border: 1px solid var(--gray-200);
+      border-left: 4px solid var(--gold);
+      border-radius: 8px;
+      padding: 22px 24px;
+      margin-bottom: 14px;
+    }
+
+    .passage-text {
+      font-size: 1.0625rem;
+      line-height: 1.8;
+      color: var(--gray-800);
+      font-style: italic;
+      margin-bottom: 14px;
+    }
+
+    .passage-meta {
+      display: flex;
+      flex-wrap: wrap;
+      align-items: center;
+      gap: 7px;
+    }
+
+    .tag {
+      display: inline-block;
+      padding: 3px 10px;
+      border-radius: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      letter-spacing: 0.01em;
+    }
+    .tag-source { background: var(--navy); color: var(--white); }
+    .tag-tradition { background: rgba(13,27,62,0.12); color: var(--navy); }
+    .tag-ref { color: var(--gray-500); font-size: 0.8rem; font-style: italic; }
+    .tag-score { display: none; }
+
+    /* ── Synthesis box ── */
+    .synthesis-box {
+      background: var(--gold-bg);
+      border: 1px solid var(--gold-border);
+      border-radius: 10px;
+      padding: 28px;
+      margin-top: 32px;
+    }
+
+    .synthesis-label {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #7a5e15;
+      text-transform: uppercase;
+      letter-spacing: 0.1em;
+      margin-bottom: 12px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .synthesis-label::before {
+      content: '';
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--gold);
+    }
+
+    .synthesis-text {
+      font-size: 1.0625rem;
+      line-height: 1.8;
+      color: var(--gray-800);
+    }
+
+    .save-btn {
+      display: inline-block;
+      margin-top: 20px;
+      padding: 11px 24px;
+      background: var(--gold);
+      color: var(--navy);
+      border: none;
+      border-radius: 6px;
+      font-family: var(--font);
+      font-size: 0.9375rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: background 0.15s;
+    }
+    .save-btn:hover { background: var(--gold-light); }
+
+    .save-note {
+      font-size: 0.8rem;
+      color: var(--gray-400);
+      margin-top: 8px;
+    }
+
+    /* ── Adjacent state ── */
+    .adjacent-message {
+      font-size: 1.125rem;
+      color: var(--gray-600);
+      margin-bottom: 4px;
+    }
+
+    .adjacent-sub {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--navy);
+      margin: 28px 0 14px;
+    }
+
+    .related-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .related-btn {
+      text-align: left;
+      padding: 14px 18px;
+      background: var(--white);
+      border: 1.5px solid var(--gray-200);
+      border-radius: 8px;
+      font-family: var(--font);
+      font-size: 0.9375rem;
+      color: var(--gray-800);
+      cursor: pointer;
+      transition: all 0.15s;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .related-btn:hover { border-color: var(--gold); background: var(--gold-bg); color: var(--navy); }
+    .related-arrow { color: var(--gold); font-weight: 700; flex-shrink: 0; line-height: 1.6; }
+
+    /* ── Not grounded ── */
+    .not-grounded {
+      text-align: center;
+      padding: 72px 24px;
+    }
+    .not-grounded-icon {
+      font-size: 2.5rem;
+      margin-bottom: 16px;
+      opacity: 0.3;
+    }
+    .not-grounded p {
+      font-size: 1.125rem;
+      color: var(--gray-500);
+    }
+
+    /* ── Error ── */
+    .error-box {
+      text-align: center;
+      padding: 48px 24px;
+      color: var(--red);
+    }
+    .error-box p { font-size: 1rem; }
+    .error-detail { font-size: 0.8125rem; color: var(--gray-400); margin-top: 6px; }
+
+    /* ── History / Library view ── */
+    #view-library { display: none; }
+
+    .library-empty {
+      text-align: center;
+      padding: 64px 24px;
+      color: var(--gray-400);
+      font-size: 1rem;
+    }
+
+    .saved-card {
+      border: 1px solid var(--gray-200);
+      border-radius: 8px;
+      padding: 16px 20px;
+      margin-bottom: 10px;
+      cursor: pointer;
+      transition: border-color 0.15s, background 0.15s;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+    }
+    .saved-card:hover { border-color: var(--gold); background: var(--gold-bg); }
+    .saved-card-text {}
+    .saved-query { font-weight: 500; color: var(--navy); font-size: 0.9375rem; }
+    .saved-date { font-size: 0.8rem; color: var(--gray-400); margin-top: 2px; }
+    .saved-actions {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      flex-shrink: 0;
+    }
+    .saved-delete, .saved-addcol {
+      background: none;
+      border: none;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 4px;
+      line-height: 1;
+      transition: color 0.15s, background 0.15s;
+    }
+    .saved-delete { color: var(--gray-300); font-size: 1rem; }
+    .saved-delete:hover { color: var(--red); }
+    .saved-addcol { color: var(--gray-400); font-size: 0.8rem; font-weight: 700; }
+    .saved-addcol:hover { color: var(--gold); background: var(--gold-bg); }
+
+    .collection-section { margin-top: 40px; }
+    .collection-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 16px;
+    }
+    .collection-header h3 {
+      font-size: 1rem;
+      font-weight: 600;
+      color: var(--navy);
+    }
+    .btn-sm {
+      padding: 6px 14px;
+      font-size: 0.8125rem;
+      border-radius: 5px;
+    }
+    .collection-item {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      padding: 12px 16px;
+      border: 1px solid var(--gray-200);
+      border-radius: 6px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      transition: border-color 0.15s;
+    }
+    .collection-item:hover { border-color: var(--gold); }
+    .collection-name { font-weight: 500; font-size: 0.9375rem; color: var(--navy); }
+    .collection-count { font-size: 0.8rem; color: var(--gray-400); margin-left: auto; }
+
+    /* ── Modal ── */
+    .modal-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(13,27,62,0.65);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 200;
+      padding: 24px;
+      backdrop-filter: blur(2px);
+    }
+    .modal-overlay.hidden { display: none; }
+
+    .modal {
+      background: var(--white);
+      border-radius: 12px;
+      padding: 40px;
+      width: 100%;
+      max-width: 440px;
+      box-shadow: 0 24px 64px rgba(0,0,0,0.3);
+      position: relative;
+    }
+
+    .modal-close {
+      position: absolute;
+      top: 16px;
+      right: 16px;
+      background: none;
+      border: none;
+      color: var(--gray-400);
+      font-size: 1.125rem;
+      cursor: pointer;
+      width: 32px;
+      height: 32px;
+      border-radius: 6px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+    .modal-close:hover { background: var(--gray-100); color: var(--gray-600); }
+
+    .modal h2 { font-size: 1.5rem; font-weight: 700; color: var(--navy); margin-bottom: 6px; }
+    .modal-sub { color: var(--gray-500); font-size: 0.9375rem; margin-bottom: 28px; }
+
+    .field { margin-bottom: 16px; }
+    .field label { display: block; font-size: 0.875rem; font-weight: 500; color: var(--gray-800); margin-bottom: 6px; }
+    .field input {
+      width: 100%;
+      padding: 10px 14px;
+      border: 1.5px solid var(--gray-200);
+      border-radius: 6px;
+      font-family: var(--font);
+      font-size: 0.9375rem;
+      outline: none;
+      transition: border-color 0.15s;
+    }
+    .field input:focus { border-color: var(--gold); }
+
+    .modal-btn {
+      display: block;
+      width: 100%;
+      padding: 13px;
+      border-radius: 7px;
+      font-family: var(--font);
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      border: none;
+      transition: background 0.15s;
+    }
+    .modal-btn-navy { background: var(--navy); color: var(--white); }
+    .modal-btn-navy:hover { background: var(--navy-mid); }
+    .modal-btn-gold { background: var(--gold); color: var(--navy); }
+    .modal-btn-gold:hover { background: var(--gold-light); }
+
+    .modal-toggle { text-align: center; font-size: 0.875rem; color: var(--gray-500); margin-top: 16px; }
+    .modal-toggle a { color: var(--gold); cursor: pointer; font-weight: 500; text-decoration: none; }
+    .modal-toggle a:hover { text-decoration: underline; }
+
+    .modal-stripe-note {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 0.8rem;
+      color: var(--gray-400);
+      margin-top: 12px;
+      text-align: center;
+      justify-content: center;
+    }
+
+    .hidden { display: none !important; }
+
+    /* ── Toast ── */
+    .toast {
+      position: fixed;
+      bottom: 24px;
+      right: 24px;
+      background: var(--gray-800);
+      color: var(--white);
+      padding: 12px 20px;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      z-index: 300;
+      box-shadow: 0 4px 20px rgba(0,0,0,0.2);
+      transform: translateY(16px);
+      opacity: 0;
+      transition: transform 0.25s ease, opacity 0.25s ease;
+      pointer-events: none;
+      max-width: 320px;
+    }
+    .toast.visible { transform: translateY(0); opacity: 1; }
+
+    /* ── Collection picker modal ── */
+    .collection-picker { }
+    .collection-picker-list { margin: 16px 0; max-height: 240px; overflow-y: auto; }
+    .cp-item {
+      padding: 10px 14px;
+      border: 1px solid var(--gray-200);
+      border-radius: 6px;
+      margin-bottom: 8px;
+      cursor: pointer;
+      font-size: 0.9375rem;
+      color: var(--navy);
+      transition: all 0.15s;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+    .cp-item:hover { border-color: var(--gold); background: var(--gold-bg); }
+    .cp-new { margin-top: 8px; }
+
+    /* ── Responsive ── */
+    @media (max-width: 600px) {
+      .hero { padding: 52px 16px 68px; }
+      .search-wrap { flex-direction: column; border-radius: 8px; }
+      .search-submit { padding: 16px; border-radius: 0 0 8px 8px; }
+      nav { padding: 0 16px; }
+      .nav-username { display: none; }
+      #main { padding: 40px 16px 64px; }
+      .modal { padding: 32px 24px; }
+      .passage-meta { flex-direction: column; align-items: flex-start; }
+      .tag-score { margin-left: 0; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════ NAV ═══════════════════════════════════════ -->
+<nav>
+  <div class="nav-logo" onclick="goHome()">Verse <span>Source</span></div>
+  <div class="nav-right">
+    <div id="nav-guest">
+      <button class="btn btn-ghost" onclick="openModal('login')">Sign In</button>
+      <button class="btn btn-gold" style="margin-left:8px" onclick="openModal('signup')">Subscribe</button>
+    </div>
+    <div id="nav-auth" class="hidden">
+      <span class="nav-username" id="nav-name"></span>
+      <button class="btn btn-ghost" onclick="showLibrary()">My Library</button>
+      <button class="btn btn-ghost" style="margin-left:8px" onclick="doLogout()">Sign Out</button>
+    </div>
+  </div>
+</nav>
+
+<!-- ═══════════════════════════════════════ HERO ═══════════════════════════════════════ -->
+<section class="hero">
+  <div class="hero-eyebrow">Canonical Christian Scriptures</div>
+  <h1>Verse <span>Source</span></h1>
+  <p class="hero-tagline">Ask anything. We'll show you what the sources actually say.</p>
+  <form id="search-form" onsubmit="handleSearch(event)">
+    <div class="search-wrap">
+      <input
+        id="search-input"
+        class="search-input"
+        type="text"
+        placeholder="Ask a question about Scripture..."
+        autocomplete="off"
+        autocorrect="off"
+        spellcheck="false"
+      />
+      <button type="submit" id="search-submit" class="search-submit">Search</button>
+    </div>
+  </form>
+  <div id="search-context" class="search-context hidden"></div>
+</section>
+
+<!-- ═══════════════════════════════════════ MAIN ═══════════════════════════════════════ -->
+<div id="main">
+  <!-- Search results view -->
+  <div id="view-results"></div>
+
+  <!-- Library view -->
+  <div id="view-library">
+    <h2 class="section-header">My Library</h2>
+    <div id="saved-list"></div>
+    <div class="collection-section">
+      <div class="collection-header">
+        <h3>Collections</h3>
+        <button class="btn btn-gold btn-sm" onclick="newCollection()">+ New Collection</button>
+      </div>
+      <div id="collection-list"></div>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ AUTH MODAL ═════════════════════════════════ -->
+<div id="modal-overlay" class="modal-overlay hidden" onclick="overlayClick(event)">
+  <div class="modal">
+    <button class="modal-close" onclick="closeModal()">✕</button>
+
+    <!-- Login panel -->
+    <div id="panel-login">
+      <h2>Sign in</h2>
+      <p class="modal-sub">Welcome back to Verse Source.</p>
+      <div class="field"><label>Email</label><input id="login-email" type="email" placeholder="you@example.com" /></div>
+      <div class="field"><label>Password</label><input id="login-password" type="password" placeholder="••••••••" /></div>
+      <button class="modal-btn modal-btn-navy" onclick="doLogin()">Sign in</button>
+      <p class="modal-toggle">No account? <a onclick="switchPanel('signup')">Subscribe for $15/month →</a></p>
+    </div>
+
+    <!-- Signup panel -->
+    <div id="panel-signup" class="hidden">
+      <h2>Create account</h2>
+      <p class="modal-sub">Save answers and build your personal library — $15/month</p>
+      <div class="field"><label>Name</label><input id="signup-name" type="text" placeholder="Your name" /></div>
+      <div class="field"><label>Email</label><input id="signup-email" type="email" placeholder="you@example.com" /></div>
+      <div class="field"><label>Password</label><input id="signup-password" type="password" placeholder="Create a password (8+ characters)" /></div>
+      <button class="modal-btn modal-btn-gold" onclick="doSignup()">Continue to payment →</button>
+      <p class="modal-stripe-note">🔒 Secured by Stripe · Cancel anytime</p>
+      <p class="modal-toggle">Already have an account? <a onclick="switchPanel('login')">Sign in</a></p>
+    </div>
+
+    <!-- Collection create panel -->
+    <div id="panel-collection" class="hidden">
+      <h2>New Collection</h2>
+      <p class="modal-sub">Give your collection a name.</p>
+      <div class="field"><label>Collection name</label><input id="collection-name-input" type="text" placeholder="e.g. Sermon on the Mount" onkeydown="if(event.key==='Enter')createCollection()" /></div>
+      <button class="modal-btn modal-btn-navy" onclick="createCollection()">Create</button>
+    </div>
+
+    <!-- Collection picker panel -->
+    <div id="panel-picker" class="hidden collection-picker">
+      <h2>Add to Collection</h2>
+      <p class="modal-sub">Choose a collection for this answer.</p>
+      <div class="collection-picker-list" id="picker-list"></div>
+      <button class="modal-btn modal-btn-gold cp-new" onclick="switchPanel('collection')">+ Create new collection</button>
+    </div>
+  </div>
+</div>
+
+<!-- ═══════════════════════════════════════ TOAST ══════════════════════════════════════ -->
+<div id="toast" class="toast"></div>
+
+<!-- ═══════════════════════════════════════ SCRIPT ════════════════════════════════════ -->
+<script>
+'use strict';
+
+/* ── Constants ── */
+const API_KEY    = 'st_ae6110780a52194e92eddc6eb478fbb0b093d3af18e132d433711bb18088b677';
+const SEARCH_URL = 'https://api.sourcetruth.io/v1/search';
+const ANSWER_URL = 'https://api.sourcetruth.io/v1/answer';
+
+/* ── State ── */
+let session = null;          // { email, name, subscribed }
+let lastQuery    = '';
+let lastPassages = [];
+let lastSynthesis = '';
+let adjacentQs   = [];       // questions for ADJACENT state — indexed by button index
+let _pickerItemId = null;    // saved-answer id pending collection assignment
+
+/* ════════════════════════════════════════════════
+   AUTH
+════════════════════════════════════════════════ */
+function loadSession() {
+  try {
+    const raw = localStorage.getItem('vs_auth');
+    if (raw) { session = JSON.parse(raw); syncNav(); }
+  } catch(_) {}
+}
+
+function syncNav() {
+  const guest = document.getElementById('nav-guest');
+  const auth  = document.getElementById('nav-auth');
+  const name  = document.getElementById('nav-name');
+  if (session) {
+    guest.classList.add('hidden');
+    auth.classList.remove('hidden');
+    name.textContent = session.name || session.email.split('@')[0];
+  } else {
+    auth.classList.add('hidden');
+    guest.classList.remove('hidden');
+  }
+}
+
+function doLogin() {
+  const email = document.getElementById('login-email').value.trim();
+  const pw    = document.getElementById('login-password').value;
+  if (!email || !pw) { toast('Please enter your email and password.'); return; }
+  session = { email, name: email.split('@')[0], subscribed: true };
+  localStorage.setItem('vs_auth', JSON.stringify(session));
+  syncNav();
+  closeModal();
+  toast('Welcome back, ' + session.name + '!');
+}
+
+function doSignup() {
+  const name  = document.getElementById('signup-name').value.trim();
+  const email = document.getElementById('signup-email').value.trim();
+  const pw    = document.getElementById('signup-password').value;
+  if (!name || !email || !pw) { toast('Please fill in all fields.'); return; }
+  if (pw.length < 8)          { toast('Password must be at least 8 characters.'); return; }
+  if (!email.includes('@'))   { toast('Please enter a valid email address.'); return; }
+
+  // In production: POST to backend → Stripe Checkout Session → redirect
+  // For this demo: mark subscribed immediately after "payment"
+  session = { email, name, subscribed: true };
+  localStorage.setItem('vs_auth', JSON.stringify(session));
+  syncNav();
+  closeModal();
+  toast('Account created. Welcome to Verse Source, ' + name + '!');
+}
+
+function doLogout() {
+  session = null;
+  localStorage.removeItem('vs_auth');
+  syncNav();
+  goHome();
+  toast('Signed out.');
+}
+
+/* ════════════════════════════════════════════════
+   MODAL
+════════════════════════════════════════════════ */
+function openModal(panelId) {
+  switchPanel(panelId);
+  document.getElementById('modal-overlay').classList.remove('hidden');
+}
+
+function closeModal() {
+  document.getElementById('modal-overlay').classList.add('hidden');
+}
+
+function overlayClick(e) {
+  if (e.target === document.getElementById('modal-overlay')) closeModal();
+}
+
+function switchPanel(id) {
+  ['login','signup','collection','picker'].forEach(p => {
+    document.getElementById('panel-' + p).classList.add('hidden');
+  });
+  document.getElementById('panel-' + id).classList.remove('hidden');
+}
+
+/* ════════════════════════════════════════════════
+   TOAST
+════════════════════════════════════════════════ */
+let _toastTimer;
+function toast(msg, ms = 3000) {
+  const el = document.getElementById('toast');
+  el.textContent = msg;
+  el.classList.add('visible');
+  clearTimeout(_toastTimer);
+  _toastTimer = setTimeout(() => el.classList.remove('visible'), ms);
+}
+
+/* ════════════════════════════════════════════════
+   NAVIGATION
+════════════════════════════════════════════════ */
+function goHome() {
+  setView('results');
+  document.getElementById('view-results').innerHTML = '';
+  document.getElementById('search-context').classList.add('hidden');
+  document.getElementById('search-input').value = '';
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function showLibrary() {
+  if (!session) { openModal('login'); return; }
+  setView('library');
+  renderLibrary();
+  scrollToMain();
+}
+
+function setView(name) {
+  document.getElementById('view-results').style.display = name === 'results' ? '' : 'none';
+  document.getElementById('view-library').style.display  = name === 'library' ? '' : 'none';
+}
+
+function scrollToMain() {
+  const main = document.getElementById('main');
+  window.scrollTo({ top: main.offsetTop - 72, behavior: 'smooth' });
+}
+
+/* ════════════════════════════════════════════════
+   API HELPERS
+════════════════════════════════════════════════ */
+async function apiPost(url, body) {
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json', 'X-API-Key': API_KEY },
+    body: JSON.stringify(body)
+  });
+  if (!res.ok) {
+    const txt = await res.text().catch(() => '');
+    throw new Error('HTTP ' + res.status + (txt ? ': ' + txt.slice(0, 120) : ''));
+  }
+  return res.json();
+}
+
+/* Normalise the many shapes a passages array might come in */
+function extractPassages(data) {
+  for (const key of [null, 'results', 'passages', 'chunks', 'documents', 'hits', 'data']) {
+    const arr = key ? data[key] : data;
+    if (Array.isArray(arr) && arr.length > 0) return arr;
+  }
+  return [];
+}
+
+function pScore(p)     { return p.score ?? p.similarity ?? p.relevance ?? 0; }
+function pText(p)      { return p.text  ?? p.content ?? p.passage ?? p.chunk_text ?? ''; }
+function pSource(p)    { return p.source ?? p.source_text ?? p.source_text_name ?? p.text_name ?? p.title_english ?? p.collection ?? (p.metadata && p.metadata.source) ?? ''; }
+function pTradition(p) { return p.tradition ?? p.collection ?? (p.metadata && p.metadata.tradition) ?? ''; }
+function pReference(p) { return p.reference ?? p.citation ?? p.location ?? p.ref ?? (p.metadata && p.metadata.reference) ?? ''; }
+
+/* ════════════════════════════════════════════════
+   SEARCH FLOW
+════════════════════════════════════════════════ */
+async function handleSearch(e) {
+  if (e && e.preventDefault) e.preventDefault();
+  const query = document.getElementById('search-input').value.trim();
+  if (!query) return;
+
+  lastQuery = query;
+  setView('results');
+
+  // Show query context under search bar
+  const ctx = document.getElementById('search-context');
+  ctx.innerHTML = 'Searching: <strong>"' + esc(query) + '"</strong>';
+  ctx.classList.remove('hidden');
+
+  // Show loading state
+  const view = document.getElementById('view-results');
+  view.innerHTML = loadingHTML('Searching canonical sources…');
+  scrollToMain();
+
+  // Lock search button
+  const btn = document.getElementById('search-submit');
+  btn.disabled = true;
+  btn.textContent = 'Searching…';
+
+  try {
+    const data     = await apiPost(SEARCH_URL, { query, top_k: 8, corpus_codes: ['kjv','bible-web','bible-asv','bible-ylt','christian-theology'] });
+    const passages = extractPassages(data);
+
+    if (!passages || passages.length === 0) {
+      renderNotGrounded();
+      return;
+    }
+
+    const hasHigh = passages.some(p => pScore(p) > 0.014);
+
+    if (hasHigh) {
+      view.innerHTML = loadingHTML('Generating synthesis…');
+      const ans = await apiPost(ANSWER_URL, { question: query }).catch(() => ({}));
+      const synthesis = ans.answer ?? ans.synthesis ?? ans.response ?? '';
+      lastPassages  = passages;
+      lastSynthesis = synthesis;
+      renderGrounded(passages, synthesis);
+    } else {
+      lastPassages = passages;
+      await renderAdjacent(passages, query);
+    }
+
+  } catch(err) {
+    view.innerHTML = `
+      <div class="error-box">
+        <p>Could not reach the canonical sources right now.</p>
+        <p class="error-detail">${esc(err.message)}</p>
+      </div>`;
+  } finally {
+    btn.disabled = false;
+    btn.textContent = 'Search';
+  }
+}
+
+/* ════════════════════════════════════════════════
+   RENDER: GROUNDED
+════════════════════════════════════════════════ */
+function renderGrounded(passages, synthesis) {
+  const high = passages.filter(p => pScore(p) > 0.014);
+  const show = high.length > 0 ? high : passages.slice(0, 5);
+
+  let html = `<h2 class="section-header">Here's what the canonical sources say:</h2>`;
+  html += `<p class="passage-count">${show.length} passage${show.length !== 1 ? 's' : ''} found</p>`;
+
+  for (const p of show) {
+    const text   = pText(p);
+    const source = pSource(p);
+    const trad   = pTradition(p);
+    const ref    = pReference(p);
+    const score  = pScore(p);
+
+    html += `
+    <div class="passage-card">
+      <div class="passage-text">“${esc(text)}”</div>
+      <div class="passage-meta">
+        ${source ? `<span class="tag tag-source">${esc(source)}</span>` : ''}
+        ${trad   ? `<span class="tag tag-tradition">${esc(trad)}</span>` : ''}
+        ${ref    ? `<span class="tag tag-ref">${esc(ref)}</span>` : ''}
+        <span class="tag tag-score">${score.toFixed(3)}</span>
+      </div>
+    </div>`;
+  }
+
+  if (synthesis) {
+    const saveRow = session && session.subscribed
+      ? `<button class="save-btn" onclick="saveCurrentAnswer()">Save this answer</button>`
+      : `<button class="save-btn" onclick="promptSave()">Save this answer</button>
+         <p class="save-note">Save answers and build your personal library &mdash; $15/month</p>`;
+
+    html += `
+    <div class="synthesis-box">
+      <div class="synthesis-label">AI draft synthesis &mdash; for editorial review before sharing</div>
+      <div class="synthesis-text">${esc(synthesis)}</div>
+      ${saveRow}
+    </div>`;
+  }
+
+  document.getElementById('view-results').innerHTML = html;
+}
+
+/* ════════════════════════════════════════════════
+   RENDER: ADJACENT
+════════════════════════════════════════════════ */
+async function renderAdjacent(passages, query) {
+  const view = document.getElementById('view-results');
+  view.innerHTML = `
+    <p class="adjacent-message">This question isn't directly answered in the canonical sources.</p>
+    ${loadingHTML('Finding related questions the sources do address…')}`;
+
+  const questions = await deriveRelatedQuestions(query, passages);
+  adjacentQs = questions;
+
+  let html = `<p class="adjacent-message">This question isn't directly answered in the canonical sources.</p>`;
+  html += `<p class="adjacent-sub">The sources do address these related questions:</p>`;
+  html += `<div class="related-list">`;
+
+  questions.forEach((q, i) => {
+    html += `
+    <button class="related-btn" onclick="runRelated(${i})">
+      <span class="related-arrow">&rarr;</span>
+      <span>${esc(q)}</span>
+    </button>`;
+  });
+
+  html += `</div>`;
+  view.innerHTML = html;
+}
+
+function runRelated(idx) {
+  const q = adjacentQs[idx];
+  if (!q) return;
+  document.getElementById('search-input').value = q;
+  handleSearch(null);
+}
+
+/* ════════════════════════════════════════════════
+   RENDER: NOT GROUNDED
+════════════════════════════════════════════════ */
+function renderNotGrounded() {
+  document.getElementById('view-results').innerHTML = `
+    <div class="not-grounded">
+      <div class="not-grounded-icon">&#x1F4DC;</div>
+      <p>No canonical source found for this question.</p>
+    </div>`;
+}
+
+/* ════════════════════════════════════════════════
+   RELATED QUESTION GENERATION
+════════════════════════════════════════════════ */
+async function deriveRelatedQuestions(query, passages) {
+  /* Primary: ask the answer endpoint for a list of related questions */
+  try {
+    const metaQ = `In Christian scripture and theology, what are 5 specific questions closely related to "${query}" that the texts directly address? List only the questions, one per line, without numbering.`;
+    const data = await apiPost(ANSWER_URL, { question: metaQ });
+    const text = data.answer ?? data.synthesis ?? data.response ?? '';
+    if (text) {
+      const qs = parseQuestionList(text);
+      if (qs.length >= 3) return qs.slice(0, 5);
+    }
+  } catch(_) {}
+
+  /* Fallback: derive questions from the returned passage content */
+  return questionsFromPassages(query, passages);
+}
+
+function parseQuestionList(text) {
+  return text
+    .split(/\n+/)
+    .map(l => l.replace(/^\d+[\.\)]\s*/, '').replace(/^[-•\*]\s*/, '').trim())
+    .filter(l => l.length > 12 && l.length < 200)
+    .filter(l => l.endsWith('?') || /^(what|how|why|when|who|which|does|is|are|can|do)/i.test(l));
+}
+
+function questionsFromPassages(originalQuery, passages) {
+  const allText   = passages.map(pText).join(' ');
+  const sources   = [...new Set(passages.map(pSource).filter(Boolean))];
+  const keywords  = topKeywords(allText, 6);
+
+  const templates = [
+    kw => `What does Scripture teach about ${kw}?`,
+    kw => `How is ${kw} described in the Bible?`,
+    kw => `What is the relationship between ${kw} and salvation in Christian teaching?`,
+    kw => `How does ${kw} relate to the Christian life and discipleship?`,
+    kw => `What does ${sources[0] || 'Scripture'} say about ${kw}?`,
+  ];
+
+  return keywords
+    .slice(0, 5)
+    .map((kw, i) => templates[i % templates.length](kw))
+    .filter(Boolean);
+}
+
+function topKeywords(text, n) {
+  const stop = new Set(['the','a','an','and','or','but','in','on','at','to','for','of','with','is','was','are','were','be','been','have','has','had','do','does','did','will','would','could','should','may','might','this','that','these','those','he','she','it','we','they','what','which','who','when','where','how','why','all','said','says','one','two','three','four','five','not','no','so','if','then','than','from','by','as','into','through','before','after','above','below','up','down','out','there','here','its','his','her','our','your','their','my','more','most','other','some','only','same','also','both','each','few','very','just','such']);
+  const freq = {};
+  (text.toLowerCase().match(/\b[a-z]{4,}\b/g) || []).forEach(w => {
+    if (!stop.has(w)) freq[w] = (freq[w] || 0) + 1;
+  });
+  return Object.entries(freq).sort((a,b) => b[1]-a[1]).slice(0, n).map(([w]) => w);
+}
+
+/* ════════════════════════════════════════════════
+   SAVE / LIBRARY
+════════════════════════════════════════════════ */
+function saveCurrentAnswer() {
+  if (!session || !session.subscribed) { promptSave(); return; }
+  const saved = getSaved();
+  const exists = saved.some(s => s.query === lastQuery);
+  if (exists) { toast('Already saved.'); return; }
+
+  saved.unshift({
+    id:        Date.now(),
+    query:     lastQuery,
+    passages:  lastPassages,
+    synthesis: lastSynthesis,
+    savedAt:   new Date().toISOString(),
+    collections: []
+  });
+  localStorage.setItem('vs_saved', JSON.stringify(saved.slice(0, 200)));
+  toast('Answer saved to your library.');
+}
+
+function promptSave() {
+  openModal(session ? 'signup' : 'login');
+}
+
+function getSaved() {
+  try { return JSON.parse(localStorage.getItem('vs_saved') || '[]'); }
+  catch(_) { return []; }
+}
+
+function getCollections() {
+  try { return JSON.parse(localStorage.getItem('vs_collections') || '[]'); }
+  catch(_) { return []; }
+}
+
+function renderLibrary() {
+  const saved = getSaved();
+  const savedList = document.getElementById('saved-list');
+
+  if (saved.length === 0) {
+    savedList.innerHTML = '<p class="library-empty">No saved answers yet. Search for something and click “Save this answer.”</p>';
+  } else {
+    savedList.innerHTML = saved.map(item => `
+      <div class="saved-card" onclick="loadSaved(${item.id})">
+        <div class="saved-card-text">
+          <div class="saved-query">${esc(item.query)}</div>
+          <div class="saved-date">${fmtDate(item.savedAt)}</div>
+        </div>
+        <div class="saved-actions">
+          <button class="saved-addcol" onclick="addToCollection(event, ${item.id})" title="Add to collection">&#x2B; folder</button>
+          <button class="saved-delete" onclick="deleteSaved(event, ${item.id})" title="Remove">&#x2715;</button>
+        </div>
+      </div>`).join('');
+  }
+
+  const cols = getCollections();
+  const colList = document.getElementById('collection-list');
+  if (cols.length === 0) {
+    colList.innerHTML = '<p style="font-size:0.875rem; color:var(--gray-400);">No collections yet.</p>';
+  } else {
+    colList.innerHTML = cols.map(c => `
+      <div class="collection-item">
+        <span class="collection-name">${esc(c.name)}</span>
+        <span class="collection-count">${c.ids.length} saved</span>
+      </div>`).join('');
+  }
+}
+
+function loadSaved(id) {
+  const saved = getSaved();
+  const item  = saved.find(s => s.id === id);
+  if (!item) return;
+  lastQuery     = item.query;
+  lastPassages  = item.passages;
+  lastSynthesis = item.synthesis;
+  document.getElementById('search-input').value = item.query;
+  setView('results');
+  renderGrounded(item.passages, item.synthesis);
+  scrollToMain();
+}
+
+function deleteSaved(e, id) {
+  e.stopPropagation();
+  const saved = getSaved().filter(s => s.id !== id);
+  localStorage.setItem('vs_saved', JSON.stringify(saved));
+  renderLibrary();
+}
+
+function addToCollection(e, id) {
+  e.stopPropagation();
+  _pickerItemId = id;
+  const cols = getCollections();
+  if (cols.length === 0) {
+    openModal('collection');
+    return;
+  }
+  const list = document.getElementById('picker-list');
+  list.innerHTML = cols.map(c => `
+    <div class="cp-item" onclick="assignToCollection(${c.id})">
+      ${esc(c.name)}
+      <span style="color:var(--gray-400);font-size:0.8rem;margin-left:auto">${c.ids.length} saved</span>
+    </div>`).join('');
+  openModal('picker');
+}
+
+function assignToCollection(colId) {
+  const cols = getCollections();
+  const col = cols.find(c => c.id === colId);
+  if (!col || !_pickerItemId) return;
+  if (!col.ids.includes(_pickerItemId)) {
+    col.ids.push(_pickerItemId);
+    localStorage.setItem('vs_collections', JSON.stringify(cols));
+    toast('Added to "' + col.name + '".');
+  } else {
+    toast('Already in "' + col.name + '".');
+  }
+  _pickerItemId = null;
+  closeModal();
+  renderLibrary();
+}
+
+/* ── Collections ── */
+function newCollection() {
+  document.getElementById('collection-name-input').value = '';
+  openModal('collection');
+}
+
+function createCollection() {
+  const name = document.getElementById('collection-name-input').value.trim();
+  if (!name) { toast('Please enter a name for this collection.'); return; }
+  const cols = getCollections();
+  if (cols.some(c => c.name.toLowerCase() === name.toLowerCase())) {
+    toast('A collection with that name already exists.'); return;
+  }
+  cols.push({ id: Date.now(), name, ids: [] });
+  localStorage.setItem('vs_collections', JSON.stringify(cols));
+  closeModal();
+  toast('Collection “' + name + '” created.');
+  if (document.getElementById('view-library').style.display !== 'none') renderLibrary();
+}
+
+/* ════════════════════════════════════════════════
+   UTILITIES
+════════════════════════════════════════════════ */
+function loadingHTML(msg) {
+  return `<div class="loading"><div class="spinner"></div><p>${esc(msg)}</p></div>`;
+}
+
+function esc(s) {
+  if (s == null) return '';
+  return String(s)
+    .replace(/&/g,'&amp;')
+    .replace(/</g,'&lt;')
+    .replace(/>/g,'&gt;')
+    .replace(/"/g,'&quot;');
+}
+
+function fmtDate(iso) {
+  try {
+    return new Date(iso).toLocaleDateString('en-US', { year:'numeric', month:'long', day:'numeric' });
+  } catch(_) { return iso; }
+}
+
+/* ════════════════════════════════════════════════
+   INIT
+════════════════════════════════════════════════ */
+loadSession();
+setView('results');
+document.getElementById('search-input').focus();
+</script>
+</body>
+</html>
