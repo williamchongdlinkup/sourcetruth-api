@@ -766,6 +766,11 @@
       <div class="key-label">Your API key — copy it now, it won't be shown again</div>
       <div class="key-value" id="modalKey"></div>
       <button class="modal-copy-btn" onclick="copyKey()">Copy key</button>
+      <div id="modalCheckoutWrap" style="display:none;margin-top:1rem;">
+        <a id="modalCheckoutBtn" href="#" class="modal-btn-submit" style="display:inline-block;text-decoration:none;padding:0.6rem 1.4rem;">
+          Proceed to payment →
+        </a>
+      </div>
     </div>
   </div>
 </div>
@@ -829,6 +834,10 @@ async function submitKeyRequest() {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.detail || 'Failed to issue key.');
+    document.getElementById('modalForm').style.display = 'none';
+    document.getElementById('modalKey').textContent = data.key;
+    document.getElementById('modalResult').style.display = 'block';
+    document.getElementById('modalCheckoutWrap').style.display = 'none';
     if (_currentTier !== 'free') {
       const checkoutRes = await fetch('https://api.sourcetruth.io/v1/stripe/checkout', {
         method: 'POST',
@@ -840,13 +849,11 @@ async function submitKeyRequest() {
       });
       const checkoutData = await checkoutRes.json();
       if (checkoutRes.ok && checkoutData.checkout_url) {
-        window.location.href = checkoutData.checkout_url;
-        return;
+        const btn = document.getElementById('modalCheckoutBtn');
+        btn.href = checkoutData.checkout_url;
+        document.getElementById('modalCheckoutWrap').style.display = 'block';
       }
     }
-    document.getElementById('modalForm').style.display = 'none';
-    document.getElementById('modalKey').textContent = data.key;
-    document.getElementById('modalResult').style.display = 'block';
   } catch (err) {
     errEl.textContent = err.message;
     errEl.style.display = 'block';
