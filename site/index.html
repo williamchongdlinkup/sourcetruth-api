@@ -775,7 +775,21 @@
   </div>
 </div>
 
+<div id="upgradeToast" style="display:none;position:fixed;bottom:2rem;left:50%;transform:translateX(-50%);background:#1a3050;border:1px solid #c9a84c;border-radius:10px;padding:1rem 1.5rem;color:#f0f4f8;font-size:0.95rem;z-index:2000;box-shadow:0 4px 24px rgba(0,0,0,0.4);text-align:center;">
+  Your plan has been upgraded. Welcome aboard!
+</div>
+
 <script>
+(function() {
+  const p = new URLSearchParams(window.location.search);
+  if (p.get('upgrade') === 'success') {
+    const t = document.getElementById('upgradeToast');
+    t.style.display = 'block';
+    setTimeout(() => { t.style.opacity = '0'; t.style.transition = 'opacity 0.6s'; setTimeout(() => t.style.display = 'none', 600); }, 5000);
+    window.history.replaceState({}, '', '/');
+  }
+})();
+
 function showTab(lang) {
   document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.code-pane').forEach(p => p.classList.remove('active'));
