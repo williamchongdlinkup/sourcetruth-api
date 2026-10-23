@@ -59,8 +59,8 @@ KEY_PREFIX = os.getenv('API_KEY_PREFIX', 'st_')
 
 TIER_LIMITS = {
     'free':         {'daily_limit': 100,    'answer_daily_limit': None},
-    'starter':      {'daily_limit': 1_000,  'answer_daily_limit': 100},
-    'professional': {'daily_limit': 10_000, 'answer_daily_limit': 300},
+    'starter':      {'daily_limit': 5_000,  'answer_daily_limit': 100},
+    'professional': {'daily_limit': 50_000, 'answer_daily_limit': 300},
 }
 
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY', '')
