@@ -301,6 +301,58 @@
     .nav-links { display: none; }
     h2 { font-size: 1.7rem; }
   }
+
+  /* ── Key Modal ──────────────────────────────────────────────── */
+  .modal-overlay {
+    display: none; position: fixed; inset: 0; z-index: 1000;
+    background: rgba(0,0,0,0.72); backdrop-filter: blur(4px);
+    align-items: center; justify-content: center;
+  }
+  .modal-overlay.open { display: flex; }
+  .modal {
+    background: var(--navy-mid); border: 1px solid var(--border);
+    border-radius: 12px; padding: 2rem; width: 100%; max-width: 420px; margin: 1rem;
+  }
+  .modal h3 { font-size: 1.2rem; margin-bottom: 0.4rem; }
+  .modal .modal-sub { color: var(--muted); font-size: 0.88rem; margin-bottom: 1.5rem; line-height: 1.5; }
+  .modal label { display: block; font-size: 0.83rem; color: var(--muted); margin-bottom: 0.3rem; }
+  .modal input[type=text], .modal input[type=email] {
+    width: 100%; background: var(--code-bg); border: 1px solid var(--border);
+    border-radius: 6px; padding: 0.6rem 0.85rem; color: var(--white);
+    font-size: 0.93rem; margin-bottom: 1rem; outline: none; font-family: 'Inter', sans-serif;
+  }
+  .modal input:focus { border-color: var(--gold); }
+  .modal-actions { display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 0.25rem; }
+  .modal-btn-cancel {
+    background: none; border: 1px solid var(--border); color: var(--muted);
+    padding: 0.55rem 1.1rem; border-radius: 6px; cursor: pointer; font-size: 0.88rem;
+  }
+  .modal-btn-submit {
+    background: var(--gold); color: var(--navy); font-weight: 600;
+    border: none; padding: 0.55rem 1.3rem; border-radius: 6px; cursor: pointer; font-size: 0.88rem;
+  }
+  .modal-btn-submit:disabled { opacity: 0.55; cursor: not-allowed; }
+  .modal-result {
+    background: var(--code-bg); border: 1px solid var(--border); border-radius: 8px;
+    padding: 1rem; margin-top: 0.25rem; display: none;
+  }
+  .modal-result .key-label { font-size: 0.78rem; color: var(--muted); margin-bottom: 0.5rem; }
+  .modal-result .key-value {
+    font-family: 'JetBrains Mono', monospace; font-size: 0.82rem; color: var(--gold-light);
+    word-break: break-all; margin-bottom: 0.8rem; line-height: 1.5;
+  }
+  .modal-copy-btn {
+    background: var(--navy-card); border: 1px solid var(--border); color: var(--white);
+    padding: 0.38rem 0.9rem; border-radius: 5px; cursor: pointer; font-size: 0.8rem;
+  }
+  .modal-copy-btn:hover { border-color: var(--gold); color: var(--gold); }
+  .modal-error { color: #f87171; font-size: 0.86rem; margin-top: -0.5rem; margin-bottom: 0.75rem; display: none; }
+  .modal-upgrade-note {
+    background: rgba(201,168,76,0.07); border: 1px solid rgba(201,168,76,0.25);
+    border-radius: 6px; padding: 0.7rem 0.85rem; margin-top: 0.8rem; font-size: 0.82rem;
+    color: var(--muted); display: none; line-height: 1.5;
+  }
+  .modal-upgrade-note a { color: var(--gold); }
 </style>
 </head>
 <body>
@@ -313,7 +365,7 @@
     <a href="#corpora">Corpora</a>
     <a href="#pricing">Pricing</a>
     <a href="https://rapidapi.com/SourceTruth/api/sourcetruth" target="_blank">RapidAPI</a>
-    <a class="nav-cta" href="https://api.sourcetruth.io/v1/keys">Get API Key</a>
+    <a class="nav-cta" href="#" onclick="openKeyModal('free');return false;">Get API Key</a>
   </div>
 </nav>
 
@@ -324,7 +376,7 @@
     <h1>The <em>canonical text</em> API</h1>
     <p>Semantic search and AI-powered Q&amp;A over pre-indexed scripture, philosophy, and classical literature. Quran, Bible, Plato, Confucius, and 26 more — no ingestion pipeline, no fine-tuning. One API call.</p>
     <div class="hero-actions">
-      <a class="btn-primary" href="https://api.sourcetruth.io/v1/keys">Get free API key</a>
+      <a class="btn-primary" href="#" onclick="openKeyModal('free');return false;">Get free API key</a>
       <a class="btn-secondary" href="https://docs.sourcetruth.io">Read the docs →</a>
     </div>
   </div>
@@ -644,7 +696,7 @@
           <li class="no">/answer endpoint</li>
           <li class="no">Priority support</li>
         </ul>
-        <a class="pricing-cta pricing-cta-secondary" href="https://api.sourcetruth.io/v1/keys">Get free key</a>
+        <a class="pricing-cta pricing-cta-secondary" href="#" onclick="openKeyModal('free');return false;">Get free key</a>
       </div>
 
       <div class="pricing-card featured">
@@ -659,7 +711,7 @@
           <li>Grounded Q&amp;A with citations</li>
           <li>Email support</li>
         </ul>
-        <a class="pricing-cta pricing-cta-primary" href="https://api.sourcetruth.io/v1/keys">Start with Starter</a>
+        <a class="pricing-cta pricing-cta-primary" href="#" onclick="openKeyModal('starter');return false;">Start with Starter</a>
       </div>
 
       <div class="pricing-card">
@@ -673,7 +725,7 @@
           <li>Grounded Q&amp;A with citations</li>
           <li>Priority support</li>
         </ul>
-        <a class="pricing-cta pricing-cta-secondary" href="https://api.sourcetruth.io/v1/keys">Go Professional</a>
+        <a class="pricing-cta pricing-cta-secondary" href="#" onclick="openKeyModal('professional');return false;">Go Professional</a>
       </div>
     </div>
 
@@ -700,12 +752,117 @@
   </div>
 </footer>
 
+<!-- ── API Key Modal ─────────────────────────────────────────── -->
+<div class="modal-overlay" id="keyModal" onclick="closeKeyModal(event)">
+  <div class="modal">
+    <h3 id="modalTitle">Get your free API key</h3>
+    <p class="modal-sub" id="modalSub">100 /search requests/day. No credit card required.</p>
+    <div id="modalForm">
+      <label for="keyName">Your name</label>
+      <input type="text" id="keyName" placeholder="Jane Doe" autocomplete="name">
+      <label for="keyEmail">Email address</label>
+      <input type="email" id="keyEmail" placeholder="you@example.com" autocomplete="email">
+      <div class="modal-error" id="modalError"></div>
+      <div class="modal-actions">
+        <button class="modal-btn-cancel" onclick="closeKeyModal()">Cancel</button>
+        <button class="modal-btn-submit" id="modalSubmit" onclick="submitKeyRequest()">Issue key</button>
+      </div>
+    </div>
+    <div class="modal-result" id="modalResult">
+      <div class="key-label">Your API key — copy it now, it won't be shown again</div>
+      <div class="key-value" id="modalKey"></div>
+      <button class="modal-copy-btn" onclick="copyKey()">Copy key</button>
+      <div class="modal-upgrade-note" id="modalUpgradeNote">
+        To activate your <strong id="upgradeTier"></strong> plan, email
+        <a href="mailto:api@sourcetruth.io">api@sourcetruth.io</a> with your API key
+        and we'll upgrade you within 24 hours.
+      </div>
+    </div>
+  </div>
+</div>
+
 <script>
 function showTab(lang) {
   document.querySelectorAll('.code-tab').forEach(t => t.classList.remove('active'));
   document.querySelectorAll('.code-pane').forEach(p => p.classList.remove('active'));
   document.getElementById('tab-' + lang).classList.add('active');
   event.target.classList.add('active');
+}
+
+let _currentTier = 'free';
+
+function openKeyModal(tier) {
+  _currentTier = tier || 'free';
+  const titles = {
+    free: 'Get your free API key',
+    starter: 'Start with Starter',
+    professional: 'Go Professional',
+  };
+  const subs = {
+    free: '100 /search requests/day. No credit card required.',
+    starter: '1,000 searches/day + /answer endpoint. $29/mo after setup.',
+    professional: '10,000 searches/day + priority support. $149/mo after setup.',
+  };
+  document.getElementById('modalTitle').textContent = titles[_currentTier] || titles.free;
+  document.getElementById('modalSub').textContent = subs[_currentTier] || subs.free;
+  document.getElementById('keyName').value = '';
+  document.getElementById('keyEmail').value = '';
+  document.getElementById('modalError').style.display = 'none';
+  document.getElementById('modalForm').style.display = 'block';
+  document.getElementById('modalResult').style.display = 'none';
+  document.getElementById('keyModal').classList.add('open');
+  setTimeout(() => document.getElementById('keyName').focus(), 60);
+}
+
+function closeKeyModal(e) {
+  if (e && e.target !== document.getElementById('keyModal')) return;
+  document.getElementById('keyModal').classList.remove('open');
+}
+
+async function submitKeyRequest() {
+  const name  = document.getElementById('keyName').value.trim();
+  const email = document.getElementById('keyEmail').value.trim();
+  const errEl = document.getElementById('modalError');
+  const btn   = document.getElementById('modalSubmit');
+
+  errEl.style.display = 'none';
+  if (!name)  { errEl.textContent = 'Name is required.'; errEl.style.display = 'block'; return; }
+  if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+    errEl.textContent = 'Valid email address required.'; errEl.style.display = 'block'; return;
+  }
+
+  btn.disabled = true; btn.textContent = 'Issuing…';
+  try {
+    const res  = await fetch('https://api.sourcetruth.io/v1/keys', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ name, email }),
+    });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.detail || 'Failed to issue key.');
+    document.getElementById('modalForm').style.display = 'none';
+    document.getElementById('modalKey').textContent = data.key;
+    document.getElementById('modalResult').style.display = 'block';
+    if (_currentTier !== 'free') {
+      const label = _currentTier.charAt(0).toUpperCase() + _currentTier.slice(1);
+      document.getElementById('upgradeTier').textContent = label;
+      document.getElementById('modalUpgradeNote').style.display = 'block';
+    }
+  } catch (err) {
+    errEl.textContent = err.message;
+    errEl.style.display = 'block';
+  } finally {
+    btn.disabled = false; btn.textContent = 'Issue key';
+  }
+}
+
+function copyKey() {
+  const key = document.getElementById('modalKey').textContent;
+  navigator.clipboard.writeText(key).then(() => {
+    const btn = document.querySelector('.modal-copy-btn');
+    btn.textContent = 'Copied!';
+    setTimeout(() => { btn.textContent = 'Copy key'; }, 2000);
+  });
 }
 </script>
 </body>
