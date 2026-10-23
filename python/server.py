@@ -708,6 +708,12 @@ def stripe_checkout(req: CheckoutRequest, request: Request):
 
     # Find or create Stripe customer, then persist the customer ID on the key
     customer_id = key_record.get('stripe_customer_id')
+    if customer_id:
+        # Verify the stored ID exists in the current Stripe mode (test vs live IDs don't cross over)
+        try:
+            stripe.Customer.retrieve(customer_id)
+        except stripe.error.InvalidRequestError:
+            customer_id = None
     if not customer_id:
         existing = stripe.Customer.list(email=email, limit=1)
         if existing.data:
