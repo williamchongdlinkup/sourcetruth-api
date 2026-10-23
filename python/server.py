@@ -139,10 +139,9 @@ app = FastAPI(
 app.state.limiter = limiter
 app.add_exception_handler(RateLimitExceeded, _rate_limit_exceeded_handler)
 
-_origins = os.getenv('ALLOWED_ORIGINS', '*')
 app.add_middleware(
     CORSMiddleware,
-    allow_origins=['*'] if _origins == '*' else _origins.split(','),
+    allow_origins=['*'],
     allow_methods=['GET', 'POST'],
     allow_headers=['*'],
 )
