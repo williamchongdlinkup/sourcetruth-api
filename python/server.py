@@ -64,14 +64,15 @@ TIER_LIMITS = {
 }
 
 stripe.api_key = os.getenv('STRIPE_SECRET_KEY', '')
-_PRICE_TO_TIER = {
-    price_id: tier
+_TIER_TO_PRICE = {
+    tier: price_id
     for tier, price_id in {
         'starter':      os.getenv('STRIPE_STARTER_PRICE_ID', ''),
         'professional': os.getenv('STRIPE_PROFESSIONAL_PRICE_ID', ''),
     }.items()
     if price_id
 }
+_PRICE_TO_TIER = {v: k for k, v in _TIER_TO_PRICE.items()}
 
 SYSTEM_PROMPT = (
     "You are a scholarly reference assistant specialising in canonical and classical texts. "
@@ -322,7 +323,8 @@ class KeyRequest(BaseModel):
 
 class CheckoutRequest(BaseModel):
     api_key:     str
-    price_id:    str
+    price_id:    Optional[str] = None
+    tier:        Optional[str] = None
     success_url: Optional[str] = None
     cancel_url:  Optional[str] = None
 
@@ -685,6 +687,12 @@ def stripe_checkout(req: CheckoutRequest, request: Request):
     if not stripe.api_key:
         raise HTTPException(status_code=503, detail='Billing not configured.')
 
+    price_id = req.price_id
+    if not price_id and req.tier:
+        price_id = _TIER_TO_PRICE.get(req.tier)
+    if not price_id:
+        raise HTTPException(status_code=400, detail='price_id or a valid tier (starter, professional) is required.')
+
     key_record = _get_key_by_raw(req.api_key)
     email = key_record.get('email', '')
     if not email:
@@ -713,7 +721,7 @@ def stripe_checkout(req: CheckoutRequest, request: Request):
     session = stripe.checkout.Session.create(
         customer=customer_id,
         mode='subscription',
-        line_items=[{'price': req.price_id, 'quantity': 1}],
+        line_items=[{'price': price_id, 'quantity': 1}],
         subscription_data={'metadata': {'key_id': str(key_record['id'])}},
         success_url=req.success_url or f'{app_url}/billing/success?session_id={{CHECKOUT_SESSION_ID}}',
         cancel_url=req.cancel_url or f'{app_url}/billing/cancel',

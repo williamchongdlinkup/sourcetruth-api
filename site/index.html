@@ -347,12 +347,6 @@
   }
   .modal-copy-btn:hover { border-color: var(--gold); color: var(--gold); }
   .modal-error { color: #f87171; font-size: 0.86rem; margin-top: -0.5rem; margin-bottom: 0.75rem; display: none; }
-  .modal-upgrade-note {
-    background: rgba(201,168,76,0.07); border: 1px solid rgba(201,168,76,0.25);
-    border-radius: 6px; padding: 0.7rem 0.85rem; margin-top: 0.8rem; font-size: 0.82rem;
-    color: var(--muted); display: none; line-height: 1.5;
-  }
-  .modal-upgrade-note a { color: var(--gold); }
 </style>
 </head>
 <body>
@@ -772,11 +766,6 @@
       <div class="key-label">Your API key — copy it now, it won't be shown again</div>
       <div class="key-value" id="modalKey"></div>
       <button class="modal-copy-btn" onclick="copyKey()">Copy key</button>
-      <div class="modal-upgrade-note" id="modalUpgradeNote">
-        To activate your <strong id="upgradeTier"></strong> plan, email
-        <a href="mailto:api@sourcetruth.io">api@sourcetruth.io</a> with your API key
-        and we'll upgrade you within 24 hours.
-      </div>
     </div>
   </div>
 </div>
@@ -840,14 +829,24 @@ async function submitKeyRequest() {
     });
     const data = await res.json();
     if (!res.ok) throw new Error(data.detail || 'Failed to issue key.');
+    if (_currentTier !== 'free') {
+      const checkoutRes = await fetch('https://api.sourcetruth.io/v1/stripe/checkout', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ api_key: data.key, tier: _currentTier,
+          success_url: 'https://sourcetruth.io?upgrade=success',
+          cancel_url:  'https://sourcetruth.io?upgrade=cancelled',
+        }),
+      });
+      const checkoutData = await checkoutRes.json();
+      if (checkoutRes.ok && checkoutData.checkout_url) {
+        window.location.href = checkoutData.checkout_url;
+        return;
+      }
+    }
     document.getElementById('modalForm').style.display = 'none';
     document.getElementById('modalKey').textContent = data.key;
     document.getElementById('modalResult').style.display = 'block';
-    if (_currentTier !== 'free') {
-      const label = _currentTier.charAt(0).toUpperCase() + _currentTier.slice(1);
-      document.getElementById('upgradeTier').textContent = label;
-      document.getElementById('modalUpgradeNote').style.display = 'block';
-    }
   } catch (err) {
     errEl.textContent = err.message;
     errEl.style.display = 'block';
