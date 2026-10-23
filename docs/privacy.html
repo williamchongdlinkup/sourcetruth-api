@@ -27,7 +27,7 @@
   footer { margin-top:3rem; padding-top:1rem; border-top:1px solid var(--border); font-size:0.78rem; color:var(--muted); text-align:center; }
 </style>
 <script>!function(t,e){var o,n,p,r;e.__SV||(window.posthog=e,e._i=[],e.init=function(i,s,a){function g(t,e){var o=e.split(".");2==o.length&&(t=t[o[0]],e=o[1]),t[e]=function(){t.push([e].concat(Array.prototype.slice.call(arguments,0)))}}(p=t.createElement("script")).type="text/javascript",p.crossOrigin="anonymous",p.async=!0,p.src="https://us-assets.i.posthog.com/static/array.js",(r=t.getElementsByTagName("script")[0]).parentNode.insertBefore(p,r);var u=e;for(void 0!==a?u=e[a]=[]:a="posthog",u.people=u.people||[],u.toString=function(t){var e="posthog";return"posthog"!==a&&(e+="."+a),t||(e+=" (stub)"),e},u.people.toString=function(){return u.toString(1)+" (stub)"},o="capture identify alias people.set people.set_once set_config register register_once unregister opt_out_capturing has_opted_out_capturing opt_in_capturing reset isFeatureEnabled onFeatureFlags getFeatureFlag getFeatureFlagPayload reloadFeatureFlags group updateEarlyAccessFeatureEnrollment getEarlyAccessFeatures getActiveMatchingSurveys getSurveys onSessionId getPageViewId captureException".split(" "),n=0;n<o.length;n++)g(u,o[n]);e._i.push([i,s,a])},e.__SV=1)}(document,window.posthog||(window.posthog=[]));
-posthog.init('phc_tjzXvEHZeVWtqCwqxCCi2twtNGeABHxKuyzEvgbcAams',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only',session_recording:{maskAllInputs:true}});</script>
+posthog.init('phc_tjzXvEHZeVWtqCwqxCCi2twtNGeABHxKuyzEvgbcAams',{api_host:'https://us.i.posthog.com',person_profiles:'identified_only',persistence:'memory',session_recording:{maskAllInputs:true}});</script>
 </head>
 <body>
 <div class="wrapper">
@@ -191,7 +191,7 @@ posthog.init('phc_tjzXvEHZeVWtqCwqxCCi2twtNGeABHxKuyzEvgbcAams',{api_host:'https
 <p>The Service is not directed at children. The minimum age for using the Service is 16 years globally. In jurisdictions where applicable law sets a lower minimum age for digital consent, we apply the higher threshold of 16 as a uniform standard. We do not knowingly collect personal data from anyone under 16. If you believe a minor has provided us with personal data, contact us and we will delete it.</p>
 
 <h2>9. Cookies and Tracking</h2>
-<p>The SourceTruth API does not use cookies or tracking technologies. Our developer documentation pages (this site) do not use analytics scripts, tracking pixels, or third-party cookies. If this changes, this section will be updated and you will be notified in accordance with §10.</p>
+<p>The SourceTruth API does not use cookies or tracking technologies. Our developer documentation pages use PostHog Analytics in cookieless mode to count anonymous pageviews. No cookies are set, no cross-site tracking occurs, and page visits are not linked to personal data. PostHog is not used for advertising.</p>
 
 <h2>10. Changes to This Policy</h2>
 <p>We may update this Privacy Policy from time to time. If we make material changes, we will notify you by email at least 14 days before the changes take effect. The "Last updated" date at the top of this page reflects the most recent revision. Continued use of the Service after the effective date constitutes acceptance of the updated Policy.</p>
