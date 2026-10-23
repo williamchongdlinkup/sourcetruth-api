@@ -779,20 +779,16 @@ async def stripe_webhook(request: Request):
         raise HTTPException(status_code=400, detail='Webhook verification failed.')
 
     etype = event['type']
-    obj   = event['data']['object']
+    obj   = event['data']['object'].to_dict()
 
     if etype in ('customer.subscription.created', 'customer.subscription.updated'):
         key_id_str = (obj.get('metadata') or {}).get('key_id')
-        print(f'[stripe_webhook] event={etype} key_id_str={key_id_str!r} price_to_tier_keys={list(_PRICE_TO_TIER.keys())}')
         if not key_id_str:
-            print(f'[stripe_webhook] ignored — no key_id in metadata')
             return {'status': 'ignored', 'reason': 'no key_id in subscription metadata'}
 
         price_id = obj['items']['data'][0]['price']['id']
         tier = _PRICE_TO_TIER.get(price_id)
-        print(f'[stripe_webhook] price_id={price_id!r} resolved_tier={tier!r}')
         if not tier:
-            print(f'[stripe_webhook] ignored — unknown price_id')
             return {'status': 'ignored', 'reason': f'unknown price_id {price_id}'}
 
         limits = TIER_LIMITS[tier]
