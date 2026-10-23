@@ -403,6 +403,14 @@ def search(
             'score':         r['score'],
         })
 
+    # Deduplicate by reference — keep highest-scoring passage per unique reference
+    seen: dict[str, dict] = {}
+    for p in passages:
+        ref = p['reference'] or ''
+        if ref not in seen or p['score'] > seen[ref]['score']:
+            seen[ref] = p
+    passages = list(seen.values())
+
     # Fix 2: log after response is sent
     if key_record:
         background_tasks.add_task(
