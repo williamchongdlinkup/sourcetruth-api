@@ -30,12 +30,13 @@
 <div class="header">
   <div class="label">SourceTruth · Legal</div>
   <h1>Terms of Service</h1>
-  <div class="meta">Effective date: 2026-08-08 · Last updated: 2026-08-09 · Operator: D'Linkup Pte. Ltd. (UEN: 201721418Z)</div>
+  <div class="meta">Effective date: 2026-10-24 · Last updated: 2026-10-24 · Operator: D'Linkup Pte. Ltd. (UEN: 201721418Z)</div>
 </div>
 
+
 <h2>1. Agreement to Terms</h2>
-<p>These Terms of Service ("Terms") govern your access to and use of the SourceTruth API, developer documentation, and related services (collectively, the "Service") provided by D'Linkup Pte. Ltd. ("we", "us", "our").</p>
-<p>By creating an API key or accessing the Service, you agree to be bound by these Terms. If you do not agree, do not use the Service. If you are using the Service on behalf of a company or other legal entity, you represent that you have the authority to bind that entity to these Terms.</p>
+<p>These Terms of Service ("Terms") govern your access to and use of the SourceTruth API, developer documentation, and related services (collectively, the "Service") provided by D'Linkup Pte. Ltd. (UEN: 201721418Z) ("we", "us", "our").</p>
+<p>By creating an API key or accessing the Service, you agree to be bound by these Terms. If you do not agree, do not use the Service. If you are using the Service on behalf of a company or other legal entity, you represent that you have the authority to bind that entity to these Terms. These Terms, together with the Privacy Policy and any subscription plan you have purchased, constitute the entire agreement between you and D'Linkup Pte. Ltd. with respect to the Service.</p>
 
 <h2>2. The Service</h2>
 <p>SourceTruth provides a pre-indexed canonical text search API covering philosophical, religious, and classical texts. The Service includes:</p>
@@ -46,19 +47,17 @@
   <li>API key management and billing infrastructure</li>
 </ul>
 <p>All indexed content is sourced from texts that are Creative Commons licensed (CC BY or CC0) or in the public domain. We make no claim of copyright over the underlying canonical texts.</p>
-<p>Features or endpoints labelled "beta", "preview", or "experimental" are provided without warranty and may be changed, suspended, or removed at any time without notice. We will endeavour to give advance notice of removal where practicable.</p>
+<p>Features labelled "beta", "preview", or "experimental" are provided without warranty and may change or be removed without notice. The API is versioned (e.g. <code>/v1/</code>); breaking changes to a published version trigger the 90-day deprecation notice described in §6.</p>
 
 <h2>3. API Keys and Accounts</h2>
 <h3>3.1 Free Tier</h3>
 <p>You may self-issue a free API key without a credit card. Free keys are limited to 100 search requests per calendar day and do not include access to the <code>/v1/answer</code> endpoint.</p>
 
 <h3>3.2 Paid Tiers</h3>
-<p>Starter and Professional tiers provide higher daily quotas and access to the <code>/v1/answer</code> endpoint. Billing is processed by Stripe. By subscribing to a paid tier, you authorise us to charge your payment method on a monthly recurring basis until you cancel.</p>
+<p>Starter and Professional tiers provide higher daily quotas and access to the <code>/v1/answer</code> endpoint. Billing is processed by Stripe. By subscribing to a paid tier, you authorise us to charge your payment method on a monthly recurring basis until you cancel. Each API key is issued to a single entity; keys are non-transferable.</p>
 
 <h3>3.3 Key Security</h3>
-<p>You are solely responsible for keeping your API key confidential and for all use of the Service made under your key, whether authorised by you or not. API keys are stored only as SHA-256 hashes and cannot be recovered by us.</p>
-<p>If you believe your key has been compromised, you must revoke it immediately using the self-service endpoint (<code>DELETE /v1/keys</code>), which takes effect instantly. If you hold a paid subscription, revocation of your key does not automatically cancel your subscription — cancel separately via the billing portal (<code>POST /v1/stripe/portal</code>) to avoid further charges.</p>
-<p>We are not liable for any unauthorised use of your API key under any circumstances. We have no obligation to investigate, verify, or reverse charges arising from unauthorised use of your key.</p>
+<p>You are responsible for keeping your API key confidential. API keys are hashed before storage and cannot be recovered. You must immediately notify us at <a href="mailto:api@sourcetruth.io">api@sourcetruth.io</a> if you believe your key has been compromised. We are not liable for unauthorised use of your API key prior to notification.</p>
 
 <h3>3.4 Accurate Information</h3>
 <p>You agree to provide accurate name and email address when creating an API key. We may use your email to contact you about your account, service changes, and billing matters.</p>
@@ -66,34 +65,33 @@
 <h2>4. Acceptable Use</h2>
 <p>You agree not to use the Service to:</p>
 <ul>
-  <li>Violate any applicable law or regulation, including Singapore law and the laws of your jurisdiction</li>
+  <li>Violate any applicable law or regulation, including the laws of Singapore and the laws of your jurisdiction</li>
   <li>Circumvent rate limits or daily quotas through technical means (e.g. IP rotation, multiple keys for the same application)</li>
-  <li>Create multiple API keys or accounts — whether manually or through automated means — to circumvent free-tier daily limits or to obtain quota beyond your subscribed plan entitlement</li>
+  <li>Create multiple API keys or accounts to circumvent free-tier daily limits, whether manually or through automated means</li>
   <li>Resell or sublicense API access without our written permission</li>
   <li>Scrape, cache, or systematically reproduce the entire indexed corpus or substantial portions of it for purposes of creating a competing product</li>
   <li>Use the Service to generate content that is defamatory, misleading, or that misrepresents the source texts</li>
   <li>Interfere with or disrupt the Service infrastructure</li>
   <li>Attempt to reverse-engineer the embedding model or retrieval system</li>
   <li>Use the <code>/v1/answer</code> endpoint output as authoritative religious, legal, medical, or financial advice without independent verification</li>
-  <li>Access or use the Service if you are located in, ordinarily resident in, or acting on behalf of a person or entity in a country or territory subject to comprehensive sanctions by the United Nations, the United States (OFAC), the European Union, or Singapore; or if you are on any applicable government denied-party or sanctions list</li>
-  <li>Deploy the <code>/v1/answer</code> endpoint in any application intended to provide crisis support, mental health counselling, suicide prevention, self-harm intervention, or any other safety-critical guidance to vulnerable individuals, without implementing appropriate human oversight, professional referral pathways, and content safeguards. The <code>/v1/answer</code> endpoint synthesises philosophical and religious texts that may include content relating to self-sacrifice, martyrdom, asceticism, or violence in doctrinal contexts — such outputs are not appropriate as standalone guidance for people in distress</li>
+  <li>Use the Service in violation of any applicable sanctions programmes, including those administered by the United Nations, the United States Office of Foreign Assets Control (OFAC), the European Union, or the Monetary Authority of Singapore (MAS)</li>
 </ul>
 
 <h3>4.1 Attribution</h3>
-<p>Where the original licence of a retrieved text requires attribution (for example, Creative Commons BY licences), you are responsible for complying with that requirement. Licence information is provided in the <code>license</code> field of API responses and via <code>GET /v1/corpora</code>. We are not liable for your failure to comply with the attribution requirements of any underlying licence.</p>
+<p>When you display or publish content retrieved through the Service, you should attribute the source text and tradition as provided in the API response metadata. This is good practice even where the underlying licence does not strictly require it.</p>
 
 <h2>5. Intellectual Property</h2>
 <h3>5.1 Query Results</h3>
 <p>The passages returned by the Service are excerpts from texts that are in the public domain or licensed under Creative Commons. Your rights to those excerpts are governed by the original licence of each source text (available in the <code>license</code> field of <code>GET /v1/corpora</code> responses). We do not assert additional copyright over retrieved passages.</p>
 
 <h3>5.2 Service IP</h3>
-<p>The SourceTruth retrieval system, embeddings, index, reranking logic, and <code>/v1/answer</code> generation pipeline are our proprietary property. The Service also incorporates third-party open-source and commercial components licensed to us (including but not limited to embedding models, language model APIs, and software libraries); no rights in those third-party components are transferred to you. You may not copy, modify, or distribute any part of these systems.</p>
+<p>The SourceTruth retrieval system, embeddings, index, reranking logic, <code>/v1/answer</code> generation pipeline, and all related software are our property or the property of our licensors. You may not copy, modify, or distribute these systems.</p>
 
 <h3>5.3 AI-Generated Answers</h3>
-<p>Answers generated by the <code>/v1/answer</code> endpoint are produced by a third-party AI model (Anthropic Claude) synthesising retrieved text passages. Copyright in purely AI-generated content is not recognised in most jurisdictions and remains legally unsettled. To the extent any intellectual property rights subsist in such outputs under applicable law, we assign all such rights to you as the API customer. We make no warranty that AI-generated outputs are free from third-party intellectual property claims. You are responsible for ensuring your use of such outputs complies with Anthropic's usage policies, the licences of any underlying source texts, and applicable law in your jurisdiction.</p>
+<p>Answers generated by the <code>/v1/answer</code> endpoint are produced by a third-party AI model (Anthropic Claude) and synthesise retrieved text excerpts. We do not claim copyright over AI-generated outputs. You are responsible for ensuring that your use of such outputs complies with Anthropic's usage policies and applicable law.</p>
 
 <h3>5.4 Feedback</h3>
-<p>If you provide us with suggestions, comments, ideas, or other feedback relating to the Service ("Feedback"), you grant us a perpetual, irrevocable, worldwide, royalty-free licence to use, reproduce, modify, and incorporate such Feedback into the Service or any other product, without compensation or attribution to you. You represent that you have the right to grant this licence and that the Feedback does not infringe any third-party rights.</p>
+<p>If you provide us with any suggestions, comments, ideas, improvements, or other feedback relating to the Service ("Feedback"), you grant us a perpetual, irrevocable, worldwide, royalty-free licence to use, reproduce, modify, and incorporate such Feedback into the Service or any other product or service without compensation or attribution to you. You represent that you have the right to grant this licence and that the Feedback does not infringe any third-party rights.</p>
 
 <h2>6. Service Levels and Availability</h2>
 <p>We aim for high availability but do not guarantee any specific uptime. The Service is provided on a best-effort basis. We may:</p>
@@ -104,7 +102,6 @@
   <li>Deprecate API endpoints with 90 days' notice</li>
 </ul>
 <p>There is no Service Level Agreement (SLA) at this time. SLAs for paid tiers are under consideration.</p>
-<p>The Service API is versioned (currently v1). Non-breaking additions to existing endpoints — such as new optional response fields or optional request parameters — may be introduced at any time without notice. Breaking changes to existing endpoints are subject to the 90-day deprecation notice above.</p>
 
 <h2>7. Billing and Payment</h2>
 <ul>
@@ -113,39 +110,18 @@
   <li>No refunds are provided for partial months, unused quota, or mid-cycle cancellations. If you cancel, access continues until the end of the current billing period.</li>
   <li>We may suspend access if payment fails and remains unresolved for 7 days.</li>
   <li>Prices are in USD. We reserve the right to change pricing with 30 days' notice to your registered email.</li>
-  <li>Upgrading to a higher plan takes effect immediately and is charged on a prorated basis for the remainder of the current billing cycle. Downgrading takes effect at the start of the next billing cycle with no partial-month refund for the difference.</li>
-  <li>If you believe a charge is in error, notify us at <a href="mailto:api@sourcetruth.io">api@sourcetruth.io</a> within 30 days of the charge date with details of the dispute. Billing disputes raised after 30 days may not be eligible for a refund or credit.</li>
+  <li>Upgrading or downgrading your subscription takes effect at the start of the next billing cycle unless otherwise stated at the time of change.</li>
 </ul>
-<p>All prices are exclusive of taxes. You are responsible for all taxes, levies, duties, or similar governmental assessments applicable to your purchase — including VAT, GST, or withholding taxes — based on your billing address or jurisdiction. If we are required by law to collect taxes on your behalf, we will add them to your invoice. If you are a tax-exempt entity, provide a valid exemption certificate before your first billing cycle.</p>
+
+<h3>7.6 Taxes</h3>
+<p>All prices are exclusive of taxes unless stated otherwise. You are responsible for all taxes, levies, duties, or similar governmental assessments applicable to your purchase, including but not limited to value-added tax (VAT), goods and services tax (GST), or withholding taxes, based on your billing address or jurisdiction. If we are required by law to collect and remit taxes on your behalf, we will add such taxes to your invoice. If you are a tax-exempt entity, provide us with a valid tax exemption certificate before your first billing cycle.</p>
+
+<h3>7.7 Disputed Charges</h3>
+<p>If you believe a charge is in error, contact <a href="mailto:api@sourcetruth.io">api@sourcetruth.io</a> within 30 days of the charge date with details of the dispute. Disputes not raised within 30 days are waived.</p>
 
 <h2>8. Data and Privacy</h2>
-<p>We collect two distinct categories of data with different privacy characteristics. The full details of each are described below and in our <a href="/privacy">Privacy Policy</a>, which forms part of these Terms.</p>
-
-<h3>8.1 Account Data (Personal)</h3>
-<p>When you create an API key, we collect your name and email address. If you subscribe to a paid plan, Stripe collects your payment information and shares a customer identifier with us. This account data is personal data processed in accordance with our <a href="/privacy">Privacy Policy</a>. By using the Service, you consent to this data being stored on servers in the United States and other jurisdictions where our infrastructure providers operate (Supabase, Railway, Stripe, Anthropic).</p>
-
-<h3>8.2 Usage Analytics — Anonymous by Default</h3>
-<p>When you make API requests, we record usage analytics including your full query text, the endpoint called, traditions and languages requested, result count, and response latency. <strong>This data is stored with no link to your account, API key, or identity.</strong> It is not personal data. We have no means of identifying whose query any individual record represents.</p>
-<p>We do not store the content of responses returned by the <code>/v1/answer</code> endpoint — generated answer text is returned to you and not retained by us.</p>
-<p>Because anonymous usage analytics are not personal data, they are retained indefinitely and may be used without restriction for any legitimate business purpose, including: product improvement, service performance monitoring, corpus expansion decisions, retrieval quality improvement, AI model training and evaluation, and benchmarking. No consent is required and no opt-out mechanism applies to this category of data.</p>
-
-<h3>8.3 Customer Intelligence Programme — Opt-In</h3>
-<p>Paid-tier customers may opt in to the Customer Intelligence Programme by calling <code>POST /v1/intelligence/enrol</code>. Enrolment is voluntary and may be withdrawn at any time.</p>
-<p><strong>When enrolled, the following changes apply:</strong> your usage analytics are stored with account linkage — associated with your API key and email address. This linked data becomes personal data subject to our Privacy Policy and to the rights and obligations described in this section.</p>
-<p>In exchange for enrolment, we provide the following services:</p>
-<ul>
-  <li><strong>Usage dashboards:</strong> access to your per-account query history, tradition usage patterns, topic trends, and consumption analytics via the API.</li>
-  <li><strong>Corpus recommendations:</strong> periodic personalised suggestions for corpus expansions and new traditions relevant to your query patterns.</li>
-  <li><strong>Retrieval tuning:</strong> where technically feasible, we will tune retrieval ranking for your account's query style to improve result quality for your domain of interest.</li>
-  <li><strong>Customer success support:</strong> our team may review your linked query history to assist with integration issues, diagnose retrieval quality problems, or resolve account queries.</li>
-</ul>
-<p>By enrolling, you grant D'Linkup Pte. Ltd. the following rights with respect to your linked usage data:</p>
-<ul>
-  <li><strong>Internal product analytics:</strong> your identified usage data may inform our product roadmap, pricing strategy, and understanding of customer segment behaviour and commercial value.</li>
-  <li><strong>Model training and improvement:</strong> your linked query data may be used to train, evaluate, or improve our retrieval models, embedding models, or reranking systems. Where your data is incorporated into a training dataset shared beyond our internal systems, it will be anonymised prior to such sharing.</li>
-  <li><strong>Aggregated benchmarking:</strong> de-identified aggregates derived from opted-in customer data may be used to build evaluation benchmarks and published performance reports. Individual queries will not be publicly attributed to you or your organisation.</li>
-</ul>
-<p><strong>Withdrawing from the Programme:</strong> you may opt out at any time by calling <code>DELETE /v1/intelligence/enrol</code>. After opt-out, new requests revert to anonymous collection immediately. Linked data collected prior to opt-out is retained for 90 days and then anonymised, unless you submit a deletion request to <a href="mailto:api@sourcetruth.io">api@sourcetruth.io</a>, in which case we will action it within 30 days. Anonymisation of historic data does not affect any model or benchmark already produced from that data prior to opt-out.</p>
+<p>Your use of the Service involves the collection of certain data, including your name, email address, and usage logs (query text, endpoint, timestamp, result count, latency). This data is processed in accordance with our <a href="/privacy">Privacy Policy</a>, which forms part of these Terms.</p>
+<p>By using the Service, you consent to your data being processed and stored on servers located in the United States and other jurisdictions where our infrastructure providers operate (Supabase, Railway, Stripe, Anthropic).</p>
 
 <h2>9. Disclaimers</h2>
 <p>THE SERVICE IS PROVIDED "AS IS" WITHOUT WARRANTIES OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE, OR NON-INFRINGEMENT.</p>
@@ -157,61 +133,58 @@
   <li>The indexed corpus is comprehensive or representative of any tradition</li>
 </ul>
 <p>The Service is not a substitute for scholarly, religious, legal, medical, or financial advice. Always verify retrieved passages against authoritative primary sources.</p>
-<p>THE INDEXED CORPUS INCLUDES PHILOSOPHICAL AND RELIGIOUS TEXTS THAT ADDRESS THEMES OF SELF-SACRIFICE, MARTYRDOM, ASCETICISM, VIOLENCE IN DOCTRINAL CONTEXTS, AND OTHER CONTENT THAT MAY BE DISTRESSING OR HARMFUL IF MISAPPLIED. AI-SYNTHESISED ANSWERS FROM THE <code>/v1/answer</code> ENDPOINT MAY PRESENT SUCH CONTENT WITHOUT ADEQUATE CONTEXTUALISATION FOR A PARTICULAR READER OR SITUATION. WE EXPRESSLY DISCLAIM ANY LIABILITY FOR HARM — INCLUDING PSYCHOLOGICAL HARM, SELF-HARM, OR HARM TO THIRD PARTIES — ARISING FROM A USER'S RELIANCE ON AI-GENERATED OUTPUTS FROM THE SERVICE. DEVELOPERS DEPLOYING THE SERVICE TO END USERS BEAR SOLE RESPONSIBILITY FOR IMPLEMENTING APPROPRIATE CONTENT SAFEGUARDS, TRIGGER WARNINGS, AND PROFESSIONAL REFERRAL MECHANISMS FOR THEIR USER BASE.</p>
 
 <h2>10. Limitation of Liability</h2>
 <p>TO THE MAXIMUM EXTENT PERMITTED BY APPLICABLE LAW, D'LINKUP PTE. LTD. SHALL NOT BE LIABLE FOR ANY INDIRECT, INCIDENTAL, SPECIAL, CONSEQUENTIAL, OR PUNITIVE DAMAGES, INCLUDING LOSS OF PROFITS, DATA, OR GOODWILL, ARISING FROM YOUR USE OF OR INABILITY TO USE THE SERVICE, EVEN IF WE HAVE BEEN ADVISED OF THE POSSIBILITY OF SUCH DAMAGES.</p>
 <p>OUR TOTAL CUMULATIVE LIABILITY FOR ALL CLAIMS ARISING FROM THESE TERMS OR YOUR USE OF THE SERVICE SHALL NOT EXCEED THE GREATER OF (A) THE AMOUNT YOU PAID TO US IN THE THREE MONTHS PRECEDING THE CLAIM OR (B) USD $100.</p>
-<p>Nothing in these Terms excludes or limits our liability for: (a) death or personal injury caused by our negligence; (b) fraud or fraudulent misrepresentation; or (c) any other liability that cannot be excluded or limited by applicable law, including the Singapore Unfair Contract Terms Act (Cap. 396). To the extent any provision of these Terms conflicts with a non-excludable statutory right, that provision is modified to the minimum extent necessary to comply with applicable law.</p>
+<p>Nothing in these Terms excludes or limits our liability for: (a) death or personal injury caused by our negligence; (b) fraud or fraudulent misrepresentation; or (c) any liability that cannot be excluded or limited by applicable law, including the Singapore Unfair Contract Terms Act (Cap. 396). To the extent any provision of these Terms conflicts with a non-excludable statutory right, that provision shall be modified to the minimum extent necessary to comply.</p>
 
 <h2>11. Indemnification</h2>
-<p>You agree to indemnify, defend, and hold harmless D'Linkup Pte. Ltd., its officers, directors, employees, and agents from any claims, damages, losses, and costs (including reasonable legal fees) arising from: (a) your use of the Service; (b) your violation of these Terms; (c) your violation of any third-party rights; or (d) any content you generate using the Service. We reserve the right to assume exclusive control of the defence of any matter subject to indemnification by you, at your expense. You agree to cooperate with our reasonable requests in connection with such defence and not to settle any indemnified claim without our prior written consent.</p>
+<p>You agree to indemnify, defend, and hold harmless D'Linkup Pte. Ltd., its officers, directors, employees, and agents from any claims, damages, losses, and costs (including reasonable legal fees) arising from: (a) your use of the Service; (b) your violation of these Terms; (c) your violation of any third-party rights; or (d) any content you generate using the Service.</p>
+<p>We reserve the right to assume exclusive control of any matter subject to indemnification by you, at our own expense. You agree to cooperate fully with our defence of such claims and not to settle any such claim without our prior written consent.</p>
 
 <h2>12. Termination</h2>
-<p>We may suspend or terminate your API key and access to the Service at any time, with or without cause, with or without notice. Grounds for immediate termination include violation of the Acceptable Use section or non-payment of fees. On termination, your right to use the Service ceases immediately.</p>
-<p>You may cancel your account at any time by accessing the billing portal (<code>POST /v1/stripe/portal</code>) or contacting us at <a href="mailto:api@sourcetruth.io">api@sourcetruth.io</a>.</p>
-<p>Following termination, your personal data (name, email address, and API key record) will be retained only as required by applicable law or our Privacy Policy retention schedules. You may request deletion by emailing <a href="mailto:api@sourcetruth.io">api@sourcetruth.io</a> within 30 days of termination; we will action valid requests within 30 days. Usage log data (query text, endpoint, latency) is automatically deleted after 90 days per our standard retention schedule. Stripe retains billing and financial records subject to their own legal retention periods, which we do not control. Sections 5, 9, 10, 11, 13, and 16 survive termination.</p>
+<p>We may suspend or terminate your API key and access to the Service at any time, with or without cause, with or without notice. Grounds for immediate termination include violation of the Acceptable Use section or non-payment of fees. On termination, your right to use the Service ceases. Sections 5, 9, 10, 11, and 13 survive termination.</p>
+<p>You may cancel your account at any time by accessing the billing portal or contacting us at <a href="mailto:api@sourcetruth.io">api@sourcetruth.io</a>.</p>
+<p>Following termination, we will retain your data only as required by applicable law or our Privacy Policy retention schedules. You may request deletion of your personal data (name, email address, and API key hash) by emailing <a href="mailto:api@sourcetruth.io">api@sourcetruth.io</a> within 30 days of termination. Usage logs (query text, endpoint, latency) are retained for 90 days post-request and then automatically deleted per our standard retention schedule. Stripe may retain billing records for their own legal retention periods.</p>
 
 <h2>13. Governing Law and Disputes</h2>
-<p>The Service is accessible internationally. By using the Service, you represent that your use complies with all laws and regulations applicable in your jurisdiction, including any local restrictions on the import, use, or re-export of API services or AI-generated content. We make no representation that the Service is appropriate or available for use in any particular country. You are solely responsible for compliance with your local laws, including any obligations arising from data protection, financial services, or content regulations in your jurisdiction.</p>
-<p>Before initiating formal legal proceedings, each party agrees to provide the other with written notice of the dispute and to negotiate in good faith for at least 30 days. If the dispute is not resolved through negotiation, the parties may, by mutual written agreement, refer it to arbitration administered by the Singapore International Arbitration Centre (SIAC) under the SIAC Rules then in force, as an alternative to court proceedings. Nothing in this clause prevents either party from seeking urgent injunctive or other interim relief from a court of competent jurisdiction at any time.</p>
-<p>These Terms are governed by the laws of the Republic of Singapore, without regard to conflict of law principles. Any dispute not resolved by the above process shall be resolved in the courts of Singapore, and you consent to the jurisdiction of those courts.</p>
+<p>These Terms are governed by the laws of Singapore, without regard to conflict of law principles. Any dispute arising under these Terms shall be resolved in the courts of Singapore, and you consent to the jurisdiction of those courts.</p>
+<p>You are responsible for ensuring that your use of the Service complies with the laws of your own jurisdiction, including any applicable data protection, financial services, or content regulations.</p>
 
 <h2>14. Changes to These Terms</h2>
 <p>We may update these Terms from time to time. If we make material changes, we will notify you by email to the address on your API key record at least 14 days before the changes take effect. Continued use of the Service after that date constitutes acceptance of the updated Terms.</p>
 
 <h2>15. Contact</h2>
 <p>D'Linkup Pte. Ltd.<br>
-1 Tampines North Drive 1, #06-08, T-Space<br>
-Singapore 528559<br>
 UEN: 201721418Z<br>
+Singapore<br>
 Email: <a href="mailto:api@sourcetruth.io">api@sourcetruth.io</a></p>
 
 <h2>16. General Provisions</h2>
-
 <h3>16.1 Severability</h3>
-<p>If any provision of these Terms is held to be invalid, illegal, or unenforceable by a court of competent jurisdiction, the remaining provisions shall continue in full force and effect. The invalid provision shall be modified to the minimum extent necessary to make it enforceable, or if modification is not possible, severed from these Terms without affecting the validity of the remainder.</p>
+<p>If any provision of these Terms is held to be invalid, illegal, or unenforceable, the remaining provisions shall continue in full force and effect. The invalid provision shall be modified to the minimum extent necessary to make it enforceable, or if modification is not possible, severed from these Terms.</p>
 
 <h3>16.2 Entire Agreement</h3>
-<p>These Terms, together with the Privacy Policy and any subscription plan you have accepted, constitute the entire agreement between you and D'Linkup Pte. Ltd. with respect to the Service and supersede all prior or contemporaneous agreements, representations, warranties, and understandings, whether written or oral, relating to the subject matter hereof.</p>
+<p>These Terms, together with the Privacy Policy and any subscription plan you have purchased, constitute the entire agreement between you and D'Linkup Pte. Ltd. with respect to the Service and supersede all prior or contemporaneous agreements, representations, or understandings, whether written or oral.</p>
 
 <h3>16.3 Waiver</h3>
-<p>Our failure or delay in exercising any right, power, or remedy under these Terms shall not constitute a waiver of that right, power, or remedy. No waiver by us of any breach of these Terms shall be construed as a waiver of any subsequent breach. Any waiver must be made in writing and signed by an authorised representative of D'Linkup Pte. Ltd. to be effective.</p>
+<p>Our failure to enforce any right or provision of these Terms shall not constitute a waiver of that right or provision. Any waiver must be in writing and signed by an authorised representative of D'Linkup Pte. Ltd. to be effective.</p>
 
 <h3>16.4 Force Majeure</h3>
-<p>Neither party shall be liable for any failure or delay in performance under these Terms caused by circumstances beyond that party's reasonable control, including but not limited to: natural disasters, pandemic, acts of government or regulatory authority, power failures, internet or telecommunications outages, failures or interruptions of third-party services or infrastructure (including database providers, hosting providers, or AI model providers on which the Service depends), cyberattacks, or civil unrest ("Force Majeure Event"). The affected party shall notify the other as soon as reasonably practicable after becoming aware of a Force Majeure Event. If a Force Majeure Event continues for more than 30 consecutive days, either party may terminate the affected services by written notice without further liability, provided that we will refund any prepaid fees for the unused portion of the affected subscription period.</p>
+<p>Neither party shall be liable for any failure or delay in performance under these Terms to the extent caused by circumstances beyond that party's reasonable control, including but not limited to: natural disasters, pandemic, acts of government, power failures, internet or telecommunications outages, failures or interruptions of third-party services or infrastructure (including but not limited to database providers, hosting providers, or AI model providers), cyberattacks, or civil unrest ("Force Majeure Event"). The affected party shall notify the other as soon as reasonably practicable. If a Force Majeure Event continues for more than 30 consecutive days, either party may terminate the affected services by written notice without liability.</p>
 
 <h3>16.5 Assignment</h3>
-<p>You may not assign, transfer, or sublicense your rights or obligations under these Terms, including your API key or subscription, without our prior written consent. Notwithstanding the foregoing, either party may assign these Terms in their entirety, without consent, in connection with a merger, acquisition, corporate reorganisation, or sale of all or substantially all of its assets, provided that: (a) the assignee assumes all obligations under these Terms; and (b) you give us written notice at <a href="mailto:api@sourcetruth.io">api@sourcetruth.io</a> within 30 days of the transaction completing. We reserve the right to terminate the Service with 30 days' notice if we reasonably object to an assignment following an acquisition. Any purported assignment in violation of this section is void.</p>
+<p>You may not assign or transfer your rights or obligations under these Terms, including your API key or subscription, without our prior written consent. We may assign or transfer our rights and obligations under these Terms, in whole or in part, to an affiliate or in connection with a merger, acquisition, corporate reorganisation, or sale of all or substantially all of our assets, without your consent, provided that we give you reasonable notice and the assignee assumes all obligations under these Terms. Any purported assignment in violation of this section is void.</p>
 
 <h3>16.6 Relationship of Parties</h3>
 <p>The parties are independent contractors. Nothing in these Terms creates a partnership, joint venture, agency, franchise, or employment relationship between you and D'Linkup Pte. Ltd. Neither party has authority to bind the other or to incur obligations on the other's behalf.</p>
 
 <h3>16.7 Notices</h3>
-<p>Notices from us to you will be sent to the email address on your API key record. Notices from you to us must be sent to <a href="mailto:api@sourcetruth.io">api@sourcetruth.io</a>. Notices are deemed received on the next business day after sending, provided no delivery failure notification is received.</p>
+<p>Formal notices from us to you will be sent to the email address on your API key record. Formal notices from you to us must be sent to <a href="mailto:api@sourcetruth.io">api@sourcetruth.io</a>. Notices are effective on the date of delivery.</p>
 
 <footer>
-  SourceTruth · Terms of Service · Effective 2026-08-08 · <a href="/privacy">Privacy Policy</a> · <a href="/">API Docs</a>
+  SourceTruth · Terms of Service · Effective 2026-10-24 · <a href="/privacy">Privacy Policy</a> · <a href="/">API Docs</a>
 </footer>
 
 </div>
