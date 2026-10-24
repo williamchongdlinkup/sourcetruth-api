@@ -95,6 +95,7 @@ async def lifespan(app: FastAPI):
 
     from normalisation.entity_resolver import EntityResolver
     from normalisation.ner import BuddhistNER
+    from search.intent import detect_bible_ref as _detect_bible_ref
     from search.multi_search import MultiAccountSearch
 
     # Fix 1: primary pool for auth / logging / entity queries
@@ -346,6 +347,7 @@ def search(
 
     t0 = time.monotonic()
     entity_ids = _ner.extract_entity_ids(req.query)
+    chapter_filter = _detect_bible_ref(req.query)
 
     results = _search.search(
         query=req.query,
@@ -356,6 +358,7 @@ def search(
         collections=req.collections,
         top_k=req.top_k,
         rerank='auto',
+        chapter_filter=chapter_filter,
     )
     latency_ms = int((time.monotonic() - t0) * 1000)
 

@@ -41,6 +41,7 @@ class MultiAccountSearch:
         corpus_codes: list[str] | None = None,
         top_k: int = 8,
         rerank: str = 'auto',
+        chapter_filter: tuple[str, int] | None = None,
     ) -> list[dict]:
         candidate_k = top_k * 3  # wider pool per account gives global RRF more signal
 
@@ -57,6 +58,7 @@ class MultiAccountSearch:
             corpus_codes=corpus_codes,
             top_k=candidate_k,
             rerank=rerank,
+            chapter_filter=chapter_filter,
         )
 
         per_account: dict[int, list[dict]] = {}

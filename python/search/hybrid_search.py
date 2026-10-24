@@ -230,6 +230,7 @@ class HybridSearch:
         top_k: int = 8,
         query_vec: list[float] | None = None,
         rerank: Literal['auto', 'mmr', 'text_dedup', 'none'] = 'auto',
+        chapter_filter: tuple[str, int] | None = None,
     ) -> list[dict]:
         """Search with optional scope filtering and post-processing.
 
@@ -246,6 +247,10 @@ class HybridSearch:
 
         if rerank == 'auto':
             rerank = _infer_rerank(traditions, languages, corpus_codes)
+        # Chapter-scoped queries return multiple chunks from one text — text_dedup
+        # would collapse them all to 1 result, so we must bypass it.
+        if chapter_filter:
+            rerank = 'none'
         use_fts = _infer_use_fts(traditions, languages, corpus_codes)
 
         pool = CANDIDATE_POOL if rerank == 'none' else max(CANDIDATE_POOL, top_k * 4)
@@ -278,6 +283,14 @@ class HybridSearch:
             ph = ','.join(['%s'] * len(collections))
             filter_parts.append(f"ct.collection IN ({ph})")
             filter_vals.extend(collections)
+
+        if chapter_filter:
+            book_title, chapter_num = chapter_filter
+            filter_parts.append("ct.title_english ILIKE %s")
+            filter_vals.append(book_title)
+            # chapter stored as TEXT (str of first chapter number in chunk)
+            filter_parts.append("dc.chapter = %s")
+            filter_vals.append(str(chapter_num))
 
         filter_sql = ('AND ' + ' AND '.join(filter_parts)) if filter_parts else ''
 
