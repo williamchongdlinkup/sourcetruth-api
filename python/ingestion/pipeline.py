@@ -40,7 +40,10 @@ def main():
         'sikh', 'zoroastrian',
         'bible-web', 'bible-asv', 'bible-ylt', 'rigveda',
         'tibetan', 'chinese-expansion', 'rumi', 'christian-theology',
-        'mahabharata', 'western-philosophy', 'political-philosophy', 'all',
+        'mahabharata', 'western-philosophy', 'political-philosophy',
+        'christian-classics',
+        'chinese-mahayana', 'jainism', 'theravada', 'bahai', 'eol-all',
+        'all',
     ]
     parser.add_argument('--source', required=True, choices=SOURCES, help='Corpus to ingest')
     parser.add_argument('--nikayas', nargs='+', default=None,
@@ -174,6 +177,19 @@ def main():
     if args.source in ('political-philosophy', 'all'):
         from ingestion.political_philosophy import run as pphil_run
         pphil_run(force=args.force)
+
+    if args.source in ('christian-classics', 'all'):
+        from ingestion.christian_tier1 import run as ct1_run
+        ct1_run(force=args.force)
+
+    # EOL Companion corpora
+    _eol_sources = {'chinese-mahayana', 'jainism', 'theravada', 'bahai', 'eol-all'}
+    if args.source in _eol_sources or args.source == 'all':
+        from ingestion.eol_corpora import run as eol_run, CORPUS_RUNNERS
+        if args.source in ('eol-all', 'all'):
+            eol_run(force=args.force)
+        elif args.source in CORPUS_RUNNERS:
+            eol_run(corpora=[args.source], force=args.force)
 
 
 if __name__ == '__main__':

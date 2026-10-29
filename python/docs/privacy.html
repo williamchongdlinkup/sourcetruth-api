@@ -38,7 +38,7 @@
 
 <h2>1. Introduction</h2>
 <p>D'Linkup Pte. Ltd. ("we", "us", "our") operates the SourceTruth API ("Service"). This Privacy Policy describes how we collect, use, store, and disclose information from and about you when you use the Service.</p>
-<p>By using the Service, you consent to the data practices described in this Policy. If you do not agree, please do not use the Service.</p>
+<p>By using the Service, you consent to the data practices described in this Policy. If you do not agree, please do not use the Service. Where an API key is issued to a business entity rather than an individual, this Policy applies to the individual(s) whose personal data (name, email address) is provided in connection with that key.</p>
 
 <h2>2. Information We Collect</h2>
 
@@ -52,12 +52,13 @@
   </tbody>
 </table>
 
-<h3>2.2 Anonymous usage analytics (default — not personal data)</h3>
-<p>The following usage data is collected automatically when you make API requests. <strong>None of this data is linked to your account, API key, or identity.</strong> Timestamps are stored rounded to the nearest hour. Because this data cannot be reasonably attributed to any individual, it is not personal data and is not subject to data protection law.</p>
+<h3>2.2 Usage analytics (default — treated as non-personal data)</h3>
+<p>The following usage data is collected automatically when you make API requests. <strong>We do not link this data to your account, API key, or identity at the time of collection.</strong> Timestamps are stored rounded to the nearest hour.</p>
+<p>We treat this data as non-personal data because it is not associated with any identified or identifiable individual in our systems. We acknowledge that some query text may incidentally contain personal information (for example, if a query references a named individual or includes personal context). Where any query constitutes personal data, it remains subject to the rights described in §7 of this Policy. You may request deletion of a specific query that contains your personal information by emailing <a href="mailto:api@sourcetruth.io">api@sourcetruth.io</a> with "Privacy Request — Query Deletion" in the subject line, describing the approximate date and content of the query.</p>
 <table>
   <thead><tr><th>Data</th><th>Retention</th><th>Purpose</th></tr></thead>
   <tbody>
-    <tr><td>Query text (full)</td><td>Indefinitely</td><td>Product improvement, corpus expansion decisions, retrieval quality improvement, AI model training, benchmarking</td></tr>
+    <tr><td>Query text (full)</td><td>Indefinitely (as non-personal data; deletion of specific queries containing personal data available on request — see above)</td><td>Product improvement, corpus expansion decisions, retrieval quality improvement, internal AI model training, benchmarking</td></tr>
     <tr><td>Endpoint called</td><td>Indefinitely</td><td>Usage analytics</td></tr>
     <tr><td>Traditions / languages requested</td><td>Indefinitely</td><td>Usage analytics, corpus expansion decisions</td></tr>
     <tr><td>Result count</td><td>Indefinitely</td><td>Coverage gap analysis, product improvement</td></tr>
@@ -84,7 +85,7 @@
     <tr><td>API key hash (SHA-256)</td><td>Indefinitely while key active; deleted within 30 days of termination on request</td><td>Authentication</td></tr>
     <tr><td>Daily request count per key</td><td>Rolling 2 days (daily_quota table)</td><td>Quota enforcement</td></tr>
     <tr><td>Stripe customer ID</td><td>Indefinitely while account active</td><td>Billing portal access</td></tr>
-    <tr><td>IP address</td><td>Not stored persistently</td><td>Rate limiting (per-request only)</td></tr>
+    <tr><td>IP address</td><td>Not stored persistently</td><td>Rate limiting (per-request only, via Cloudflare)</td></tr>
   </tbody>
 </table>
 
@@ -100,36 +101,51 @@
 <ul>
   <li><strong>Service operation:</strong> Authenticate API keys, enforce rate limits and quotas, process billing</li>
   <li><strong>Communication:</strong> Send transactional emails (billing receipts, account notices, service changes) to the email on your API key record</li>
-  <li><strong>Anonymous analytics:</strong> Anonymous usage data (§2.2) is used without restriction to improve the Service, expand the corpus, improve retrieval quality, train AI models, and build benchmarks. Because this data is not personal data, no consent is required and no opt-out applies.</li>
+  <li><strong>Usage analytics and product improvement:</strong> Usage data (§2.2) is used to improve the Service, expand the corpus, and improve retrieval quality</li>
+  <li><strong>Internal AI model training:</strong> Anonymous usage data (§2.2) is used to train and evaluate our own internal retrieval and ranking models. See §3.1 for detail.</li>
   <li><strong>Customer Intelligence Programme:</strong> Where you have opted in (§2.3), linked usage data is used for the purposes described in Terms of Service §8.3: usage dashboards, corpus recommendations, retrieval tuning, customer success, internal product analytics, model training, and aggregated benchmarking.</li>
   <li><strong>Security and abuse prevention:</strong> Detect and prevent misuse, fraud, or violations of our Terms of Service</li>
   <li><strong>Legal compliance:</strong> Comply with applicable laws and respond to lawful requests from authorities</li>
 </ul>
 <p>We do not sell your personal data to third parties.</p>
 
+<h3>3.1 AI Model Training — Scope and Limits</h3>
+<p>When we refer to "internal AI model training" as a purpose for usage data, this means:</p>
+<ul>
+  <li>Training and improving our own internal retrieval and ranking models to improve the quality of <code>/v1/search</code> results</li>
+  <li>Evaluating retrieval performance against benchmarks derived from real-world query patterns</li>
+  <li>Improving prompt design for <code>/v1/answer</code> generation</li>
+</ul>
+<p>We do <strong>not</strong> sell, licence, or share query data with third parties for their model training purposes. Anthropic processes query text in real time as part of <code>/v1/answer</code> request fulfilment (inference only) — we do not send query data to Anthropic for fine-tuning. See §4 for Anthropic's role as sub-processor.</p>
+
+<h3>3.2 AI Training and the Right to Deletion</h3>
+<p>Where query data has been used to train or evaluate internal AI models prior to a deletion request, deleting the source data does not automatically alter trained model weights already produced. This is a technical limitation of current AI training methods. We will suppress the use of any identified personal data in future training cycles and, where technically feasible, will retrain or adjust models to remove the influence of data subject to verified deletion requests. We disclose this limitation rather than making an unqualified deletion promise.</p>
+
 <h2>4. Data Sharing</h2>
 <p>We share data with the following sub-processors as necessary to provide the Service:</p>
 <table>
   <thead><tr><th>Sub-processor</th><th>Purpose</th><th>Data shared</th><th>Location</th></tr></thead>
   <tbody>
-    <tr><td>Supabase Inc.</td><td>Database hosting (PostgreSQL)</td><td>Account data (emails, API key hashes, billing IDs), anonymous usage analytics, quota counts. Opted-in customers: linked usage data.</td><td>USA (AWS us-east-1)</td></tr>
+    <tr><td>Supabase Inc.</td><td>Database hosting (PostgreSQL)</td><td>Account data (emails, API key hashes, billing IDs), usage analytics, quota counts. Opted-in customers: linked usage data.</td><td>USA (AWS us-east-1)</td></tr>
     <tr><td>Railway Corp.</td><td>API server hosting</td><td>In-flight request data (transient)</td><td>USA</td></tr>
-    <tr><td>Stripe, Inc.</td><td>Payment processing</td><td>Email, name, payment method (card processed by Stripe, not us)</td><td>USA</td></tr>
-    <tr><td>Anthropic, PBC</td><td>/v1/answer generation (Claude API)</td><td>Query text and retrieved passage text sent to Claude API for answer generation</td><td>USA</td></tr>
-    <tr><td>Cloudflare, Inc.</td><td>CDN and DNS proxy</td><td>In-flight HTTP requests (IP visible to Cloudflare, not stored by us)</td><td>Global</td></tr>
+    <tr><td>Stripe, Inc.</td><td>Payment processing</td><td>Email, name, billing address, IP address (for fraud scoring), payment method. Card details are processed directly by Stripe and never transmitted to us. Stripe processes this data subject to <a href="https://stripe.com/privacy">Stripe's Privacy Policy</a>.</td><td>USA</td></tr>
+    <tr><td>Anthropic, PBC</td><td>/v1/answer generation (Claude API — inference only)</td><td>Query text and retrieved passage text sent to Claude API at request time for answer generation. Not used for fine-tuning. Processed subject to <a href="https://www.anthropic.com/legal/privacy">Anthropic's Privacy Policy</a> and usage policies.</td><td>USA</td></tr>
+    <tr><td>Cloudflare, Inc.</td><td>CDN and DNS proxy</td><td>In-flight HTTP requests (IP visible to Cloudflare for DDoS protection and rate limiting; not stored by us persistently)</td><td>Global</td></tr>
+    <tr><td>Transactional email provider (TBD)</td><td>Delivery of billing receipts, API key confirmations, and account notices</td><td>Email address, name</td><td>To be confirmed when provider selected</td></tr>
   </tbody>
 </table>
 
 <p>We may disclose your information to law enforcement or regulators when required by law, or to protect the rights, property, or safety of D'Linkup, our users, or the public.</p>
+<p>Enterprise customers requiring a Data Processing Agreement (DPA) may request one at <a href="mailto:api@sourcetruth.io">api@sourcetruth.io</a>.</p>
 
 <h2>5. Data Retention</h2>
 <ul>
-  <li><strong>Anonymous usage analytics (api_usage table):</strong> Retained indefinitely. This data is not personal data and is not subject to deletion obligations under data protection law.</li>
-  <li><strong>Customer Intelligence Programme data (linked usage, opted-in customers):</strong> Retained while the customer remains enrolled. On opt-out, retained for 90 days then anonymised. On deletion request to <a href="mailto:api@sourcetruth.io">api@sourcetruth.io</a>, deleted within 30 days. Anonymisation of historic data does not affect models or benchmarks already produced from that data.</li>
+  <li><strong>Anonymous usage analytics (api_usage table):</strong> Retained indefinitely as non-personal data. Where a specific query is identified as containing personal data, it may be deleted on request per the process in §2.2.</li>
+  <li><strong>Customer Intelligence Programme data (linked usage, opted-in customers):</strong> Retained while the customer remains enrolled. On opt-out, retained for 90 days then anonymised. On deletion request to <a href="mailto:api@sourcetruth.io">api@sourcetruth.io</a>, deleted within 30 days. Anonymisation of historic data does not affect models or benchmarks already produced — see §3.2.</li>
   <li><strong>Daily quota counts:</strong> 2 days rolling</li>
   <li><strong>API key records (api_keys table):</strong> Retained while the key is active. Deleted within 30 days of account termination on request.</li>
-  <li><strong>Email addresses:</strong> Retained while the account is active. On request to delete, we remove the email from the api_keys record within 30 days. Note that Stripe may retain email data subject to its own retention policies.</li>
-  <li><strong>Stripe billing data:</strong> Retained by Stripe per their data retention policy (typically 7 years for financial records).</li>
+  <li><strong>Email addresses:</strong> Retained while the account is active. On request to delete, we remove the email from the api_keys record within 30 days. Note that Stripe may retain email data subject to its own retention policies (typically 7 years for financial records).</li>
+  <li><strong>Stripe billing data:</strong> Retained by Stripe per their data retention policy.</li>
 </ul>
 
 <h2>6. Data Security</h2>
@@ -140,38 +156,40 @@
   <li>We use Supabase Row Level Security (RLS) policies to restrict data access</li>
   <li>Access to production databases is restricted to authorised personnel and service accounts</li>
 </ul>
-<p>No system is perfectly secure. In the event of a data breach that affects your personal data, we will notify you and relevant regulators as required by applicable law.</p>
+<p>No system is perfectly secure. In the event of a data breach affecting your personal data, we will comply with our mandatory notification obligations: under Singapore's PDPA (as amended 2021) we will notify the Personal Data Protection Commission (PDPC) and affected individuals within 3 calendar days of becoming aware of a notifiable breach; under the GDPR we will notify the relevant supervisory authority within 72 hours of becoming aware. We will contact you at the email address on your API key record.</p>
 
 <h2>7. Your Rights</h2>
 <p>Depending on your jurisdiction, you may have the following rights regarding your personal data:</p>
 <ul>
   <li><strong>Access:</strong> Request a copy of the personal data we hold about you</li>
   <li><strong>Correction:</strong> Request that inaccurate data be corrected</li>
-  <li><strong>Deletion:</strong> Request deletion of your personal data (subject to legal retention requirements)</li>
-  <li><strong>Portability:</strong> Request your data in a machine-readable format</li>
+  <li><strong>Deletion:</strong> Request deletion of your personal data (subject to legal retention requirements and the limitation described in §3.2)</li>
+  <li><strong>Portability:</strong> Request your personal data in a machine-readable format (CSV or JSON). We will fulfil verified portability requests within 30 days. Portability applies to data you actively provided (name, email address); it does not apply to anonymous usage analytics.</li>
   <li><strong>Objection / restriction:</strong> Object to certain processing activities</li>
   <li><strong>Withdraw consent:</strong> Withdraw consent to non-essential processing at any time</li>
 </ul>
 <p>To exercise these rights, email us at <a href="mailto:api@sourcetruth.io">api@sourcetruth.io</a> with "Privacy Request" in the subject line. We will respond within 30 days. We may need to verify your identity before processing the request.</p>
 
 <h3>7.1 Singapore PDPA</h3>
-<p>We are subject to the Personal Data Protection Act 2012 (Singapore) ("PDPA"). You have the right to access and correct your personal data held by us. To make a request, email us at <a href="mailto:api@sourcetruth.io">api@sourcetruth.io</a> with "Privacy Request" in the subject line. If you believe we have not handled your personal data in accordance with the PDPA, you may lodge a complaint with the Personal Data Protection Commission (PDPC) at <a href="https://www.pdpc.gov.sg">www.pdpc.gov.sg</a>.</p>
+<p>We are subject to the Personal Data Protection Act 2012 (Singapore) ("PDPA"), as amended in 2021. You have the right to access and correct your personal data held by us, and to request data portability under Part IVA of the PDPA. To make a request, email us at <a href="mailto:api@sourcetruth.io">api@sourcetruth.io</a> with "Privacy Request" in the subject line. If you believe we have not handled your personal data in accordance with the PDPA, you may lodge a complaint with the Personal Data Protection Commission (PDPC) at <a href="https://www.pdpc.gov.sg">www.pdpc.gov.sg</a>.</p>
 
 <h3>7.2 GDPR (EEA/UK)</h3>
 <p>If you are located in the European Economic Area or the United Kingdom, you have additional rights under the General Data Protection Regulation (GDPR) / UK GDPR. Our legal basis for processing your data is:</p>
 <ul>
-  <li><strong>Contract performance:</strong> account data (name, email) collected and used to provide the Service</li>
-  <li><strong>Legitimate interests:</strong> quota enforcement, security, and abuse prevention</li>
-  <li><strong>Not applicable:</strong> anonymous usage analytics (§2.2) are not personal data — GDPR does not apply to them</li>
-  <li><strong>Consent:</strong> Customer Intelligence Programme data (§2.3) — enrolment constitutes explicit, informed, freely given consent to the processing described in Terms of Service §8.3</li>
+  <li><strong>Contract performance (Article 6(1)(b)):</strong> Name and email address collected and used to provide the Service and process billing</li>
+  <li><strong>Legitimate interests (Article 6(1)(f)):</strong> Quota enforcement, security, and abuse prevention. Our legitimate interests assessment considers that these activities are necessary for the integrity of the Service and that the data processed (daily request counts, API key hashes) is minimal and technical in nature, and does not override the fundamental interests or rights of data subjects.</li>
+  <li><strong>Consent (Article 6(1)(a)):</strong> Customer Intelligence Programme data (§2.3) — enrolment constitutes explicit, informed, freely given consent to the processing described in Terms of Service §8.3</li>
+  <li><strong>Not applicable:</strong> Anonymous usage analytics (§2.2) that do not constitute personal data are not subject to GDPR. Where any query text constitutes personal data, we rely on legitimate interests for its processing given the minimal nature of the data and the non-identifiable way it is stored.</li>
 </ul>
-<p>Data transfers to the United States rely on the EU-US Data Privacy Framework and Standard Contractual Clauses with our sub-processors. You may lodge a complaint with your local supervisory authority.</p>
+<p>Data transfers to the United States are made only to sub-processors that have committed to appropriate data protection safeguards: for EEA transfers, under GDPR Chapter V including the EU-US Data Privacy Framework (where the sub-processor is certified) and Standard Contractual Clauses (2021 EC SCCs); for UK transfers, under UK GDPR Article 46 including the UK-US Data Bridge (where certified) and UK International Data Transfer Agreements (IDTAs) or UK Addendum SCCs. The applicable transfer mechanism for each sub-processor is available on request at <a href="mailto:api@sourcetruth.io">api@sourcetruth.io</a>.</p>
+<p>If you are located in the EEA and believe we have not handled your personal data in accordance with the GDPR, you may lodge a complaint with the supervisory authority in your EU member state. If you are located in the United Kingdom, you may lodge a complaint with the Information Commissioner's Office (ICO) at <a href="https://ico.org.uk/make-a-complaint/">ico.org.uk/make-a-complaint</a>.</p>
+<p><strong>EU/EEA Representative (GDPR Article 27):</strong> D'Linkup Pte. Ltd. currently has no establishment in the European Economic Area. We will designate a formal EU representative and publish their contact details in this section before the first paying EEA customer joins the Service, or before proactively marketing to EEA individuals — whichever comes first. Until that point, EEA individuals may direct GDPR enquiries to <a href="mailto:api@sourcetruth.io">api@sourcetruth.io</a>.</p>
 
 <h2>8. Children's Privacy</h2>
-<p>The Service is not directed at children under 16 years of age. We do not knowingly collect personal data from children. If you believe a child has provided us with personal data, contact us and we will delete it.</p>
+<p>The Service is not directed at children. The minimum age for using the Service is 16 years globally. In jurisdictions where applicable law sets a lower minimum age for digital consent, we apply the higher threshold of 16 as a uniform standard. We do not knowingly collect personal data from anyone under 16. If you believe a minor has provided us with personal data, contact us and we will delete it.</p>
 
 <h2>9. Cookies and Tracking</h2>
-<p>The SourceTruth API does not use cookies or tracking technologies. Our developer documentation pages (this site) do not use analytics scripts, tracking pixels, or third-party cookies.</p>
+<p>The SourceTruth API does not use cookies or tracking technologies. Our developer documentation pages (this site) do not use analytics scripts, tracking pixels, or third-party cookies. If this changes, this section will be updated and you will be notified in accordance with §10.</p>
 
 <h2>10. Changes to This Policy</h2>
 <p>We may update this Privacy Policy from time to time. If we make material changes, we will notify you by email at least 14 days before the changes take effect. The "Last updated" date at the top of this page reflects the most recent revision. Continued use of the Service after the effective date constitutes acceptance of the updated Policy.</p>

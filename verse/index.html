@@ -901,7 +901,7 @@ async function handleSearch(e) {
   btn.textContent = 'Searching…';
 
   try {
-    const data     = await apiPost(SEARCH_URL, { query, top_k: 8, corpus_codes: ['kjv','bible-web','bible-asv','bible-ylt','christian-theology'] });
+    const data     = await apiPost(SEARCH_URL, { query, top_k: 8, corpus_codes: ['kjv','bible-web','bible-asv','bible-ylt','christian-theology','christian-classics'], traditions: ['christianity'] });
     const passages = extractPassages(data);
 
     if (!passages || passages.length === 0) {
@@ -913,11 +913,17 @@ async function handleSearch(e) {
 
     if (hasHigh) {
       view.innerHTML = loadingHTML('Generating synthesis…');
-      const ans = await apiPost(ANSWER_URL, { question: query }).catch(() => ({}));
-      const synthesis = ans.answer ?? ans.synthesis ?? ans.response ?? '';
+      let synthesis = '';
+      let synthGated = false;
+      try {
+        const ans = await apiPost(ANSWER_URL, { question: query });
+        synthesis = ans.answer ?? ans.synthesis ?? ans.response ?? '';
+      } catch(err) {
+        if (err.message.startsWith('HTTP 403')) synthGated = true;
+      }
       lastPassages  = passages;
       lastSynthesis = synthesis;
-      renderGrounded(passages, synthesis);
+      renderGrounded(passages, synthesis, synthGated);
     } else {
       lastPassages = passages;
       await renderAdjacent(passages, query);
@@ -938,7 +944,7 @@ async function handleSearch(e) {
 /* ════════════════════════════════════════════════
    RENDER: GROUNDED
 ════════════════════════════════════════════════ */
-function renderGrounded(passages, synthesis) {
+function renderGrounded(passages, synthesis, synthGated = false) {
   const high = passages.filter(p => pScore(p) > 0.014);
   const show = high.length > 0 ? high : passages.slice(0, 5);
 
@@ -975,6 +981,13 @@ function renderGrounded(passages, synthesis) {
       <div class="synthesis-label">AI draft synthesis &mdash; for editorial review before sharing</div>
       <div class="synthesis-text">${esc(synthesis)}</div>
       ${saveRow}
+    </div>`;
+  } else if (synthGated) {
+    html += `
+    <div class="synthesis-box">
+      <div class="synthesis-label">AI synthesis</div>
+      <div class="synthesis-text" style="color:var(--gray-500);">Subscribe to unlock a plain-English summary of what these passages mean together.</div>
+      <button class="save-btn" onclick="openModal('signup')" style="margin-top:16px">Subscribe for $15/month &rarr;</button>
     </div>`;
   }
 
