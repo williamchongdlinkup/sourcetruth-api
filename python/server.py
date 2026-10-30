@@ -49,6 +49,7 @@ load_dotenv()
 sys.path.insert(0, str(Path(__file__).parent))
 
 from db import get_conn, get_primary_conn, init_primary_pool
+from search.intent import detect_bible_ref as _detect_bible_ref
 
 _conns  = []    # long-lived per-account search connections (managed by MultiAccountSearch)
 _search = None
@@ -92,7 +93,6 @@ SYSTEM_PROMPT = (
 async def lifespan(app: FastAPI):
     global _conns, _search, _claude
 
-    from search.intent import detect_bible_ref as _detect_bible_ref
     from search.multi_search import MultiAccountSearch
 
     # Fix 1: primary pool for auth / logging / entity queries
