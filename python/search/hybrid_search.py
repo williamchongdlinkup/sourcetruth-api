@@ -281,7 +281,7 @@ class HybridSearch:
 
         if collections:
             ph = ','.join(['%s'] * len(collections))
-            filter_parts.append(f"ct.collection IN ({ph})")
+            filter_parts.append(f"dc.collection IN ({ph})")
             filter_vals.extend(collections)
 
         if chapter_filter:

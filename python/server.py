@@ -40,7 +40,7 @@ from dotenv import load_dotenv
 from fastapi import BackgroundTasks, Depends, FastAPI, Header, HTTPException, Request
 from fastapi.middleware.cors import CORSMiddleware
 from fastapi.staticfiles import StaticFiles
-from pydantic import BaseModel
+from pydantic import BaseModel, Field, model_validator
 from slowapi import Limiter, _rate_limit_exceeded_handler
 from slowapi.errors import RateLimitExceeded
 from slowapi.util import get_remote_address
@@ -296,13 +296,41 @@ def get_key_record(x_api_key: str = Header(default='')) -> dict | None:
 
 # ── Request / response models ─────────────────────────────────────────────────
 
+_TRADITION_ALIASES: dict[str, str] = {
+    'muslim':    'islam',
+    'christian': 'christianity',
+    'hindu':     'hinduism',
+    'sikh':      'sikhism',
+    'taoist':    'east-asian',
+    'jain':      'jainism',
+    'jewish':    'judaism',
+    'tibetan':   'vajrayana',
+}
+
+
 class SearchRequest(BaseModel):
     query: str
-    corpus_codes: Optional[list[str]] = None   # most precise: e.g. ["sahih-bukhari", "quran"]
-    traditions:   Optional[list[str]] = None   # e.g. ["theravada", "islam"]
-    languages:    Optional[list[str]] = None   # ISO: ["en", "pi", "ar"]
+    corpus_codes: Optional[list[str]] = None
+    traditions:   Optional[list[str]] = None
+    languages:    Optional[list[str]] = None
     collections:  Optional[list[str]] = None
     top_k: int = 8
+    # Accept singular aliases used by legacy/external clients
+    tradition:  Optional[str] = Field(default=None)
+    collection: Optional[str] = Field(default=None)
+    k:          Optional[int] = Field(default=None)
+
+    @model_validator(mode='after')
+    def _normalise(self):
+        if self.tradition is not None and self.traditions is None:
+            self.traditions = [self.tradition]
+        if self.collection is not None and self.collections is None:
+            self.collections = [self.collection]
+        if self.k is not None and self.top_k == 8:
+            self.top_k = self.k
+        if self.traditions:
+            self.traditions = [_TRADITION_ALIASES.get(t, t) for t in self.traditions]
+        return self
 
 
 class AnswerRequest(BaseModel):
