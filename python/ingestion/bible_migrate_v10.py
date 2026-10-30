@@ -45,7 +45,7 @@ MAX_RETRIES = 3
 
 TRANSLATIONS = [
     {"abbrev": "asv",  "code": "bible-asv"},
-    {"abbrev": "kjv",  "code": "bible-kjv"},
+    {"abbrev": "kjv",  "code": "kjv"},        # KJV uses corpus code 'kjv', not 'bible-kjv'
     {"abbrev": "web",  "code": "bible-web"},
     {"abbrev": "ylt",  "code": "bible-ylt"},
 ]
@@ -67,6 +67,8 @@ ALL_BOOKS = [
     (58,"Hebrews"),(59,"James"),(60,"1 Peter"),(61,"2 Peter"),
     (62,"1 John"),(63,"2 John"),(64,"3 John"),(65,"Jude"),(66,"Revelation"),
 ]
+
+TITLE_TO_NR = {name: nr for nr, name in ALL_BOOKS}
 
 
 # ── Fetch ─────────────────────────────────────────────────────────────────────
@@ -328,8 +330,11 @@ def main():
             try:
                 book_nr = int(book["external_id"].split("-")[-1])
             except (ValueError, IndexError):
-                print(f"  [SKIP] Cannot parse book_nr from {book['external_id']}")
-                continue
+                # name-based IDs (e.g. kjv-genesis) — look up by title
+                book_nr = TITLE_TO_NR.get(book["title_english"])
+                if book_nr is None:
+                    print(f"  [SKIP] Cannot resolve book_nr for {book['external_id']}")
+                    continue
 
             if not (book_start <= book_nr <= book_end):
                 continue
