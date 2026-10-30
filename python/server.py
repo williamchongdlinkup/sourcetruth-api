@@ -52,7 +52,6 @@ from db import get_conn, get_primary_conn, init_primary_pool
 
 _conns  = []    # long-lived per-account search connections (managed by MultiAccountSearch)
 _search = None
-_ner    = None
 _claude = None
 
 KEY_PREFIX = os.getenv('API_KEY_PREFIX', 'st_')
@@ -91,10 +90,8 @@ SYSTEM_PROMPT = (
 
 @asynccontextmanager
 async def lifespan(app: FastAPI):
-    global _conns, _search, _ner, _claude
+    global _conns, _search, _claude
 
-    from normalisation.entity_resolver import EntityResolver
-    from normalisation.ner import BuddhistNER
     from search.intent import detect_bible_ref as _detect_bible_ref
     from search.multi_search import MultiAccountSearch
 
@@ -118,7 +115,6 @@ async def lifespan(app: FastAPI):
                 print(f'  Corpus account {acc_num} unavailable ({url_var}): {e}')
 
     _search = MultiAccountSearch(accounts)
-    _ner    = BuddhistNER(EntityResolver(primary_conn))
     _claude = anthropic.Anthropic()
 
     print(f'Corpus API ready — {len(accounts)} corpus account(s) online.')
@@ -346,7 +342,7 @@ def search(
         raise HTTPException(status_code=400, detail='Query cannot be empty.')
 
     t0 = time.monotonic()
-    entity_ids = _ner.extract_entity_ids(req.query)
+    entity_ids = []
     chapter_filter = _detect_bible_ref(req.query)
 
     results = _search.search(
@@ -458,7 +454,7 @@ def answer(
         raise HTTPException(status_code=400, detail='Question cannot be empty.')
 
     t0 = time.monotonic()
-    entity_ids = _ner.extract_entity_ids(req.question)
+    entity_ids = []
 
     passages = _search.search(
         query=req.question,
